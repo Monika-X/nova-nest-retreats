@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login — Nova Nest Retreats</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/animations.css">
+    <link rel="stylesheet" href="../css/responsive.css">
+    <style>
+        .auth-page {
+            min-height: 100vh;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+        }
+        @media (max-width: 1024px) {
+            .auth-page { grid-template-columns: 1fr; }
+            .auth-visual { display: none; }
+        }
+        .auth-visual {
+            position: relative;
+            overflow: hidden;
+        }
+        .auth-visual img {
+            width: 100%; height: 100%; object-fit: cover;
+        }
+        .auth-visual-overlay {
+            position: absolute; inset: 0;
+            background: linear-gradient(160deg, rgba(2,6,23,0.3) 0%, rgba(10,14,26,0.85) 100%);
+            display: flex; flex-direction: column;
+            justify-content: flex-end;
+            padding: 3rem;
+        }
+        .auth-panel {
+            display: flex; flex-direction: column;
+            justify-content: center; align-items: center;
+            padding: 2rem;
+            background: var(--clr-bg-deep);
+            position: relative;
+            overflow: hidden;
+        }
+        /* Animated Background Blobs */
+        .bg-blob {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            z-index: 1;
+            opacity: 0.12;
+            animation: drift 15s infinite alternate ease-in-out;
+            pointer-events: none;
+        }
+        .bg-blob-1 {
+            width: 300px; height: 300px;
+            background: var(--emerald-500);
+            top: -10%; left: -10%;
+        }
+        .bg-blob-2 {
+            width: 350px; height: 350px;
+            background: var(--ocean-500);
+            bottom: -10%; right: -10%;
+            animation-delay: -5s;
+        }
+        @keyframes drift {
+            0% { transform: translate(0, 0) scale(1); }
+            100% { transform: translate(50px, 40px) scale(1.25); }
+        }
+        .auth-card {
+            width: 100%; max-width: 440px;
+            z-index: 2;
+        }
+        .role-toggle {
+            display: flex;
+            background: rgba(255,255,255,0.04);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius-full);
+            padding: 4px;
+            margin-bottom: 2rem;
+        }
+        .role-btn {
+            flex: 1; padding: 0.6rem 1rem;
+            border-radius: var(--radius-full);
+            font-size: var(--fs-sm);
+            font-weight: var(--fw-semibold);
+            cursor: pointer;
+            transition: all var(--transition-fast);
+            text-align: center;
+            color: var(--clr-text-muted);
+        }
+        .role-btn.active {
+            background: var(--grad-primary);
+            color: var(--white);
+            box-shadow: var(--shadow-glow-emerald);
+        }
+        .divider-text {
+            display: flex; align-items: center; gap: 1rem;
+            color: var(--clr-text-muted); font-size: var(--fs-xs);
+        }
+        .divider-text::before, .divider-text::after {
+            content: ''; flex: 1; height: 1px;
+            background: var(--glass-border);
+        }
+    </style>
+</head>
+<body>
+    <div class="auth-page">
+        <!-- Visual Panel -->
+        <div class="auth-visual">
+            <img src="https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&w=1200&q=80" alt="Luxury Resort">
+            <div class="auth-visual-overlay">
+                <a href="../index.html" class="nav-logo mb-8">
+                    <div class="logo-icon">
+                        <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" width="42" height="42">
+                            <defs><linearGradient id="g1" x1="4" y1="2" x2="36" y2="38" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#10b981"/><stop offset="100%" stop-color="#0ea5e9"/></linearGradient></defs>
+                            <path d="M20 1 L23.5 15 L38 20 L23.5 25 L20 39 L16.5 25 L2 20 L16.5 15 Z" fill="url(#g1)" opacity="0.9"/>
+                            <circle cx="20" cy="20" r="3.5" fill="url(#g1)"/>
+                        </svg>
+                    </div>
+                    <div class="logo-text">
+                        <span class="logo-primary">NOVA</span>
+                        <span class="logo-secondary">NEST RETREATS</span>
+                    </div>
+                </a>
+                <blockquote class="text-white text-xl font-display font-semibold leading-snug mb-4">
+                    "Every journey begins with a single step — let yours start in luxury."
+                </blockquote>
+                <div class="flex items-center gap-3">
+                    <div class="w-8 h-8 rounded-full overflow-hidden"><img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?auto=format&fit=crop&w=100&q=80" alt="Guest"></div>
+                    <div><div class="text-sm font-bold text-white">Sarah Jenkins</div><div class="text-xs text-white-80">Frequent Traveler</div></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Auth Panel -->
+        <div class="auth-panel">
+            <div class="bg-blob bg-blob-1"></div>
+            <div class="bg-blob bg-blob-2"></div>
+
+            <div class="auth-card card-glass p-8 reveal">
+                <!-- Mobile Logo -->
+                <a href="../index.html" class="nav-logo mb-6 lg:hidden flex">
+                    <div class="logo-text"><span class="logo-primary text-2xl">NOVA NEST</span></div>
+                </a>
+
+                <h1 class="text-3xl font-display font-bold mb-2">Welcome back</h1>
+                <p class="text-muted text-sm mb-6">Sign in to manage your bookings and explore exclusive deals.</p>
+
+                <!-- Role Toggle -->
+                <div class="role-toggle" id="role-toggle">
+                    <div class="role-btn" data-role="user" id="role-user">User Login</div>
+                    <div class="role-btn active" data-role="admin" id="role-admin">Admin Login</div>
+                </div>
+
+                <!-- Admin badge (shown by default) -->
+                <div id="admin-notice" class="badge badge-emerald mb-6 flex items-center gap-1">
+                    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="inline-block"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg> Admin Portal Access
+                </div>
+
+                <!-- Form -->
+                <form id="login-form" class="flex flex-col gap-4" novalidate>
+                    <div class="form-group mb-0">
+                        <label class="form-label text-xs uppercase tracking-wider">Email Address</label>
+                        <input type="email" id="login-email" class="form-input h-12 mt-1" placeholder="you@example.com" required>
+                        <span class="text-error text-2xs mt-1 block hidden" id="login-email-error">Required field</span>
+                    </div>
+                    <div class="form-group mb-0">
+                        <label class="form-label text-xs uppercase tracking-wider flex justify-between">
+                            <span>Password</span>
+                            <a href="#" class="text-emerald text-xs">Forgot password?</a>
+                        </label>
+                        <div class="relative">
+                            <input type="password" id="login-password" class="form-input h-12 mt-1 pr-12" placeholder="Enter your password" required>
+                            <button type="button" id="toggle-password" class="absolute right-4 top-1/2 -translate-y-1/2 text-muted hover:text-white" style="margin-top: 2px;">
+                                <svg id="eye-icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                            </button>
+                        </div>
+                        <span class="text-error text-2xs mt-1 block hidden" id="login-password-error">Required field</span>
+                    </div>
+
+                    <div class="flex items-center gap-2">
+                        <input type="checkbox" id="remember-me" class="w-4 h-4 accent-emerald-500">
+                        <label for="remember-me" class="text-sm text-muted cursor-pointer">Remember me for 30 days</label>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary btn-pulse btn-lg btn-block mt-2 shadow-glow-emerald" id="login-btn">Sign In</button>
+
+                    <p id="login-error" class="text-error text-xs text-center hidden">Invalid email or password. Please try again.</p>
+                </form>
+
+                <div class="divider-text my-5">or continue with</div>
+
+                <!-- Social Logins -->
+                <div class="flex gap-3">
+                    <button type="button" id="google-login-btn" class="btn btn-outline flex-1 gap-2 btn-sm flex items-center justify-center">
+                        <svg viewBox="0 0 24 24" width="18" height="18" style="width: 18px; height: 18px; flex-shrink: 0; min-width: 18px; min-height: 18px;"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+                        Google
+                    </button>
+                    <button type="button" id="facebook-login-btn" class="btn btn-outline flex-1 gap-2 btn-sm flex items-center justify-center">
+                        <svg viewBox="0 0 24 24" width="18" height="18" fill="#1877F2" style="width: 18px; height: 18px; flex-shrink: 0; min-width: 18px; min-height: 18px;"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+                        Facebook
+                    </button>
+                </div>
+
+                <p class="text-center text-sm text-muted mt-6">
+                    Don't have an account? <a href="signup.html" class="text-emerald font-semibold hover:underline">Create one free</a>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <script src="../js/main.js"></script>
+    <script>
+        // Role toggle
+        const roleBtns = document.querySelectorAll('.role-btn');
+        const adminNotice = document.getElementById('admin-notice');
+        let currentRole = 'admin'; // Changed default to admin as per active class
+
+        roleBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                roleBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                currentRole = btn.dataset.role;
+                if(currentRole === 'admin') {
+                    adminNotice.classList.remove('hidden');
+                } else {
+                    adminNotice.classList.add('hidden');
+                }
+            });
+        });
+
+        // Password toggle
+        document.getElementById('toggle-password').addEventListener('click', function() {
+            const pass = document.getElementById('login-password');
+            const icon = document.getElementById('eye-icon');
+            if (pass.type === 'password') {
+                pass.type = 'text';
+                icon.innerHTML = '<path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path><line x1="1" y1="1" x2="23" y2="23"></line>';
+            } else {
+                pass.type = 'password';
+                icon.innerHTML = '<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle>';
+            }
+        });
+
+        // Form submission & validation
+        document.getElementById('login-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const emailInput = document.getElementById('login-email');
+            const passwordInput = document.getElementById('login-password');
+            const email = emailInput.value.trim();
+            const password = passwordInput.value;
+            
+            const emailError = document.getElementById('login-email-error');
+            const passwordError = document.getElementById('login-password-error');
+            const errorEl = document.getElementById('login-error');
+            
+            // Reset previous validation messages
+            emailError.classList.add('hidden');
+            passwordError.classList.add('hidden');
+            errorEl.classList.add('hidden');
+            
+            let hasError = false;
+
+            // Required field validations
+            if (!email) {
+                emailError.innerText = "Email is required.";
+                emailError.classList.remove('hidden');
+                hasError = true;
+            }
+            if (!password) {
+                passwordError.innerText = "Password is required.";
+                passwordError.classList.remove('hidden');
+                hasError = true;
+            }
+
+            if (hasError) return;
+
+            // Email Validation regex
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) {
+                emailError.innerText = "Please enter a valid email address.";
+                emailError.classList.remove('hidden');
+                return;
+            }
+
+            // Password length validation
+            if (password.length < 6) {
+                passwordError.innerText = "Password must be at least 6 characters long.";
+                passwordError.classList.remove('hidden');
+                return;
+            }
+
+            // Credentials check
+            let isAuthenticated = false;
+            let dest = '';
+            
+            if (currentRole === 'admin') {
+                if (email === 'admin@novanest.com') {
+                    if (password === 'admin123') {
+                        isAuthenticated = true;
+                        dest = 'admin-dashboard.html';
+                    } else {
+                        passwordError.innerText = "Password incorrect.";
+                        passwordError.classList.remove('hidden');
+                        return;
+                    }
+                } else {
+                    errorEl.innerText = "Admin account not found.";
+                    errorEl.classList.remove('hidden');
+                    return;
+                }
+            } else {
+                // User Login
+                if (email === 'user@novanest.com') {
+                    if (password === 'user123') {
+                        isAuthenticated = true;
+                        dest = 'user-dashboard.html';
+                    } else {
+                        passwordError.innerText = "Password incorrect.";
+                        passwordError.classList.remove('hidden');
+                        return;
+                    }
+                } else {
+                    // Check registered users in localStorage
+                    const users = JSON.parse(localStorage.getItem("users") || "[]");
+                    const user = users.find(u => u.email.toLowerCase() === email.toLowerCase());
+                    if (user) {
+                        if (user.password === password) {
+                            isAuthenticated = true;
+                            dest = 'user-dashboard.html';
+                        } else {
+                            passwordError.innerText = "Password incorrect.";
+                            passwordError.classList.remove('hidden');
+                            return;
+                        }
+                    } else {
+                        errorEl.innerText = "Email not registered. Please create an account.";
+                        errorEl.classList.remove('hidden');
+                        return;
+                    }
+                }
+            }
+
+            if (isAuthenticated) {
+                const btn = document.getElementById('login-btn');
+                btn.innerHTML = '<span class="animate-pulse">Signing in...</span>';
+                btn.disabled = true;
+
+                // Extract username from email & store in localStorage
+                const username = email.split('@')[0];
+                localStorage.setItem("username", username);
+
+                setTimeout(() => {
+                    window.location.href = dest;
+                }, 1200);
+            }
+        });
+
+        // Social login click handlers
+        function handleSocialLogin(provider) {
+            const dest = currentRole === 'admin' ? 'admin-dashboard.html' : 'user-dashboard.html';
+            localStorage.setItem("username", provider + " User");
+            
+            // Show loading animation
+            const btn = document.getElementById('login-btn');
+            btn.innerHTML = `<span class="animate-pulse">Signing in with ${provider}...</span>`;
+            btn.disabled = true;
+            
+            setTimeout(() => {
+                window.location.href = dest;
+            }, 1000);
+        }
+
+        document.getElementById('google-login-btn').addEventListener('click', () => handleSocialLogin('Google'));
+        document.getElementById('facebook-login-btn').addEventListener('click', () => handleSocialLogin('Facebook'));
+    </script>
+</body>
+</html>

@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Wishlist — Nova Nest Retreats</title>
+    <meta name="description" content="View your saved resorts and dream destinations on your Nova Nest Retreats wishlist.">
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/animations.css">
+    <link rel="stylesheet" href="../css/responsive.css">
+    <style>
+        .dash-layout { display: grid; grid-template-columns: 260px 1fr; min-height: 100vh; }
+        @media(max-width:1024px){ .dash-layout { grid-template-columns: 1fr; } .dash-sidebar { display: none; } }
+        .dash-sidebar { position: sticky; top: var(--nav-height); height: calc(100vh - var(--nav-height)); background: var(--clr-bg-surface); border-right: 1px solid var(--glass-border); overflow-y: auto; padding: 2rem 1rem; display: flex; flex-direction: column; gap: 0.25rem; }
+        .sidebar-label { font-size: var(--fs-2xs); font-weight: var(--fw-semibold); text-transform: uppercase; letter-spacing: 0.12em; color: var(--clr-text-muted); padding: 0.5rem 0.75rem; margin-top: 1.25rem; }
+        .sidebar-link { display: flex; align-items: center; gap: 0.75rem; padding: 0.7rem 0.9rem; border-radius: var(--radius-md); font-size: var(--fs-sm); font-weight: var(--fw-medium); color: var(--clr-text-secondary); transition: all var(--transition-fast); }
+        .sidebar-link:hover { background: rgba(255,255,255,0.05); color: var(--white); }
+        .sidebar-link.active { background: rgba(16,185,129,0.1); color: var(--emerald-400); border-left: 3px solid var(--emerald-500); }
+        .sidebar-link svg { width: 18px; height: 18px; stroke: currentColor; fill: none; stroke-width: 2; flex-shrink: 0; }
+
+        /* Wishlist grid */
+        .wishlist-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.5rem; }
+        .wish-card { background: var(--clr-bg-card); border: 1px solid var(--glass-border); border-radius: var(--radius-lg); overflow: hidden; transition: all 0.4s ease; display: flex; flex-direction: column; animation: fadeInUp 0.4s ease forwards; }
+        .wish-card:hover { border-color: rgba(16,185,129,0.25); transform: translateY(-4px); box-shadow: var(--shadow-lg); }
+        .wish-img-container { position: relative; height: 180px; overflow: hidden; }
+        .wish-img-container img { width: 100%; height: 100%; object-fit: cover; transition: transform var(--transition-slow); }
+        .wish-card:hover .wish-img-container img { transform: scale(1.05); }
+        .wish-remove-btn { position: absolute; top: 0.75rem; right: 0.75rem; width: 36px; height: 36px; border-radius: 50%; background: rgba(15,23,42,0.7); color: var(--clr-error, #ef4444); border: 1px solid rgba(255,255,255,0.1); display: flex; align-items: center; justify-content: center; backdrop-filter: blur(4px); transition: all var(--transition-fast); cursor: pointer; }
+        .wish-remove-btn:hover { background: var(--clr-error, #ef4444); color: var(--white); transform: scale(1.1); }
+        .empty-state { text-align: center; padding: 4rem 2rem; background: var(--clr-bg-card); border: 1px dashed var(--glass-border); border-radius: var(--radius-xl); }
+
+        @keyframes fadeInUp { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:translateY(0); } }
+
+        /* Modal overlay */
+        .modal-overlay { position: fixed; inset: 0; background: rgba(2,6,23,0.88); z-index: 9000; display: flex; align-items: center; justify-content: center; padding: 1.5rem; backdrop-filter: blur(8px); opacity: 0; pointer-events: none; transition: opacity 0.3s ease; }
+        .modal-overlay.open { opacity: 1; pointer-events: all; }
+        .modal-box { background: var(--clr-bg-surface, #0f172a); border: 1px solid var(--glass-border); border-radius: var(--radius-2xl); width: 100%; max-width: 900px; max-height: 88vh; overflow-y: auto; display: flex; flex-direction: column; transform: scale(0.95) translateY(20px); transition: transform 0.3s ease; }
+        .modal-overlay.open .modal-box { transform: scale(1) translateY(0); }
+        .modal-header { position: sticky; top: 0; z-index: 10; background: var(--clr-bg-surface, #0f172a); border-bottom: 1px solid var(--glass-border); padding: 1.25rem 1.75rem; display: flex; align-items: center; justify-content: space-between; }
+        .modal-close { width: 36px; height: 36px; border-radius: 50%; background: rgba(255,255,255,0.06); border: 1px solid var(--glass-border); display: flex; align-items: center; justify-content: center; color: var(--clr-text-muted); cursor: pointer; transition: all var(--transition-fast); }
+        .modal-close:hover { background: rgba(255,255,255,0.12); color: var(--white); }
+        .modal-body { padding: 1.75rem; }
+        
+        .modal-filters { display: flex; gap: 1rem; margin-bottom: 1.5rem; flex-wrap: wrap; align-items: center; }
+        .modal-search-input { flex: 1; background: rgba(255,255,255,0.04); border: 1px solid var(--glass-border); border-radius: var(--radius-md); padding: 0.6rem 1rem; color: white; font-size: 0.85rem; outline: none; transition: border-color 0.2s; min-width: 200px; }
+        .modal-search-input:focus { border-color: var(--emerald-500, #10b981); }
+        .modal-select { background: #0f172a; border: 1px solid var(--glass-border); border-radius: var(--radius-md); padding: 0.6rem 1rem; color: white; font-size: 0.85rem; outline: none; transition: border-color 0.2s; cursor: pointer; }
+        .modal-select:focus { border-color: var(--emerald-500, #10b981); }
+
+        .modal-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 1.25rem; }
+        .resort-pick-card { background: var(--clr-bg-card, rgba(15,23,42,0.85)); border: 1px solid var(--glass-border); border-radius: var(--radius-lg); overflow: hidden; display: flex; flex-direction: column; transition: all 0.25s; }
+        .resort-pick-card:hover { border-color: rgba(16,185,129,0.3); transform: translateY(-2px); }
+        .resort-pick-card img { width: 100%; height: 140px; object-fit: cover; }
+        .resort-pick-info { padding: 0.875rem; flex: 1; display: flex; flex-direction: column; gap: 0.4rem; }
+        .resort-pick-name { font-weight: 700; color: var(--white); font-size: 0.875rem; line-height: 1.3; }
+        .resort-pick-location { font-size: 0.72rem; color: var(--emerald-400, #34d399); font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; }
+        .resort-pick-price { font-size: 0.78rem; color: var(--clr-text-secondary); margin-top: auto; }
+        .add-wish-btn { margin: 0 0.875rem 0.875rem; padding: 0.55rem; border-radius: var(--radius-md); border: none; cursor: pointer; font-size: 0.82rem; font-weight: 600; font-family: inherit; transition: all 0.2s; text-align: center; }
+        .add-wish-btn.add { background: linear-gradient(135deg, var(--emerald-500, #10b981), var(--ocean-500, #0ea5e9)); color: white; }
+        .add-wish-btn.add:hover { opacity: 0.9; transform: translateY(-1px); }
+        .add-wish-btn.added { background: rgba(16,185,129,0.12); color: var(--emerald-400, #34d399); border: 1px solid rgba(16,185,129,0.3); cursor: default; }
+    </style>
+</head>
+<body>
+    <header id="main-header"></header>
+
+    <main id="main-content" class="page-content bg-deep">
+        <div class="dash-layout">
+            <!-- Sidebar -->
+            <aside class="dash-sidebar">
+                <div class="flex items-center gap-3 mb-6 p-2 bg-emerald-900 bg-opacity-20 rounded-xl border border-emerald-500 border-opacity-20">
+                    <div class="w-10 h-10 rounded-full bg-emerald-500 flex items-center justify-center text-white font-bold text-sm flex-shrink-0">JD</div>
+                    <div class="min-w-0">
+                        <div class="font-bold text-sm text-white truncate">John Doe</div>
+                        <div class="text-xs text-emerald truncate">Gold Member</div>
+                    </div>
+                </div>
+
+                <span class="sidebar-label">Main</span>
+                <a href="user-dashboard.html" class="sidebar-link">
+                    <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+                    Dashboard
+                </a>
+                <a href="bookings.html" class="sidebar-link">
+                    <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
+                    My Bookings
+                </a>
+                <a href="wishlist.html" class="sidebar-link active">
+                    <svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+                    Wishlist
+                </a>
+                <a href="payment-history.html" class="sidebar-link">
+                    <svg viewBox="0 0 24 24"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect><line x1="1" y1="10" x2="23" y2="10"></line></svg>
+                    Payment History
+                </a>
+
+                <span class="sidebar-label">Account</span>
+                <a href="settings.html" class="sidebar-link">
+                    <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06A1.65 1.65 0 0 0 15 19.4a1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+                    Settings
+                </a>
+                <a href="login.html" class="sidebar-link text-error mt-4" style="color:#ef4444">
+                    <svg viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+                    Logout
+                </a>
+            </aside>
+
+            <!-- Main Content -->
+            <div class="flex flex-col gap-8 p-6" style="padding:2.5rem;">
+                <!-- Header -->
+                <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;" class="reveal">
+                    <div>
+                        <h1 class="text-3xl font-display font-bold">My Wishlist</h1>
+                        <p class="text-muted mt-1">Manage your saved retreats. You have <span id="wish-count" class="font-bold text-emerald">0</span> items saved.</p>
+                    </div>
+                    <button id="add-more-btn" class="btn btn-outline" onclick="openModal()" style="display:flex;align-items:center;gap:0.5rem;">
+                        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                        Add More Stays
+                    </button>
+                </div>
+
+                <!-- Wishlist Grid -->
+                <div class="wishlist-grid reveal" id="wishlist-grid"></div>
+
+                <!-- Empty State -->
+                <div class="empty-state reveal" id="empty-state" style="display:none;">
+                    <div style="width:64px;height:64px;border-radius:50%;background:rgba(16,185,129,0.1);display:flex;align-items:center;justify-content:center;color:var(--emerald-400,#34d399);margin:0 auto 1rem;">
+                        <svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+                    </div>
+                    <h2 class="text-xl font-display font-bold text-white mb-2">Your Wishlist is Empty</h2>
+                    <p class="text-muted text-sm" style="max-width:28rem;margin:0 auto 1.5rem;">Explore our curated luxury resort destinations to save your favourite paradises for later.</p>
+                    <button class="btn btn-primary" onclick="openModal()">Browse Resorts</button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Add More Stays Modal -->
+    <div class="modal-overlay" id="add-modal" onclick="handleOverlayClick(event)">
+        <div class="modal-box">
+            <div class="modal-header">
+                <div>
+                    <h2 style="font-size:1.1rem;font-weight:700;color:var(--white);">Browse Luxury Resorts</h2>
+                    <p style="font-size:0.78rem;color:var(--clr-text-muted);margin-top:2px;">Search and add resorts directly to your wishlist.</p>
+                </div>
+                <button class="modal-close" onclick="closeModal()" aria-label="Close">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                </button>
+            </div>
+            <div class="modal-body">
+                <!-- Filters -->
+                <div class="modal-filters">
+                    <input type="text" id="modal-search" class="modal-search-input" placeholder="Search by resort name or location..." oninput="handleFilterChange()">
+                    <select id="modal-category" class="modal-select" onchange="handleFilterChange()">
+                        <option value="all">All Categories</option>
+                        <option value="beachfront">Beachfront</option>
+                        <option value="jungle">Jungle &amp; Safari</option>
+                        <option value="mountain">Mountains</option>
+                        <option value="city">City Luxury</option>
+                        <option value="island">Private Island</option>
+                    </select>
+                </div>
+
+                <!-- Resort grid inside modal -->
+                <div class="modal-grid" id="modal-resort-grid"></div>
+
+                <!-- Load More Button -->
+                <div id="modal-load-more-container" style="text-align:center;margin-top:2rem;display:none;">
+                    <button id="modal-load-more-btn" class="btn btn-outline" onclick="loadMoreResorts()">Load More Resorts</button>
+                </div>
+
+                <!-- No results inside modal -->
+                <div id="modal-no-results" style="text-align:center;padding:3rem 1rem;display:none;">
+                    <p style="color:var(--clr-text-muted);font-size:0.9rem;">No resorts found matching your criteria.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="../js/main.js"></script>
+    <script src="../js/animations.js"></script>
+    <script>
+        /* ============================================================
+           RESORTS CATALOGUE GENERATOR (Exactly matches resorts.html)
+        ============================================================ */
+        const ALL_RESORTS = (() => {
+            const pfx = [
+                'Azure','Emerald','Sapphire','Golden','Crystal','Coral','Amber','Silver',
+                'Ruby','Topaz','Jade','Opal','Turquoise','Cobalt','Ivory','Onyx',
+                'Pearl','Indigo','Citrine','Platinum','Sunset','Sunrise','Midnight',
+                'Dawn','Royal','Imperial','Grand','Majestic','Elite','Premier',
+                'Prestige','Luxe','Serene','Tranquil','Mystic','Celestial','Horizon',
+                'Cascade','Radiant','Zenith'
+            ];
+            const noun = ['Ocean','Beach','Island','Mountain','Jungle','Lake','Valley','Bay','Cliff','Garden'];
+            const type = ['Resort','Lodge','Retreat','Villas','Hotel','Sanctuary','Haven','Palace','Estate','Oasis'];
+
+            const locations = [
+                { name:'Maldives',            cat:'island',     min:18000, max:95000  },
+                { name:'Bali, Indonesia',      cat:'jungle',     min:6000,  max:45000  },
+                { name:'Goa, India',           cat:'beachfront', min:4000,  max:35000  },
+                { name:'Kerala, India',        cat:'jungle',     min:3500,  max:25000  },
+                { name:'Swiss Alps',           cat:'mountain',   min:20000, max:80000  },
+                { name:'Singapore',            cat:'city',       min:18000, max:70000  },
+                { name:'Bora Bora',            cat:'island',     min:28000, max:100000 },
+                { name:'Phuket, Thailand',     cat:'beachfront', min:5000,  max:40000  },
+                { name:'Dubai, UAE',           cat:'city',       min:15000, max:90000  },
+                { name:'Santorini, Greece',    cat:'beachfront', min:12000, max:75000  },
+                { name:'Seychelles',           cat:'island',     min:22000, max:85000  },
+                { name:'Coorg, India',         cat:'mountain',   min:3000,  max:18000  },
+                { name:'Manali, India',        cat:'mountain',   min:2500,  max:15000  },
+                { name:'Andaman Islands',      cat:'beachfront', min:5000,  max:32000  },
+                { name:'Sri Lanka',            cat:'jungle',     min:5000,  max:35000  },
+                { name:'Rajasthan, India',     cat:'city',       min:8000,  max:55000  },
+                { name:'Ooty, India',          cat:'mountain',   min:2800,  max:14000  },
+                { name:'Tuscany, Italy',       cat:'city',       min:16000, max:72000  },
+                { name:'Langkawi, Malaysia',   cat:'island',     min:6000,  max:42000  },
+                { name:'Queenstown, NZ',       cat:'mountain',   min:14000, max:65000  }
+            ];
+
+            const badges = [
+                { text:'Best Seller',    cls:''             },
+                { text:'Trending',       cls:'badge-warning' },
+                { text:'Exclusive Deal', cls:'badge-ocean'   },
+                { text:'Top Rated',      cls:''             },
+                { text:'Flash Sale',     cls:'badge-warning' },
+                { text:'Most Popular',   cls:''             },
+                { text:"Editor's Pick",  cls:'badge-ocean'   },
+                { text:'Award Winner',   cls:''             },
+                { text:'Member Deal',    cls:'badge-warning' },
+                { text:'New Arrival',    cls:'badge-ocean'   },
+                null, null, null, null, null
+            ];
+
+            const imgs = [
+                '1582719478250-c89cae4dc85b','1571896349842-33c89424de2d',
+                '1566073771259-6a8506099945','1522798514-97ceb8c4f1c8',
+                '1544365558-35aa4afcf11f',  '1498307833015-e7b400441eb8',
+                '1520250497591-112f2f40a3f4','1551882547-ff40c63fe5fa',
+                '1578683010236-d716f9a3f461','1540541338287-41700207dee6',
+                '1537996194471-e657df975ab4','1615880484746-a134be9a6ecf',
+                '1506905925346-21bda4d32df4','1445019980597-93fa8acb246c',
+                '1518684079-3c830dcef090',  '1542838132-92c53300491e',
+                '1613395877344-13d4a8e0d49e','1504701954957-2010ec3bcec1',
+                '1499793983690-e29da59ef1c2','1610641818989-c2051b5e2cfd'
+            ];
+
+            const ratingPool = [3.5, 4.0, 4.2, 4.5, 4.7, 4.8, 5.0];
+
+            const list = [];
+            for (let i = 0; i < 400; i++) {
+                const loc    = locations[i % 20];
+                const range  = loc.max - loc.min;
+                const raw    = loc.min + ((i * 1237 + i * i * 19) % range);
+                const price  = Math.round(raw / 500) * 500;
+
+                const name   = `${pfx[i % pfx.length]} ${noun[Math.floor(i / 4) % noun.length]} ${type[Math.floor(i / 40) % type.length]}`;
+                const badge  = badges[i % badges.length];
+                const rating = ratingPool[i % ratingPool.length];
+                const reviews = 20 + ((i * 37 + 117) % 780);
+                const img    = imgs[i % imgs.length];
+
+                list.push({ id: i + 1, name, location: loc.name, cat: loc.cat, price, badge, rating, reviews, img });
+            }
+            return list;
+        })();
+
+        /* ============================================================
+           WISHLIST STATE (localStorage)
+        ============================================================ */
+        const LS_KEY = 'novanest_wishlist';
+
+        function loadWishlist() {
+            try {
+                return JSON.parse(localStorage.getItem(LS_KEY)) || [];
+            } catch {
+                return [];
+            }
+        }
+
+        function saveWishlist(list) {
+            localStorage.setItem(LS_KEY, JSON.stringify(list));
+        }
+
+        function isInWishlist(id) {
+            return loadWishlist().some(r => r.id === id || String(r.id) === String(id));
+        }
+
+        function addToWishlist(resort) {
+            const list = loadWishlist();
+            if (!list.some(r => r.id === resort.id || String(r.id) === String(resort.id))) {
+                list.push(resort);
+                saveWishlist(list);
+            }
+        }
+
+        function removeFromWishlist(id) {
+            const list = loadWishlist().filter(r => r.id !== id && String(r.id) !== String(id));
+            saveWishlist(list);
+        }
+
+        /* ============================================================
+           WISHLIST CARD RENDERING
+        ============================================================ */
+        function buildWishCard(resort) {
+            const card = document.createElement('div');
+            card.className = 'wish-card';
+            card.id = 'wish-card-' + resort.id;
+            
+            const imgUrl = resort.img.startsWith('http') ? resort.img : `https://images.unsplash.com/photo-${resort.img}?auto=format&fit=crop&w=800&q=80`;
+            const priceVal = typeof resort.price === 'number' ? '₹' + resort.price.toLocaleString('en-IN') : resort.price;
+
+            card.innerHTML = `
+                <div class="wish-img-container">
+                    <img src="${imgUrl}" alt="${resort.name}" loading="lazy">
+                    <button class="wish-remove-btn" onclick="removeWish('${resort.id}')" aria-label="Remove from wishlist">
+                        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+                    </button>
+                </div>
+                <div class="p-5 flex-1 flex flex-col justify-between" style="padding:1.25rem;display:flex;flex-direction:column;justify-content:space-between;flex:1;">
+                    <div>
+                        <div style="font-size:0.72rem;color:var(--emerald-400,#34d399);font-weight:700;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.3rem;">${resort.location}</div>
+                        <h3 style="font-family:var(--font-display);font-weight:700;font-size:0.95rem;color:var(--white);margin-bottom:0.5rem;">${resort.name}</h3>
+                        <p style="font-size:0.75rem;color:var(--clr-text-muted);margin-bottom:1rem;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;">Experience premium luxury accommodations with world-class facilities and breathtaking views.</p>
+                    </div>
+                    <div>
+                        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;">
+                            <div style="font-family:var(--font-display);font-weight:700;color:var(--white);font-size:1.05rem;">${priceVal} <span style="font-size:0.75rem;color:var(--clr-text-muted);font-weight:400;">/ night</span></div>
+                            <div style="font-size:0.75rem;color:#f59e0b;">★ ${resort.rating} <span style="color:var(--clr-text-muted);">(${resort.reviews})</span></div>
+                        </div>
+                        <a href="resort-details.html" class="btn btn-sm btn-primary btn-block" style="display:block;text-align:center;">Book Stay</a>
+                    </div>
+                </div>`;
+            return card;
+        }
+
+        function renderWishlist() {
+            const grid = document.getElementById('wishlist-grid');
+            const emptyState = document.getElementById('empty-state');
+            const wishlist = loadWishlist();
+
+            grid.innerHTML = '';
+            wishlist.forEach(resort => grid.appendChild(buildWishCard(resort)));
+
+            const count = wishlist.length;
+            document.getElementById('wish-count').textContent = count;
+
+            if (count === 0) {
+                grid.style.display = 'none';
+                emptyState.style.display = 'block';
+            } else {
+                grid.style.display = 'grid';
+                emptyState.style.display = 'none';
+            }
+        }
+
+        function removeWish(id) {
+            const card = document.getElementById('wish-card-' + id);
+            if (!card) return;
+            card.style.transition = 'all 0.35s ease';
+            card.style.opacity = '0';
+            card.style.transform = 'scale(0.88) translateY(10px)';
+            setTimeout(() => {
+                removeFromWishlist(id);
+                renderWishlist();
+                refreshModalButtons();
+            }, 350);
+        }
+
+        /* ============================================================
+           MODAL CATALOGUE BROWSING & FILTERS & PAGINATION
+        ============================================================ */
+        let modalFilteredResorts = [];
+        let modalCurrentLimit = 16;
+        const MODAL_PAGE_SIZE = 16;
+
+        function openModal() {
+            document.getElementById('modal-search').value = '';
+            document.getElementById('modal-category').value = 'all';
+            
+            modalCurrentLimit = MODAL_PAGE_SIZE;
+            applyModalFilters();
+            
+            document.getElementById('add-modal').classList.add('open');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal() {
+            document.getElementById('add-modal').classList.remove('open');
+            document.body.style.overflow = '';
+        }
+
+        function handleOverlayClick(e) {
+            if (e.target === document.getElementById('add-modal')) closeModal();
+        }
+
+        function handleFilterChange() {
+            modalCurrentLimit = MODAL_PAGE_SIZE;
+            applyModalFilters();
+        }
+
+        function applyModalFilters() {
+            const searchQuery = document.getElementById('modal-search').value.trim().toLowerCase();
+            const categoryFilter = document.getElementById('modal-category').value;
+
+            modalFilteredResorts = ALL_RESORTS.filter(resort => {
+                const matchesSearch = resort.name.toLowerCase().includes(searchQuery) || resort.location.toLowerCase().includes(searchQuery);
+                const matchesCategory = categoryFilter === 'all' || resort.cat === categoryFilter;
+                return matchesSearch && matchesCategory;
+            });
+
+            renderModalGrid();
+        }
+
+        function renderModalGrid() {
+            const grid = document.getElementById('modal-resort-grid');
+            const noResults = document.getElementById('modal-no-results');
+            const loadMoreBtnContainer = document.getElementById('modal-load-more-container');
+            
+            grid.innerHTML = '';
+            
+            if (modalFilteredResorts.length === 0) {
+                noResults.style.display = 'block';
+                loadMoreBtnContainer.style.display = 'none';
+                return;
+            } else {
+                noResults.style.display = 'none';
+            }
+
+            const visibleSlice = modalFilteredResorts.slice(0, modalCurrentLimit);
+            
+            visibleSlice.forEach(resort => {
+                const alreadyAdded = isInWishlist(resort.id);
+                const card = document.createElement('div');
+                card.className = 'resort-pick-card';
+                card.id = 'modal-card-' + resort.id;
+                
+                const imgUrl = `https://images.unsplash.com/photo-${resort.img}?auto=format&fit=crop&w=600&q=80`;
+                const priceFormatted = '₹' + resort.price.toLocaleString('en-IN');
+
+                card.innerHTML = `
+                    <img src="${imgUrl}" alt="${resort.name}" loading="lazy">
+                    <div class="resort-pick-info">
+                        <div class="resort-pick-location">${resort.location}</div>
+                        <div class="resort-pick-name">${resort.name}</div>
+                        <div class="resort-pick-price">${priceFormatted} / night &nbsp;★ ${resort.rating} (${resort.reviews})</div>
+                    </div>
+                    <button id="addbtn-${resort.id}" class="add-wish-btn ${alreadyAdded ? 'added' : 'add'}" onclick="toggleWish('${resort.id}')" ${alreadyAdded ? 'disabled' : ''}>
+                        ${alreadyAdded ? '✓ Added to Wishlist' : '+ Add to Wishlist'}
+                    </button>`;
+                grid.appendChild(card);
+            });
+
+            if (modalCurrentLimit < modalFilteredResorts.length) {
+                loadMoreBtnContainer.style.display = 'block';
+            } else {
+                loadMoreBtnContainer.style.display = 'none';
+            }
+        }
+
+        function loadMoreResorts() {
+            modalCurrentLimit += MODAL_PAGE_SIZE;
+            renderModalGrid();
+        }
+
+        function toggleWish(id) {
+            const resort = ALL_RESORTS.find(r => String(r.id) === String(id));
+            if (!resort || isInWishlist(id)) return;
+            addToWishlist(resort);
+            renderWishlist();
+
+            // Update the modal button state
+            const btn = document.getElementById('addbtn-' + id);
+            if (btn) {
+                btn.className = 'add-wish-btn added';
+                btn.disabled = true;
+                btn.textContent = '✓ Added to Wishlist';
+            }
+        }
+
+        function refreshModalButtons() {
+            ALL_RESORTS.forEach(resort => {
+                const btn = document.getElementById('addbtn-' + resort.id);
+                if (!btn) return;
+                const inList = isInWishlist(resort.id);
+                btn.className = 'add-wish-btn ' + (inList ? 'added' : 'add');
+                btn.disabled = inList;
+                btn.textContent = inList ? '✓ Added to Wishlist' : '+ Add to Wishlist';
+            });
+        }
+
+        /* ============================================================
+           INITIALISE — seed defaults if empty on first visit
+        ============================================================ */
+        (function init() {
+            if (loadWishlist().length === 0) {
+                // Pre-seed with first 3 resorts
+                [1, 2, 3].forEach(id => {
+                    const resort = ALL_RESORTS.find(r => r.id === id);
+                    if (resort) addToWishlist(resort);
+                });
+            }
+            renderWishlist();
+        })();
+
+        // Escape key closes modal
+        document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+    </script>
+</body>
+</html>

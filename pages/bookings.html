@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Bookings — Nova Nest Retreats</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/animations.css">
+    <link rel="stylesheet" href="../css/responsive.css">
+    <style>
+        .dash-layout { display: grid; grid-template-columns: 260px 1fr; min-height: 100vh; }
+        @media(max-width:1024px){ .dash-layout { grid-template-columns: 1fr; } .dash-sidebar { display: none; } }
+        .dash-sidebar { position: sticky; top: var(--nav-height); height: calc(100vh - var(--nav-height)); background: var(--clr-bg-surface); border-right: 1px solid var(--glass-border); overflow-y: auto; padding: 2rem 1rem; display: flex; flex-direction: column; gap: 0.25rem; }
+        .sidebar-label { font-size: var(--fs-2xs); font-weight: var(--fw-semibold); text-transform: uppercase; letter-spacing: 0.12em; color: var(--clr-text-muted); padding: 0.5rem 0.75rem; margin-top: 1.25rem; }
+        .sidebar-link { display: flex; align-items: center; gap: 0.75rem; padding: 0.7rem 0.9rem; border-radius: var(--radius-md); font-size: var(--fs-sm); font-weight: var(--fw-medium); color: var(--clr-text-secondary); transition: all var(--transition-fast); }
+        .sidebar-link:hover { background: rgba(255,255,255,0.05); color: var(--white); }
+        .sidebar-link.active { background: rgba(16,185,129,0.1); color: var(--emerald-400); border-left: 3px solid var(--emerald-500); }
+        .sidebar-link svg { width: 18px; height: 18px; stroke: currentColor; fill: none; stroke-width: 2; flex-shrink: 0; }
+        .booking-card { background: var(--clr-bg-card); border: 1px solid var(--glass-border); border-radius: var(--radius-lg); overflow: hidden; transition: all var(--transition-base); }
+        .booking-card:hover { border-color: rgba(16,185,129,0.2); transform: translateY(-3px); box-shadow: var(--shadow-lg); }
+    </style>
+</head>
+<body>
+    <header id="main-header"></header>
+    <main id="main-content" class="page-content bg-deep">
+        <div class="dash-layout">
+            <aside class="dash-sidebar">
+                <div class="flex items-center gap-3 mb-6 p-2 bg-emerald-900 bg-opacity-20 rounded-xl border border-emerald-500 border-opacity-20">
+                    <div class="w-10 h-10 rounded-full bg-emerald-500 flex items-center justify-center text-white font-bold text-sm flex-shrink-0">JD</div>
+                    <div><div class="font-bold text-sm text-white">John Doe</div><div class="text-xs text-emerald">Gold Member</div></div>
+                </div>
+                <span class="sidebar-label">Main</span>
+                <a href="user-dashboard.html" class="sidebar-link"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>Dashboard</a>
+                <a href="bookings.html" class="sidebar-link active"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>My Bookings</a>
+                <a href="wishlist.html" class="sidebar-link"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>Wishlist</a>
+                <a href="payment-history.html" class="sidebar-link"><svg viewBox="0 0 24 24"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect><line x1="1" y1="10" x2="23" y2="10"></line></svg>Payment History</a>
+                <span class="sidebar-label">Account</span>
+                <a href="settings.html" class="sidebar-link"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06A1.65 1.65 0 0 0 15 19.4a1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>Settings</a>
+                <a href="login.html" class="sidebar-link text-error mt-4"><svg viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>Logout</a>
+            </aside>
+
+            <div class="flex flex-col gap-8 p-6 md:p-10">
+                <!-- Header -->
+                <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 reveal">
+                    <div><h1 class="text-3xl font-display font-bold">My Bookings</h1><p class="text-muted mt-1">All your resort reservations in one place.</p></div>
+                    <a href="resorts.html" class="btn btn-primary shadow-glow-emerald">+ New Booking</a>
+                </div>
+
+                <!-- Filter Tabs -->
+                <div class="flex gap-3 flex-wrap reveal">
+                    <button class="tag active" data-filter="all">All (4)</button>
+                    <button class="tag" data-filter="confirmed">Confirmed (2)</button>
+                    <button class="tag" data-filter="pending">Pending (1)</button>
+                    <button class="tag" data-filter="completed">Completed (1)</button>
+                </div>
+
+                <!-- Booking Cards -->
+                <div class="flex flex-col gap-5">
+                    <!-- Card 1 -->
+                    <div class="booking-card reveal stagger-1">
+                        <div class="flex flex-col md:flex-row">
+                            <div class="w-full md:w-48 h-40 md:h-auto flex-shrink-0 overflow-hidden">
+                                <img src="https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&w=400&q=80" alt="resort" class="w-full h-full object-cover">
+                            </div>
+                            <div class="flex-1 p-6 flex flex-col md:flex-row justify-between gap-4">
+                                <div>
+                                    <div class="flex items-center gap-3 mb-2">
+                                        <h3 class="font-display font-bold text-lg text-white">Azure Ocean Water Villas</h3>
+                                        <span class="badge badge-emerald">Confirmed</span>
+                                    </div>
+                                    <div class="text-sm text-emerald mb-4 flex items-center gap-1">
+                                        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="inline-block"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg> Male Atoll, Maldives
+                                    </div>
+                                    <div class="grid grid-cols-3 gap-4 text-sm">
+                                        <div><div class="text-muted text-xs mb-1">Check-in</div><div class="font-medium text-white">Dec 15, 2026</div></div>
+                                        <div><div class="text-muted text-xs mb-1">Check-out</div><div class="font-medium text-white">Dec 18, 2026</div></div>
+                                        <div><div class="text-muted text-xs mb-1">Guests</div><div class="font-medium text-white">2 Adults</div></div>
+                                    </div>
+                                </div>
+                                <div class="flex flex-col items-end justify-between gap-3 min-w-max">
+                                    <div class="text-right"><div class="text-2xl font-display font-bold text-white">₹82,320</div><div class="text-xs text-muted">3 nights incl. taxes</div></div>
+                                    <div class="flex gap-2">
+                                        <button class="btn btn-sm btn-outline">Cancel</button>
+                                        <a href="resort-details.html" class="btn btn-sm btn-primary">View Details</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Card 2 -->
+                    <div class="booking-card reveal stagger-2">
+                        <div class="flex flex-col md:flex-row">
+                            <div class="w-full md:w-48 h-40 md:h-auto flex-shrink-0 overflow-hidden">
+                                <img src="https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=400&q=80" alt="resort" class="w-full h-full object-cover">
+                            </div>
+                            <div class="flex-1 p-6 flex flex-col md:flex-row justify-between gap-4">
+                                <div>
+                                    <div class="flex items-center gap-3 mb-2">
+                                        <h3 class="font-display font-bold text-lg text-white">Sapphire Coast Premium</h3>
+                                        <span class="badge badge-warning">Pending Payment</span>
+                                    </div>
+                                    <div class="text-sm text-emerald mb-4 flex items-center gap-1">
+                                        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="inline-block"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg> Goa, India
+                                    </div>
+                                    <div class="grid grid-cols-3 gap-4 text-sm">
+                                        <div><div class="text-muted text-xs mb-1">Check-in</div><div class="font-medium text-white">Jan 5, 2027</div></div>
+                                        <div><div class="text-muted text-xs mb-1">Check-out</div><div class="font-medium text-white">Jan 7, 2027</div></div>
+                                        <div><div class="text-muted text-xs mb-1">Guests</div><div class="font-medium text-white">2 Adults</div></div>
+                                    </div>
+                                </div>
+                                <div class="flex flex-col items-end justify-between gap-3 min-w-max">
+                                    <div class="text-right"><div class="text-2xl font-display font-bold text-white">₹20,400</div><div class="text-xs text-muted">2 nights incl. taxes</div></div>
+                                    <div class="flex gap-2">
+                                        <button class="btn btn-sm btn-danger">Cancel</button>
+                                        <button class="btn btn-sm btn-primary shadow-glow-emerald">Pay Now</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Card 3 — Completed -->
+                    <div class="booking-card reveal stagger-3 opacity-75">
+                        <div class="flex flex-col md:flex-row">
+                            <div class="w-full md:w-48 h-40 md:h-auto flex-shrink-0 overflow-hidden">
+                                <img src="https://images.unsplash.com/photo-1571896349842-33c89424de2d?auto=format&fit=crop&w=400&q=80" alt="resort" class="w-full h-full object-cover filter grayscale-[50%]">
+                            </div>
+                            <div class="flex-1 p-6 flex flex-col md:flex-row justify-between gap-4">
+                                <div>
+                                    <div class="flex items-center gap-3 mb-2">
+                                        <h3 class="font-display font-bold text-lg text-white">Emerald Jungle Retreat</h3>
+                                        <span class="badge badge-ocean">Completed</span>
+                                    </div>
+                                    <div class="text-sm text-emerald mb-4 flex items-center gap-1">
+                                        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="inline-block"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg> Bali, Indonesia
+                                    </div>
+                                    <div class="grid grid-cols-3 gap-4 text-sm">
+                                        <div><div class="text-muted text-xs mb-1">Check-in</div><div class="font-medium text-white">Sep 10, 2025</div></div>
+                                        <div><div class="text-muted text-xs mb-1">Check-out</div><div class="font-medium text-white">Sep 15, 2025</div></div>
+                                        <div><div class="text-muted text-xs mb-1">Guests</div><div class="font-medium text-white">2 Adults</div></div>
+                                    </div>
+                                </div>
+                                <div class="flex flex-col items-end justify-between gap-3 min-w-max">
+                                    <div class="text-right"><div class="text-2xl font-display font-bold text-white">₹64,000</div><div class="text-xs text-muted">5 nights incl. taxes</div></div>
+                                    <div class="flex gap-2">
+                                        <button class="btn btn-sm btn-outline">Write Review</button>
+                                        <button class="btn btn-sm btn-primary">Book Again</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="../js/main.js"></script>
+    <script src="../js/animations.js"></script>
+    <script>
+        // Filter tabs
+        const tags = document.querySelectorAll('.tag[data-filter]');
+        tags.forEach(tag => {
+            tag.addEventListener('click', () => {
+                tags.forEach(t => t.classList.remove('active'));
+                tag.classList.add('active');
+            });
+        });
+    </script>
+</body>
+</html>

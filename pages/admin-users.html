@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Users — Admin Panel | Nova Nest Retreats</title>
+    <meta name="description" content="Admin panel to manage registered users, roles, activity and account statuses at Nova Nest Retreats.">
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/animations.css">
+    <link rel="stylesheet" href="../css/responsive.css">
+    <style>
+        .dash-layout { display: grid; grid-template-columns: 260px 1fr; min-height: 100vh; }
+        @media(max-width:1024px){ .dash-layout { grid-template-columns: 1fr; } .dash-sidebar { display: none; } }
+        .dash-sidebar { position: sticky; top: var(--nav-height); height: calc(100vh - var(--nav-height)); background: rgba(5,10,22,0.98); border-right: 1px solid var(--glass-border); overflow-y: auto; padding: 1.5rem 1rem; display: flex; flex-direction: column; gap: 0.2rem; }
+        .sidebar-label { font-size: 0.65rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.14em; color: var(--clr-text-muted); padding: 0.5rem 0.75rem; margin-top: 1.25rem; }
+        .sidebar-link { display: flex; align-items: center; gap: 0.75rem; padding: 0.65rem 0.9rem; border-radius: 10px; font-size: 0.85rem; font-weight: 500; color: var(--clr-text-secondary); transition: all 0.2s; text-decoration: none; }
+        .sidebar-link:hover { background: rgba(255,255,255,0.05); color: var(--white); }
+        .sidebar-link.active { background: rgba(16,185,129,0.12); color: #34d399; border-left: 3px solid #10b981; padding-left: calc(0.9rem - 3px); }
+        .sidebar-link svg { width: 17px; height: 17px; stroke: currentColor; fill: none; stroke-width: 2; flex-shrink: 0; }
+        .sidebar-avatar { display: flex; align-items: center; gap: 0.75rem; padding: 0.9rem; background: rgba(16,185,129,0.06); border: 1px solid rgba(16,185,129,0.15); border-radius: 12px; margin-bottom: 0.5rem; }
+        .sa-circle { width: 38px; height: 38px; border-radius: 50%; background: linear-gradient(135deg,#10b981,#0ea5e9); display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 0.8rem; color: white; flex-shrink: 0; }
+        .dash-main { padding: 2rem 2.5rem; display: flex; flex-direction: column; gap: 1.75rem; overflow-y: auto; }
+        @media(max-width:768px){ .dash-main { padding: 1.25rem; } }
+
+        /* Stats */
+        .stats-row { display: grid; grid-template-columns: repeat(4,1fr); gap: 1.25rem; }
+        @media(max-width:900px){ .stats-row { grid-template-columns: repeat(2,1fr); } }
+        .stat-card { background: var(--clr-bg-card); border: 1px solid var(--glass-border); border-radius: 16px; padding: 1.4rem 1.5rem; position: relative; overflow: hidden; transition: all 0.25s; }
+        .stat-card::before { content:''; position:absolute; top:0; left:0; right:0; height:2px; background:var(--grad-primary); opacity:0; transition:opacity 0.25s; }
+        .stat-card:hover { transform: translateY(-4px); border-color: rgba(16,185,129,0.25); }
+        .stat-card:hover::before { opacity:1; }
+        .sc-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.75rem; }
+        .sc-icon { width: 42px; height: 42px; border-radius: 10px; display: flex; align-items: center; justify-content: center; }
+        .sc-icon svg { width: 19px; height: 19px; fill: none; stroke: currentColor; stroke-width: 2; }
+        .sci-emerald { background: rgba(16,185,129,0.12); color: #34d399; }
+        .sci-ocean { background: rgba(14,165,233,0.12); color: #38bdf8; }
+        .sci-purple { background: rgba(139,92,246,0.12); color: #a78bfa; }
+        .sci-rose { background: rgba(244,63,94,0.12); color: #fb7185; }
+        .sc-trend { font-size: 0.71rem; font-weight: 600; padding: 0.18rem 0.48rem; border-radius: 20px; }
+        .sc-trend.up { background: rgba(16,185,129,0.15); color: #34d399; }
+        .sc-trend.down { background: rgba(244,63,94,0.12); color: #fb7185; }
+        .sc-val { font-size: 1.85rem; font-weight: 800; color: white; font-family: var(--font-display); line-height: 1; margin-bottom: 0.3rem; }
+        .sc-lbl { font-size: 0.74rem; color: var(--clr-text-muted); text-transform: uppercase; letter-spacing: 0.07em; }
+
+        /* Toolbar */
+        .toolbar { display: flex; gap: 0.75rem; flex-wrap: wrap; align-items: center; }
+        .search-wrap { position: relative; flex: 1; min-width: 200px; max-width: 320px; }
+        .search-wrap svg { position: absolute; left: 0.85rem; top: 50%; transform: translateY(-50%); width: 15px; height: 15px; stroke: var(--clr-text-muted); fill: none; stroke-width: 2; pointer-events: none; }
+        .search-inp { width: 100%; padding: 0.6rem 0.9rem 0.6rem 2.3rem; background: rgba(255,255,255,0.04); border: 1px solid var(--glass-border); border-radius: 10px; color: var(--clr-text-primary); font-size: 0.84rem; outline: none; transition: border-color 0.2s; }
+        .search-inp:focus { border-color: rgba(16,185,129,0.4); }
+        .search-inp::placeholder { color: var(--clr-text-muted); }
+        .sel-inp { padding: 0.6rem 0.9rem; background: rgba(255,255,255,0.04); border: 1px solid var(--glass-border); border-radius: 10px; color: var(--clr-text-primary); font-size: 0.84rem; outline: none; transition: border-color 0.2s; cursor: pointer; }
+        .sel-inp option { background: #0f172a; }
+
+        /* Role tabs */
+        .role-tabs { display: flex; gap: 0.4rem; }
+        .rtab { padding: 0.4rem 1rem; border-radius: 8px; border: 1px solid var(--glass-border); background: transparent; color: var(--clr-text-muted); font-size: 0.8rem; cursor: pointer; transition: all 0.2s; }
+        .rtab:hover { color: white; }
+        .rtab.active { background: linear-gradient(135deg,#10b981,#0ea5e9); border-color: transparent; color: white; }
+
+        /* Table */
+        .table-card { background: var(--clr-bg-card); border: 1px solid var(--glass-border); border-radius: 16px; overflow: hidden; }
+        .table-hdr { display: flex; align-items: center; justify-content: space-between; padding: 1.1rem 1.5rem; border-bottom: 1px solid var(--glass-border); flex-wrap: wrap; gap: 0.75rem; }
+        .table-title { font-weight: 700; color: white; font-size: 0.95rem; }
+        .tbl-count { font-size: 0.75rem; color: var(--clr-text-muted); background: rgba(255,255,255,0.05); padding: 0.2rem 0.6rem; border-radius: 20px; }
+        .admin-table { width: 100%; border-collapse: collapse; }
+        .admin-table th { padding: 0.7rem 1.2rem; text-align: left; font-size: 0.68rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--clr-text-muted); border-bottom: 1px solid var(--glass-border); white-space: nowrap; }
+        .admin-table td { padding: 0.9rem 1.2rem; font-size: 0.84rem; color: var(--clr-text-secondary); border-bottom: 1px solid rgba(255,255,255,0.03); vertical-align: middle; }
+        .admin-table tr:last-child td { border-bottom: none; }
+        .admin-table tbody tr:hover td { background: rgba(255,255,255,0.02); }
+
+        /* Checkbox */
+        .cb { width: 15px; height: 15px; accent-color: #10b981; cursor: pointer; }
+
+        /* User info cell */
+        .user-cell { display: flex; align-items: center; gap: 0.75rem; }
+        .u-avatar { width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 0.75rem; color: white; flex-shrink: 0; }
+        .u-name { font-weight: 600; color: white; font-size: 0.87rem; }
+        .u-email { font-size: 0.72rem; color: var(--clr-text-muted); }
+
+        /* Status & Role badges */
+        .ubadge { display: inline-flex; align-items: center; gap: 0.28rem; padding: 0.22rem 0.65rem; border-radius: 20px; font-size: 0.7rem; font-weight: 600; white-space: nowrap; }
+        .ubadge::before { content:''; width: 5px; height: 5px; border-radius: 50%; background: currentColor; }
+        .ub-active { background: rgba(16,185,129,0.12); color: #34d399; }
+        .ub-inactive { background: rgba(100,116,139,0.15); color: #94a3b8; }
+        .ub-banned { background: rgba(244,63,94,0.1); color: #fb7185; }
+        .rb-admin { background: rgba(139,92,246,0.12); color: #a78bfa; padding: 0.18rem 0.55rem; border-radius: 6px; font-size: 0.68rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; }
+        .rb-user { background: rgba(14,165,233,0.1); color: #38bdf8; padding: 0.18rem 0.55rem; border-radius: 6px; font-size: 0.68rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; }
+        .rb-vip { background: rgba(245,158,11,0.12); color: #fbbf24; padding: 0.18rem 0.55rem; border-radius: 6px; font-size: 0.68rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; }
+
+        /* Activity bar */
+        .activity-bar { height: 6px; border-radius: 3px; background: rgba(255,255,255,0.06); overflow: hidden; min-width: 80px; }
+        .activity-fill { height: 100%; border-radius: 3px; background: linear-gradient(90deg,#10b981,#0ea5e9); }
+
+        /* Action buttons */
+        .act-btns { display: flex; gap: 0.35rem; align-items: center; }
+        .act-btn { width: 29px; height: 29px; border-radius: 7px; border: 1px solid var(--glass-border); background: transparent; display: flex; align-items: center; justify-content: center; cursor: pointer; color: var(--clr-text-muted); transition: all 0.2s; }
+        .act-btn svg { width: 12px; height: 12px; stroke: currentColor; fill: none; stroke-width: 2; }
+        .act-btn:hover { background: rgba(255,255,255,0.06); color: white; }
+        .act-btn.ban:hover { background: rgba(244,63,94,0.1); color: #fb7185; border-color: rgba(244,63,94,0.25); }
+        .act-btn.msg:hover { background: rgba(14,165,233,0.1); color: #38bdf8; border-color: rgba(14,165,233,0.25); }
+
+        /* Pagination */
+        .pagination { display: flex; align-items: center; justify-content: space-between; padding: 0.9rem 1.5rem; border-top: 1px solid var(--glass-border); }
+        .pg-info { font-size: 0.77rem; color: var(--clr-text-muted); }
+        .pg-btns { display: flex; gap: 0.3rem; }
+        .pg-btn { padding: 0.3rem 0.7rem; border-radius: 7px; border: 1px solid var(--glass-border); background: transparent; color: var(--clr-text-muted); font-size: 0.77rem; cursor: pointer; transition: all 0.2s; }
+        .pg-btn.active { background: rgba(16,185,129,0.15); color: #34d399; border-color: rgba(16,185,129,0.3); }
+        .pg-btn:hover:not(.active) { background: rgba(255,255,255,0.05); color: white; }
+
+        /* Bulk action bar */
+        .bulk-bar { display: flex; align-items: center; gap: 1rem; padding: 0.75rem 1.5rem; background: rgba(16,185,129,0.07); border-bottom: 1px solid rgba(16,185,129,0.15); }
+        .bulk-bar span { font-size: 0.82rem; color: #34d399; font-weight: 600; }
+        .bulk-btn { padding: 0.3rem 0.85rem; border-radius: 7px; border: 1px solid var(--glass-border); background: transparent; color: var(--clr-text-secondary); font-size: 0.78rem; cursor: pointer; transition: all 0.2s; }
+        .bulk-btn:hover { background: rgba(255,255,255,0.06); color: white; }
+        .bulk-btn.danger:hover { background: rgba(244,63,94,0.12); color: #fb7185; }
+
+        /* Modal */
+        .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.75); backdrop-filter: blur(6px); z-index: 1000; display: flex; align-items: center; justify-content: center; padding: 1.5rem; opacity: 0; visibility: hidden; transition: all 0.3s; }
+        .modal-overlay.open { opacity: 1; visibility: visible; }
+        .modal-box { background: var(--clr-bg-surface); border: 1px solid var(--glass-border); border-radius: 20px; width: 100%; max-width: 460px; padding: 2rem; transform: scale(0.95); transition: transform 0.3s; }
+        .modal-overlay.open .modal-box { transform: scale(1); }
+        .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; }
+        .modal-title { font-size: 1.15rem; font-weight: 800; color: white; font-family: var(--font-display); }
+        .modal-close { width: 32px; height: 32px; border-radius: 8px; border: 1px solid var(--glass-border); background: transparent; color: var(--clr-text-muted); cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s; }
+        .modal-close:hover { background: rgba(244,63,94,0.1); color: #fb7185; }
+        .modal-close svg { width: 14px; height: 14px; stroke: currentColor; fill: none; stroke-width: 2; }
+        .form-group { margin-bottom: 1rem; }
+        .form-label { display: block; font-size: 0.77rem; font-weight: 600; color: var(--clr-text-secondary); margin-bottom: 0.38rem; letter-spacing: 0.04em; }
+        .form-ctrl { width: 100%; padding: 0.68rem 0.9rem; background: rgba(255,255,255,0.04); border: 1px solid var(--glass-border); border-radius: 10px; color: var(--clr-text-primary); font-size: 0.84rem; outline: none; transition: border-color 0.2s; font-family: inherit; }
+        .form-ctrl:focus { border-color: rgba(16,185,129,0.45); }
+        .form-ctrl::placeholder { color: var(--clr-text-muted); }
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+        .modal-actions { display: flex; gap: 0.75rem; justify-content: flex-end; margin-top: 1.5rem; }
+    </style>
+</head>
+<body>
+    <header id="main-header"></header>
+
+    <main id="main-content" class="page-content bg-deep">
+        <div class="dash-layout">
+
+            <!-- SIDEBAR -->
+            <aside class="dash-sidebar">
+                <div class="sidebar-avatar">
+                    <div class="sa-circle admin-initials">AD</div>
+                    <div>
+                        <div style="font-weight:700;font-size:0.85rem;color:white;" id="sidebar-admin-name">Admin User</div>
+                        <div style="font-size:0.7rem;color:#34d399;">Super Admin</div>
+                    </div>
+                </div>
+                <span class="sidebar-label">Overview</span>
+                <a href="admin-dashboard.html" class="sidebar-link">
+                    <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>Dashboard
+                </a>
+                <span class="sidebar-label">Management</span>
+                <a href="admin-bookings.html" class="sidebar-link">
+                    <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>Manage Bookings
+                </a>
+                <a href="admin-resorts.html" class="sidebar-link">
+                    <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>Manage Resorts
+                </a>
+                <a href="admin-users.html" class="sidebar-link active">
+                    <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>Manage Users
+                </a>
+                <span class="sidebar-label">Account</span>
+                <a href="settings.html" class="sidebar-link">
+                    <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>Settings
+                </a>
+                <a href="login.html" class="sidebar-link" style="color:#fb7185;margin-top:auto;">
+                    <svg viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>Logout
+                </a>
+            </aside>
+
+            <!-- MAIN -->
+            <div class="dash-main">
+
+                <!-- Header -->
+                <div class="reveal" style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:1rem;">
+                    <div>
+                        <h1 style="font-size:1.75rem;font-weight:800;color:white;font-family:var(--font-display);">Manage Users</h1>
+                        <p style="color:var(--clr-text-muted);font-size:0.85rem;margin-top:0.3rem;">View, search, manage roles and control all registered guest accounts.</p>
+                    </div>
+                    <div style="display:flex;gap:0.75rem;">
+                        <button class="btn btn-outline btn-sm" style="font-size:0.82rem;" onclick="exportCSV()">
+                            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" style="margin-right:0.3rem;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                            Export
+                        </button>
+                        <button class="btn btn-primary btn-sm" style="font-size:0.82rem;" onclick="openModal()">+ Invite User</button>
+                    </div>
+                </div>
+
+                <!-- Stats -->
+                <div class="stats-row reveal">
+                    <div class="stat-card">
+                        <div class="sc-top"><div class="sc-icon sci-emerald"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg></div><span class="sc-trend up">↑ 9%</span></div>
+                        <div class="sc-val" data-count="1428">0</div>
+                        <div class="sc-lbl">Total Users</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="sc-top"><div class="sc-icon sci-ocean"><svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div><span class="sc-trend up">↑ 14%</span></div>
+                        <div class="sc-val" data-count="384">0</div>
+                        <div class="sc-lbl">Active This Month</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="sc-top"><div class="sc-icon sci-purple"><svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div><span class="sc-trend up">↑ 6</span></div>
+                        <div class="sc-val" data-count="47">0</div>
+                        <div class="sc-lbl">VIP Members</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="sc-top"><div class="sc-icon sci-rose"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg></div><span class="sc-trend down">↓ 2</span></div>
+                        <div class="sc-val" data-count="12">0</div>
+                        <div class="sc-lbl">Banned Accounts</div>
+                    </div>
+                </div>
+
+                <!-- Toolbar -->
+                <div class="toolbar reveal">
+                    <div class="search-wrap">
+                        <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                        <input class="search-inp" type="text" id="user-search" placeholder="Search by name or email…" oninput="searchUsers(this.value)">
+                    </div>
+                    <div class="role-tabs">
+                        <button class="rtab active" onclick="filterRole('all',this)">All</button>
+                        <button class="rtab" onclick="filterRole('user',this)">Users</button>
+                        <button class="rtab" onclick="filterRole('vip',this)">VIP</button>
+                        <button class="rtab" onclick="filterRole('admin',this)">Admins</button>
+                    </div>
+                    <select class="sel-inp" onchange="filterStatus(this.value)">
+                        <option value="all">All Status</option>
+                        <option value="active">Active</option>
+                        <option value="inactive">Inactive</option>
+                        <option value="banned">Banned</option>
+                    </select>
+                    <select class="sel-inp">
+                        <option>Sort: Newest</option>
+                        <option>Sort: Oldest</option>
+                        <option>Sort: Most Bookings</option>
+                        <option>Sort: Name A–Z</option>
+                    </select>
+                    <span style="font-size:0.8rem;color:var(--clr-text-muted);margin-left:auto;" id="user-count">10 of 1,428 users</span>
+                </div>
+
+                <!-- Table -->
+                <div class="table-card reveal">
+                    <div class="table-hdr">
+                        <span class="table-title">Registered Users</span>
+                        <div style="display:flex;gap:0.5rem;align-items:center;">
+                            <label style="font-size:0.78rem;color:var(--clr-text-muted);display:flex;align-items:center;gap:0.4rem;cursor:pointer;">
+                                <input type="checkbox" class="cb" id="select-all" onchange="toggleAll(this)"> Select All
+                            </label>
+                            <span class="tbl-count" id="user-count-badge">10 users</span>
+                        </div>
+                    </div>
+
+                    <!-- Bulk action bar (hidden by default) -->
+                    <div class="bulk-bar" id="bulk-bar" style="display:none;">
+                        <span id="bulk-count">0 selected</span>
+                        <button class="bulk-btn" onclick="bulkAction('activate')">Activate</button>
+                        <button class="bulk-btn" onclick="bulkAction('deactivate')">Deactivate</button>
+                        <button class="bulk-btn danger" onclick="bulkAction('ban')">Ban Selected</button>
+                        <button class="bulk-btn danger" onclick="bulkAction('delete')">Delete Selected</button>
+                    </div>
+
+                    <div style="overflow-x:auto;">
+                        <table class="admin-table">
+                            <thead>
+                                <tr>
+                                    <th><input type="checkbox" class="cb" id="th-cb"></th>
+                                    <th>User</th>
+                                    <th>Role</th>
+                                    <th>Joined</th>
+                                    <th>Bookings</th>
+                                    <th>Activity</th>
+                                    <th>Spent</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="users-tbody">
+                                <!-- Row 1 -->
+                                <tr data-role="vip" data-status="active" data-name="sarah jenkins" data-email="sarah.j@example.com">
+                                    <td><input type="checkbox" class="cb row-cb" onchange="updateBulk()"></td>
+                                    <td><div class="user-cell"><div class="u-avatar" style="background:linear-gradient(135deg,#10b981,#0ea5e9);">SJ</div><div><div class="u-name">Sarah Jenkins</div><div class="u-email">sarah.j@example.com</div></div></div></td>
+                                    <td><span class="rb-vip">VIP</span></td>
+                                    <td style="font-size:0.8rem;white-space:nowrap;">Mar 12, 2024</td>
+                                    <td style="font-weight:700;color:white;">14</td>
+                                    <td><div class="activity-bar"><div class="activity-fill" style="width:94%;"></div></div></td>
+                                    <td style="font-weight:600;color:#34d399;font-size:0.85rem;">₹4.8L</td>
+                                    <td><span class="ubadge ub-active">Active</span></td>
+                                    <td><div class="act-btns">
+                                        <button class="act-btn msg" title="Message"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></button>
+                                        <button class="act-btn" title="Edit" onclick="openModal()"><svg viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button>
+                                        <button class="act-btn ban" title="Ban"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg></button>
+                                    </div></td>
+                                </tr>
+                                <!-- Row 2 -->
+                                <tr data-role="user" data-status="active" data-name="rahul mehta" data-email="rahul.m@example.com">
+                                    <td><input type="checkbox" class="cb row-cb" onchange="updateBulk()"></td>
+                                    <td><div class="user-cell"><div class="u-avatar" style="background:linear-gradient(135deg,#f59e0b,#ef4444);">RM</div><div><div class="u-name">Rahul Mehta</div><div class="u-email">rahul.m@example.com</div></div></div></td>
+                                    <td><span class="rb-user">User</span></td>
+                                    <td style="font-size:0.8rem;white-space:nowrap;">Jun 3, 2024</td>
+                                    <td style="font-weight:700;color:white;">6</td>
+                                    <td><div class="activity-bar"><div class="activity-fill" style="width:62%;"></div></div></td>
+                                    <td style="font-weight:600;color:#34d399;font-size:0.85rem;">₹1.2L</td>
+                                    <td><span class="ubadge ub-active">Active</span></td>
+                                    <td><div class="act-btns">
+                                        <button class="act-btn msg" title="Message"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></button>
+                                        <button class="act-btn" title="Edit" onclick="openModal()"><svg viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button>
+                                        <button class="act-btn ban" title="Ban"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg></button>
+                                    </div></td>
+                                </tr>
+                                <!-- Row 3 -->
+                                <tr data-role="vip" data-status="active" data-name="priya kapoor" data-email="priya.k@example.com">
+                                    <td><input type="checkbox" class="cb row-cb" onchange="updateBulk()"></td>
+                                    <td><div class="user-cell"><div class="u-avatar" style="background:linear-gradient(135deg,#8b5cf6,#ec4899);">PK</div><div><div class="u-name">Priya Kapoor</div><div class="u-email">priya.k@example.com</div></div></div></td>
+                                    <td><span class="rb-vip">VIP</span></td>
+                                    <td style="font-size:0.8rem;white-space:nowrap;">Jan 18, 2024</td>
+                                    <td style="font-weight:700;color:white;">22</td>
+                                    <td><div class="activity-bar"><div class="activity-fill" style="width:88%;"></div></div></td>
+                                    <td style="font-weight:600;color:#34d399;font-size:0.85rem;">₹8.2L</td>
+                                    <td><span class="ubadge ub-active">Active</span></td>
+                                    <td><div class="act-btns">
+                                        <button class="act-btn msg" title="Message"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></button>
+                                        <button class="act-btn" title="Edit" onclick="openModal()"><svg viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button>
+                                        <button class="act-btn ban" title="Ban"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg></button>
+                                    </div></td>
+                                </tr>
+                                <!-- Row 4 -->
+                                <tr data-role="admin" data-status="active" data-name="michael davis" data-email="m.davis@example.com">
+                                    <td><input type="checkbox" class="cb row-cb" onchange="updateBulk()"></td>
+                                    <td><div class="user-cell"><div class="u-avatar" style="background:linear-gradient(135deg,#0ea5e9,#6366f1);">MD</div><div><div class="u-name">Michael Davis</div><div class="u-email">m.davis@example.com</div></div></div></td>
+                                    <td><span class="rb-admin">Admin</span></td>
+                                    <td style="font-size:0.8rem;white-space:nowrap;">Sep 5, 2023</td>
+                                    <td style="font-weight:700;color:white;">3</td>
+                                    <td><div class="activity-bar"><div class="activity-fill" style="width:45%;"></div></div></td>
+                                    <td style="font-weight:600;color:#34d399;font-size:0.85rem;">₹2.4L</td>
+                                    <td><span class="ubadge ub-active">Active</span></td>
+                                    <td><div class="act-btns">
+                                        <button class="act-btn msg" title="Message"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></button>
+                                        <button class="act-btn" title="Edit" onclick="openModal()"><svg viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button>
+                                        <button class="act-btn ban" title="Ban"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg></button>
+                                    </div></td>
+                                </tr>
+                                <!-- Row 5 -->
+                                <tr data-role="user" data-status="inactive" data-name="ana rodriguez" data-email="a.rodriguez@example.com">
+                                    <td><input type="checkbox" class="cb row-cb" onchange="updateBulk()"></td>
+                                    <td><div class="user-cell"><div class="u-avatar" style="background:linear-gradient(135deg,#f97316,#eab308);">AR</div><div><div class="u-name">Ana Rodriguez</div><div class="u-email">a.rodriguez@example.com</div></div></div></td>
+                                    <td><span class="rb-user">User</span></td>
+                                    <td style="font-size:0.8rem;white-space:nowrap;">Nov 21, 2024</td>
+                                    <td style="font-weight:700;color:white;">2</td>
+                                    <td><div class="activity-bar"><div class="activity-fill" style="width:20%;"></div></div></td>
+                                    <td style="font-weight:600;color:#34d399;font-size:0.85rem;">₹0.6L</td>
+                                    <td><span class="ubadge ub-inactive">Inactive</span></td>
+                                    <td><div class="act-btns">
+                                        <button class="act-btn msg" title="Message"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></button>
+                                        <button class="act-btn" title="Edit" onclick="openModal()"><svg viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button>
+                                        <button class="act-btn ban" title="Ban"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg></button>
+                                    </div></td>
+                                </tr>
+                                <!-- Row 6 -->
+                                <tr data-role="user" data-status="banned" data-name="james wilson" data-email="j.wilson@example.com">
+                                    <td><input type="checkbox" class="cb row-cb" onchange="updateBulk()"></td>
+                                    <td><div class="user-cell"><div class="u-avatar" style="background:linear-gradient(135deg,#64748b,#94a3b8);">JW</div><div><div class="u-name">James Wilson</div><div class="u-email">j.wilson@example.com</div></div></div></td>
+                                    <td><span class="rb-user">User</span></td>
+                                    <td style="font-size:0.8rem;white-space:nowrap;">Aug 7, 2024</td>
+                                    <td style="font-weight:700;color:white;">1</td>
+                                    <td><div class="activity-bar"><div class="activity-fill" style="width:5%;"></div></div></td>
+                                    <td style="font-weight:600;color:#34d399;font-size:0.85rem;">₹0.4L</td>
+                                    <td><span class="ubadge ub-banned">Banned</span></td>
+                                    <td><div class="act-btns">
+                                        <button class="act-btn msg" title="Message"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></button>
+                                        <button class="act-btn" title="Edit" onclick="openModal()"><svg viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button>
+                                        <button class="act-btn ban" title="Unban" style="color:#34d399;"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></button>
+                                    </div></td>
+                                </tr>
+                                <!-- Row 7 -->
+                                <tr data-role="vip" data-status="active" data-name="aisha patel" data-email="aisha.p@example.com">
+                                    <td><input type="checkbox" class="cb row-cb" onchange="updateBulk()"></td>
+                                    <td><div class="user-cell"><div class="u-avatar" style="background:linear-gradient(135deg,#10b981,#3b82f6);">AP</div><div><div class="u-name">Aisha Patel</div><div class="u-email">aisha.p@example.com</div></div></div></td>
+                                    <td><span class="rb-vip">VIP</span></td>
+                                    <td style="font-size:0.8rem;white-space:nowrap;">Feb 14, 2024</td>
+                                    <td style="font-weight:700;color:white;">18</td>
+                                    <td><div class="activity-bar"><div class="activity-fill" style="width:82%;"></div></div></td>
+                                    <td style="font-weight:600;color:#34d399;font-size:0.85rem;">₹6.3L</td>
+                                    <td><span class="ubadge ub-active">Active</span></td>
+                                    <td><div class="act-btns">
+                                        <button class="act-btn msg" title="Message"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></button>
+                                        <button class="act-btn" title="Edit" onclick="openModal()"><svg viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button>
+                                        <button class="act-btn ban" title="Ban"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg></button>
+                                    </div></td>
+                                </tr>
+                                <!-- Row 8 -->
+                                <tr data-role="user" data-status="active" data-name="chen wei" data-email="chen.w@example.com">
+                                    <td><input type="checkbox" class="cb row-cb" onchange="updateBulk()"></td>
+                                    <td><div class="user-cell"><div class="u-avatar" style="background:linear-gradient(135deg,#a78bfa,#f472b6);">CW</div><div><div class="u-name">Chen Wei</div><div class="u-email">chen.w@example.com</div></div></div></td>
+                                    <td><span class="rb-user">User</span></td>
+                                    <td style="font-size:0.8rem;white-space:nowrap;">Jul 29, 2024</td>
+                                    <td style="font-weight:700;color:white;">9</td>
+                                    <td><div class="activity-bar"><div class="activity-fill" style="width:71%;"></div></div></td>
+                                    <td style="font-weight:600;color:#34d399;font-size:0.85rem;">₹3.1L</td>
+                                    <td><span class="ubadge ub-active">Active</span></td>
+                                    <td><div class="act-btns">
+                                        <button class="act-btn msg" title="Message"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></button>
+                                        <button class="act-btn" title="Edit" onclick="openModal()"><svg viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button>
+                                        <button class="act-btn ban" title="Ban"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg></button>
+                                    </div></td>
+                                </tr>
+                                <!-- Row 9 -->
+                                <tr data-role="user" data-status="active" data-name="emma johnson" data-email="emma.j@example.com">
+                                    <td><input type="checkbox" class="cb row-cb" onchange="updateBulk()"></td>
+                                    <td><div class="user-cell"><div class="u-avatar" style="background:linear-gradient(135deg,#ec4899,#f97316);">EJ</div><div><div class="u-name">Emma Johnson</div><div class="u-email">emma.j@example.com</div></div></div></td>
+                                    <td><span class="rb-user">User</span></td>
+                                    <td style="font-size:0.8rem;white-space:nowrap;">Dec 2, 2024</td>
+                                    <td style="font-weight:700;color:white;">4</td>
+                                    <td><div class="activity-bar"><div class="activity-fill" style="width:38%;"></div></div></td>
+                                    <td style="font-weight:600;color:#34d399;font-size:0.85rem;">₹0.9L</td>
+                                    <td><span class="ubadge ub-active">Active</span></td>
+                                    <td><div class="act-btns">
+                                        <button class="act-btn msg" title="Message"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></button>
+                                        <button class="act-btn" title="Edit" onclick="openModal()"><svg viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button>
+                                        <button class="act-btn ban" title="Ban"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg></button>
+                                    </div></td>
+                                </tr>
+                                <!-- Row 10 -->
+                                <tr data-role="admin" data-status="active" data-name="dev sharma" data-email="dev.s@novaadmin.com">
+                                    <td><input type="checkbox" class="cb row-cb" onchange="updateBulk()"></td>
+                                    <td><div class="user-cell"><div class="u-avatar" style="background:linear-gradient(135deg,#10b981,#059669);">DS</div><div><div class="u-name">Dev Sharma</div><div class="u-email">dev.s@novaadmin.com</div></div></div></td>
+                                    <td><span class="rb-admin">Admin</span></td>
+                                    <td style="font-size:0.8rem;white-space:nowrap;">May 1, 2023</td>
+                                    <td style="font-weight:700;color:white;">0</td>
+                                    <td><div class="activity-bar"><div class="activity-fill" style="width:100%;"></div></div></td>
+                                    <td style="font-weight:600;color:var(--clr-text-muted);font-size:0.85rem;">—</td>
+                                    <td><span class="ubadge ub-active">Active</span></td>
+                                    <td><div class="act-btns">
+                                        <button class="act-btn msg" title="Message"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></button>
+                                        <button class="act-btn" title="Edit" onclick="openModal()"><svg viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button>
+                                        <button class="act-btn ban" title="Ban"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg></button>
+                                    </div></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Pagination -->
+                    <div class="pagination">
+                        <span class="pg-info">Showing <strong style="color:white;">10</strong> of <strong style="color:white;">1,428</strong> users</span>
+                        <div class="pg-btns">
+                            <button class="pg-btn">‹ Prev</button>
+                            <button class="pg-btn active">1</button>
+                            <button class="pg-btn">2</button>
+                            <button class="pg-btn">3</button>
+                            <span style="color:var(--clr-text-muted);padding:0 0.3rem;font-size:0.78rem;">…</span>
+                            <button class="pg-btn">143</button>
+                            <button class="pg-btn">Next ›</button>
+                        </div>
+                    </div>
+                </div>
+
+            </div><!-- /dash-main -->
+        </div>
+    </main>
+
+    <!-- INVITE USER MODAL -->
+    <div class="modal-overlay" id="user-modal">
+        <div class="modal-box">
+            <div class="modal-header">
+                <h2 class="modal-title">Invite / Edit User</h2>
+                <button class="modal-close" onclick="closeModal()"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+            </div>
+            <form onsubmit="submitUser(event)">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">First Name</label>
+                        <input class="form-ctrl" type="text" placeholder="First name" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Last Name</label>
+                        <input class="form-ctrl" type="text" placeholder="Last name" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Email Address</label>
+                    <input class="form-ctrl" type="email" placeholder="user@example.com" required>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">Role</label>
+                        <select class="form-ctrl">
+                            <option value="user">User</option>
+                            <option value="vip">VIP</option>
+                            <option value="admin">Admin</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Status</label>
+                        <select class="form-ctrl">
+                            <option value="active">Active</option>
+                            <option value="inactive">Inactive</option>
+                            <option value="banned">Banned</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Phone (optional)</label>
+                    <input class="form-ctrl" type="tel" placeholder="+91 00000 00000">
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-outline btn-sm" onclick="closeModal()">Cancel</button>
+                    <button type="submit" class="btn btn-primary btn-sm">Save User</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="../js/main.js"></script>
+    <script src="../js/animations.js"></script>
+    <script src="../js/dashboard.js"></script>
+    <script>
+        function openModal() { document.getElementById('user-modal').classList.add('open'); document.body.style.overflow='hidden'; }
+        function closeModal() { document.getElementById('user-modal').classList.remove('open'); document.body.style.overflow=''; }
+        document.getElementById('user-modal').addEventListener('click', e => { if(e.target===document.getElementById('user-modal')) closeModal(); });
+        function submitUser(e) {
+            e.preventDefault(); closeModal();
+            const t = document.createElement('div'); t.className='toast show';
+            t.innerHTML='<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg><span>User saved successfully!</span>';
+            document.body.appendChild(t); setTimeout(()=>t.remove(), 3000);
+        }
+        function searchUsers(q) {
+            q = q.toLowerCase();
+            let count = 0;
+            document.querySelectorAll('#users-tbody tr').forEach(r => {
+                const show = !q || (r.dataset.name||'').includes(q) || (r.dataset.email||'').includes(q);
+                r.style.display = show ? '' : 'none';
+                if(show) count++;
+            });
+            document.getElementById('user-count-badge').innerText = count + ' users';
+        }
+        function filterRole(role, btn) {
+            document.querySelectorAll('.rtab').forEach(b=>b.classList.remove('active'));
+            btn.classList.add('active');
+            let count = 0;
+            document.querySelectorAll('#users-tbody tr').forEach(r => {
+                const show = role==='all' || r.dataset.role===role;
+                r.style.display = show ? '' : 'none';
+                if(show) count++;
+            });
+            document.getElementById('user-count-badge').innerText = count + ' users';
+        }
+        function filterStatus(status) {
+            let count = 0;
+            document.querySelectorAll('#users-tbody tr').forEach(r => {
+                const show = status==='all' || r.dataset.status===status;
+                r.style.display = show ? '' : 'none';
+                if(show) count++;
+            });
+            document.getElementById('user-count-badge').innerText = count + ' users';
+        }
+        function toggleAll(cb) {
+            document.querySelectorAll('.row-cb').forEach(c => c.checked = cb.checked);
+            updateBulk();
+        }
+        function updateBulk() {
+            const checked = document.querySelectorAll('.row-cb:checked').length;
+            const bar = document.getElementById('bulk-bar');
+            bar.style.display = checked > 0 ? 'flex' : 'none';
+            document.getElementById('bulk-count').innerText = checked + ' selected';
+        }
+        function bulkAction(action) {
+            const count = document.querySelectorAll('.row-cb:checked').length;
+            const t = document.createElement('div'); t.className='toast show';
+            t.innerHTML=`<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg><span>${count} user(s) ${action}d!</span>`;
+            document.body.appendChild(t); setTimeout(()=>t.remove(), 3000);
+            document.querySelectorAll('.row-cb').forEach(c=>c.checked=false);
+            document.getElementById('select-all').checked=false;
+            updateBulk();
+        }
+        function exportCSV() {
+            const t = document.createElement('div'); t.className='toast show';
+            t.innerHTML='<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg><span>Users exported as CSV!</span>';
+            document.body.appendChild(t); setTimeout(()=>t.remove(), 3000);
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Account Settings — Nova Nest Retreats</title>
+    <meta name="description" content="Manage your profile information, password, notifications, and preferences.">
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/animations.css">
+    <link rel="stylesheet" href="../css/responsive.css">
+    <style>
+        .dash-layout { display: grid; grid-template-columns: 260px 1fr; min-height: 100vh; }
+        @media(max-width:1024px){ .dash-layout { grid-template-columns: 1fr; } .dash-sidebar { display: none; } }
+        .dash-sidebar { position: sticky; top: var(--nav-height); height: calc(100vh - var(--nav-height)); background: var(--clr-bg-surface); border-right: 1px solid var(--glass-border); overflow-y: auto; padding: 2rem 1rem; display: flex; flex-direction: column; gap: 0.25rem; }
+        .sidebar-label { font-size: var(--fs-2xs); font-weight: var(--fw-semibold); text-transform: uppercase; letter-spacing: 0.12em; color: var(--clr-text-muted); padding: 0.5rem 0.75rem; margin-top: 1.25rem; }
+        .sidebar-link { display: flex; align-items: center; gap: 0.75rem; padding: 0.7rem 0.9rem; border-radius: var(--radius-md); font-size: var(--fs-sm); font-weight: var(--fw-medium); color: var(--clr-text-secondary); transition: all var(--transition-fast); }
+        .sidebar-link:hover { background: rgba(255,255,255,0.05); color: var(--white); }
+        .sidebar-link.active { background: rgba(16,185,129,0.1); color: var(--emerald-400); border-left: 3px solid var(--emerald-500); }
+        .sidebar-link svg { width: 18px; height: 18px; stroke: currentColor; fill: none; stroke-width: 2; flex-shrink: 0; }
+        .settings-container { max-width: 800px; margin: 0 auto; width: 100%; }
+        .settings-tab-btn { padding: 0.75rem 1.25rem; font-weight: var(--fw-medium); border-bottom: 2px solid transparent; color: var(--clr-text-secondary); transition: all var(--transition-fast); }
+        .settings-tab-btn.active { color: var(--emerald-400); border-color: var(--emerald-500); }
+        .settings-panel { display: none; }
+        .settings-panel.active { display: block; }
+        .avatar-upload { position: relative; width: 100px; height: 100px; border-radius: 50%; overflow: hidden; background: rgba(255,255,255,0.05); border: 2px solid var(--glass-border); }
+        .avatar-upload img { width: 100%; height: 100%; object-fit: cover; }
+        .avatar-overlay { position: absolute; inset: 0; background: rgba(15,23,42,0.8); display: flex; align-items: center; justify-content: center; opacity: 0; transition: opacity var(--transition-fast); cursor: pointer; }
+        .avatar-upload:hover .avatar-overlay { opacity: 1; }
+        .toggle-switch { display: inline-flex; align-items: center; cursor: pointer; }
+        .toggle-input { display: none; }
+        .toggle-track { width: 44px; height: 22px; background: rgba(255,255,255,0.1); border-radius: var(--radius-full); position: relative; transition: background var(--transition-fast); }
+        .toggle-thumb { width: 18px; height: 18px; background: var(--white); border-radius: 50%; position: absolute; top: 2px; left: 2px; transition: transform var(--transition-fast); }
+        .toggle-input:checked + .toggle-track { background: var(--emerald-500); }
+        .toggle-input:checked + .toggle-track .toggle-thumb { transform: translateX(22px); }
+        .toast { position: fixed; bottom: 2rem; right: 2rem; background: var(--clr-bg-surface); border: 1px solid var(--emerald-500); border-left: 4px solid var(--emerald-500); padding: 1rem 1.5rem; border-radius: var(--radius-md); box-shadow: var(--shadow-lg); display: flex; align-items: center; gap: 0.75rem; transform: translateY(100px); opacity: 0; transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1); z-index: var(--z-toast); }
+        .toast.show { transform: translateY(0); opacity: 1; }
+    </style>
+</head>
+<body>
+    <header id="main-header"></header>
+
+    <main id="main-content" class="page-content bg-deep">
+        <div class="dash-layout">
+            <!-- Sidebar -->
+            <aside class="dash-sidebar">
+                <div class="flex items-center gap-3 mb-6 p-2 bg-emerald-900 bg-opacity-20 rounded-xl border border-emerald-500 border-opacity-20">
+                    <div class="w-10 h-10 rounded-full bg-emerald-500 flex items-center justify-center text-white font-bold text-sm flex-shrink-0">JD</div>
+                    <div class="min-w-0">
+                        <div class="font-bold text-sm text-white truncate">John Doe</div>
+                        <div class="text-xs text-emerald truncate">Gold Member</div>
+                    </div>
+                </div>
+
+                <span class="sidebar-label">Main</span>
+                <a href="user-dashboard.html" class="sidebar-link">
+                    <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+                    Dashboard
+                </a>
+                <a href="bookings.html" class="sidebar-link">
+                    <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
+                    My Bookings
+                </a>
+                <a href="wishlist.html" class="sidebar-link">
+                    <svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+                    Wishlist
+                </a>
+                <a href="payment-history.html" class="sidebar-link">
+                    <svg viewBox="0 0 24 24"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect><line x1="1" y1="10" x2="23" y2="10"></line></svg>
+                    Payment History
+                </a>
+
+                <span class="sidebar-label">Account</span>
+                <a href="settings.html" class="sidebar-link active">
+                    <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06A1.65 1.65 0 0 0 15 19.4a1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+                    Settings
+                </a>
+                <a href="login.html" class="sidebar-link text-error mt-4">
+                    <svg viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+                    Logout
+                </a>
+            </aside>
+
+            <!-- Main Content -->
+            <div class="flex flex-col gap-8 p-6 md:p-10 overflow-y-auto">
+                <div class="settings-container">
+                    <!-- Header -->
+                    <div class="reveal mb-6">
+                        <h1 class="text-3xl font-display font-bold">Account Settings</h1>
+                        <p class="text-muted mt-1">Manage your details, preferences, and platform choices.</p>
+                    </div>
+
+                    <!-- Navigation Tabs -->
+                    <div class="flex border-b border-glass mb-6 reveal">
+                        <button class="settings-tab-btn active" onclick="switchTab('profile')">Profile Info</button>
+                        <button class="settings-tab-btn" onclick="switchTab('security')">Security</button>
+                        <button class="settings-tab-btn" onclick="switchTab('preferences')">Preferences</button>
+                    </div>
+
+                    <!-- Profile Panel -->
+                    <div id="profile-panel" class="settings-panel active reveal">
+                        <div class="card p-6 flex flex-col gap-6">
+                            <h2 class="text-xl font-bold text-white">Personal Profile</h2>
+                            
+                            <!-- Avatar Upload -->
+                            <div class="flex items-center gap-6">
+                                <div class="avatar-upload">
+                                    <img id="avatar-preview" src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=150&q=80" alt="Avatar">
+                                    <div class="avatar-overlay" onclick="document.getElementById('avatar-input').click()">
+                                        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></svg>
+                                    </div>
+                                </div>
+                                <div>
+                                    <input type="file" id="avatar-input" style="display:none" accept="image/*" onchange="previewAvatar(event)">
+                                    <button class="btn btn-sm btn-outline mb-2" onclick="document.getElementById('avatar-input').click()">Upload New Photo</button>
+                                    <p class="text-xs text-muted">Allowed JPG, PNG or WEBP. Max size of 2MB.</p>
+                                </div>
+                            </div>
+
+                            <!-- Form -->
+                            <form onsubmit="saveSettings(event)" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div class="form-group">
+                                    <label class="form-label">Full Name</label>
+                                    <input type="text" class="form-input" value="John Doe" required>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Email Address</label>
+                                    <input type="email" class="form-input" value="john.doe@example.com" required>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Phone Number</label>
+                                    <input type="tel" class="form-input" value="+91 98765 43210">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Membership Tier</label>
+                                    <input type="text" class="form-input opacity-70" value="Gold Member" readonly disabled>
+                                </div>
+                                <div class="md:col-span-2 flex justify-end mt-4">
+                                    <button type="submit" class="btn btn-primary">Save Changes</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                    <!-- Security Panel -->
+                    <div id="security-panel" class="settings-panel reveal">
+                        <div class="card p-6 flex flex-col gap-6">
+                            <h2 class="text-xl font-bold text-white">Security & Password</h2>
+                            
+                            <form onsubmit="saveSettings(event)" class="flex flex-col gap-4">
+                                <div class="form-group">
+                                    <label class="form-label">Current Password</label>
+                                    <div class="relative">
+                                        <input type="password" id="current-password" class="form-input pr-12" placeholder="••••••••••••" required>
+                                        <button type="button" id="toggle-current-password" class="absolute right-4 top-1/2 -translate-y-1/2 text-muted hover:text-white">
+                                            <svg id="eye-icon-current" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">New Password</label>
+                                    <div class="relative">
+                                        <input type="password" id="new-password" class="form-input pr-12" placeholder="Enter new password" required>
+                                        <button type="button" id="toggle-new-password" class="absolute right-4 top-1/2 -translate-y-1/2 text-muted hover:text-white">
+                                            <svg id="eye-icon-new" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Confirm New Password</label>
+                                    <div class="relative">
+                                        <input type="password" id="confirm-new-password" class="form-input pr-12" placeholder="Re-enter new password" required>
+                                        <button type="button" id="toggle-confirm-new-password" class="absolute right-4 top-1/2 -translate-y-1/2 text-muted hover:text-white">
+                                            <svg id="eye-icon-confirm-new" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="flex justify-end mt-4">
+                                    <button type="submit" class="btn btn-primary">Update Password</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                    <!-- Preferences Panel -->
+                    <div id="preferences-panel" class="settings-panel reveal">
+                        <div class="card p-6 flex flex-col gap-6">
+                            <h2 class="text-xl font-bold text-white">System Preferences</h2>
+                            
+                            <form onsubmit="saveSettings(event)" class="flex flex-col gap-6">
+                                <div>
+                                    <h3 class="font-semibold text-sm text-white mb-3">Notifications</h3>
+                                    <div class="flex flex-col gap-3">
+                                        <label class="toggle-switch flex justify-between items-center bg-white bg-opacity-5 p-3 rounded-lg border border-glass">
+                                            <div>
+                                                <div class="text-sm font-semibold text-white">Email Promotions</div>
+                                                <div class="text-2xs text-muted">Receive special resort discount packages & weekend offers.</div>
+                                            </div>
+                                            <input type="checkbox" class="toggle-input" checked>
+                                            <span class="toggle-track"><span class="toggle-thumb"></span></span>
+                                        </label>
+                                        <label class="toggle-switch flex justify-between items-center bg-white bg-opacity-5 p-3 rounded-lg border border-glass">
+                                            <div>
+                                                <div class="text-sm font-semibold text-white">Booking Updates</div>
+                                                <div class="text-2xs text-muted">Get real-time updates regarding check-in dates, approvals & confirmations.</div>
+                                            </div>
+                                            <input type="checkbox" class="toggle-input" checked>
+                                            <span class="toggle-track"><span class="toggle-thumb"></span></span>
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <h3 class="font-semibold text-sm text-white mb-3">Interface Theme</h3>
+                                    <div class="grid grid-cols-2 gap-4">
+                                        <div class="border border-emerald-500 bg-emerald-950 bg-opacity-20 p-4 rounded-xl flex items-center justify-between cursor-pointer">
+                                            <span class="text-sm font-semibold text-white">Dark Mode (Default)</span>
+                                            <span class="w-4 h-4 rounded-full bg-emerald-500 flex items-center justify-center text-white text-2xs">✓</span>
+                                        </div>
+                                        <div class="border border-glass bg-white bg-opacity-5 p-4 rounded-xl flex items-center justify-between opacity-50 cursor-not-allowed">
+                                            <span class="text-sm font-semibold text-white">Light Theme</span>
+                                            <span class="text-2xs text-muted">Coming soon</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="flex justify-end mt-4">
+                                    <button type="submit" class="btn btn-primary">Save Preferences</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="toast">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+        <span id="toast-text">Settings saved successfully!</span>
+    </div>
+
+    <script src="../js/main.js"></script>
+    <script src="../js/animations.js"></script>
+    <script>
+        function switchTab(tabId) {
+            // Remove active classes
+            document.querySelectorAll('.settings-tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('.settings-panel').forEach(panel => panel.classList.remove('active'));
+            
+            // Add active classes to selected tab
+            const activeBtn = Array.from(document.querySelectorAll('.settings-tab-btn')).find(btn => btn.innerText.toLowerCase().includes(tabId));
+            if (activeBtn) activeBtn.classList.add('active');
+            
+            const panel = document.getElementById(tabId + '-panel');
+            if (panel) panel.classList.add('active');
+        }
+
+        function previewAvatar(event) {
+            const reader = new FileReader();
+            reader.onload = function(){
+                const output = document.getElementById('avatar-preview');
+                output.src = reader.result;
+            };
+            reader.readAsDataURL(event.target.files[0]);
+        }
+
+        function saveSettings(event) {
+            event.preventDefault();
+            const toast = document.getElementById('toast');
+            toast.classList.add('show');
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+
+        // Password toggles
+        function setupPasswordToggle(inputId, toggleId, iconId) {
+            document.getElementById(toggleId)?.addEventListener('click', function() {
+                const pass = document.getElementById(inputId);
+                const icon = document.getElementById(iconId);
+                if (pass.type === 'password') {
+                    pass.type = 'text';
+                    icon.innerHTML = '<path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path><line x1="1" y1="1" x2="23" y2="23"></line>';
+                } else {
+                    pass.type = 'password';
+                    icon.innerHTML = '<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle>';
+                }
+            });
+        }
+
+        setupPasswordToggle('current-password', 'toggle-current-password', 'eye-icon-current');
+        setupPasswordToggle('new-password', 'toggle-new-password', 'eye-icon-new');
+        setupPasswordToggle('confirm-new-password', 'toggle-confirm-new-password', 'eye-icon-confirm-new');
+    </script>
+</body>
+</html>

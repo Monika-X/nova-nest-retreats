@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Dashboard — Nova Nest Retreats</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/animations.css">
+    <link rel="stylesheet" href="../css/responsive.css">
+    <style>
+        .dash-layout { display: grid; grid-template-columns: 260px 1fr; min-height: 100vh; }
+        @media(max-width:1024px){ .dash-layout { grid-template-columns: 1fr; } .dash-sidebar { display: none; } }
+        .dash-sidebar {
+            position: sticky; top: var(--nav-height); height: calc(100vh - var(--nav-height));
+            background: var(--clr-bg-surface); border-right: 1px solid var(--glass-border);
+            overflow-y: auto; padding: 2rem 1rem;
+            display: flex; flex-direction: column; gap: 0.25rem;
+        }
+        .sidebar-label {
+            font-size: var(--fs-2xs); font-weight: var(--fw-semibold);
+            text-transform: uppercase; letter-spacing: 0.12em;
+            color: var(--clr-text-muted); padding: 0.5rem 0.75rem; margin-top: 1.25rem;
+        }
+        .sidebar-link {
+            display: flex; align-items: center; gap: 0.75rem;
+            padding: 0.7rem 0.9rem; border-radius: var(--radius-md);
+            font-size: var(--fs-sm); font-weight: var(--fw-medium);
+            color: var(--clr-text-secondary); transition: all var(--transition-fast);
+        }
+        .sidebar-link:hover { background: rgba(255,255,255,0.05); color: var(--white); }
+        .sidebar-link.active { background: rgba(16,185,129,0.1); color: var(--emerald-400); border-left: 3px solid var(--emerald-500); }
+        .sidebar-link svg { width: 18px; height: 18px; stroke: currentColor; fill: none; stroke-width: 2; flex-shrink: 0; }
+        
+        .dashboard-grid { display: grid; grid-template-columns: 1.2fr 1fr; gap: 1.75rem; }
+        @media(max-width:992px){ .dashboard-grid { grid-template-columns: 1fr; } }
+        
+        .stat-card { background: var(--clr-bg-card); border: 1px solid var(--glass-border); border-radius: var(--radius-lg); padding: 1.5rem; transition: all var(--transition-fast); }
+        .stat-card:hover { border-color: rgba(16,185,129,0.2); transform: translateY(-3px); }
+        .stat-icon { width: 48px; height: 48px; border-radius: var(--radius-md); display: flex; align-items: center; justify-content: center; margin-bottom: 1rem; }
+        
+        .booking-row { display: grid; grid-template-columns: 60px 1fr auto auto auto; align-items: center; gap: 1rem; padding: 1rem 1.25rem; border-radius: var(--radius-md); transition: background var(--transition-fast); }
+        .booking-row:hover { background: rgba(255,255,255,0.03); }
+        @media(max-width:768px){ .booking-row { grid-template-columns: 1fr auto; } .booking-row > *:nth-child(1), .booking-row > *:nth-child(3), .booking-row > *:nth-child(4) { display: none; } }
+        
+        .quick-action-btn { background: rgba(255,255,255,0.03); border: 1px solid var(--glass-border); border-radius: var(--radius-lg); padding: 1.25rem; text-align: center; display: flex; flex-direction: column; align-items: center; gap: 0.5rem; transition: all var(--transition-fast); }
+        .quick-action-btn:hover { background: rgba(16,185,129,0.05); border-color: var(--emerald-500); transform: translateY(-2px); }
+        .quick-action-btn svg { width: 24px; height: 24px; color: var(--emerald-400); stroke: currentColor; fill: none; stroke-width: 2; }
+    </style>
+</head>
+<body>
+    <header id="main-header"></header>
+
+    <main id="main-content" class="page-content bg-deep">
+        <div class="dash-layout">
+            <!-- Sidebar -->
+            <aside class="dash-sidebar">
+                <!-- User info -->
+                <div class="flex items-center gap-3 mb-6 p-2 bg-emerald-900 bg-opacity-20 rounded-xl border border-emerald-500 border-opacity-20">
+                    <div class="w-10 h-10 rounded-full bg-emerald-500 flex items-center justify-center text-white font-bold text-sm flex-shrink-0 user-initials">JD</div>
+                    <div class="min-w-0">
+                        <div class="font-bold text-sm text-white truncate" id="sidebar-username">John Doe</div>
+                        <div class="text-xs text-emerald truncate">Gold Member</div>
+                    </div>
+                </div>
+
+                <span class="sidebar-label">Main</span>
+                <a href="user-dashboard.html" class="sidebar-link active">
+                    <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+                    Dashboard
+                </a>
+                <a href="bookings.html" class="sidebar-link">
+                    <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
+                    My Bookings
+                </a>
+                <a href="wishlist.html" class="sidebar-link">
+                    <svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+                    Wishlist
+                </a>
+                <a href="payment-history.html" class="sidebar-link">
+                    <svg viewBox="0 0 24 24"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect><line x1="1" y1="10" x2="23" y2="10"></line></svg>
+                    Payment History
+                </a>
+
+                <span class="sidebar-label">Account</span>
+                <a href="settings.html" class="sidebar-link">
+                    <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06A1.65 1.65 0 0 0 15 19.4a1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+                    Settings
+                </a>
+                <a href="login.html" class="sidebar-link text-error mt-4">
+                    <svg viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+                    Logout
+                </a>
+            </aside>
+
+            <!-- Main Content -->
+            <div class="flex flex-col gap-8 p-6 md:p-10 overflow-y-auto">
+                
+                <!-- Greeting Header -->
+                <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 reveal">
+                    <div>
+                        <h1 class="text-3xl font-display font-bold flex items-center gap-2" id="user-greeting">Hello, Monika <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-warning animate-bounce inline-block" style="transform-origin: bottom right;"><path d="M18 11V6a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2v5"/><path d="M14 10V4a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2v6"/><path d="M10 10.5V6a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2v8"/><path d="M6 14v0a5 5 0 0 0 5 5h3a6 6 0 0 0 6-6V11a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2"/></svg></h1>
+                        <p class="text-muted mt-1">Here is a visual summary of your travel portfolio.</p>
+                    </div>
+                </div>
+
+                <!-- Main Layout Columns -->
+                <div class="dashboard-grid">
+                    <!-- Column Left: Profile Card, Booking History, Wishlist -->
+                    <div class="flex flex-col gap-8">
+                        
+                        <!-- Profile Card -->
+                        <div class="card p-6 reveal">
+                            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                                <div class="flex items-center gap-4">
+                                    <div class="w-16 h-16 rounded-full bg-emerald-500 flex items-center justify-center text-white font-bold text-xl user-initials">MO</div>
+                                    <div>
+                                        <h2 class="text-xl font-bold text-white mb-0.5" id="profile-card-name">Monika</h2>
+                                        <p class="text-xs text-muted">Tier: <span class="text-emerald font-semibold">Gold Member</span> • Joined Dec 2024</p>
+                                    </div>
+                                </div>
+                                <a href="settings.html" class="btn btn-xs btn-outline">Edit Profile</a>
+                            </div>
+                        </div>
+
+                        <!-- Booking History (Stays) -->
+                        <div class="card reveal">
+                            <div class="card-body border-b border-glass flex justify-between items-center py-4">
+                                <h2 class="text-lg font-display font-bold">Stay & Booking History</h2>
+                                <a href="bookings.html" class="text-sm text-emerald hover:underline">View All</a>
+                            </div>
+                            <div class="divide-y divide-glass">
+                                <div class="booking-row">
+                                    <div class="w-12 h-12 rounded-lg overflow-hidden"><img src="https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&w=100&q=80" class="w-full h-full object-cover" alt="resort"></div>
+                                    <div>
+                                        <div class="font-semibold text-white text-sm">Azure Ocean Water Villas</div>
+                                        <div class="text-xs text-muted">Dec 15 – 18, 2026 • 3 nights</div>
+                                    </div>
+                                    <div class="text-xs text-white hidden md:block">₹82,320</div>
+                                    <div class="badge badge-emerald text-xs hidden md:flex">Confirmed</div>
+                                    <a href="resort-details.html" class="btn btn-xs btn-outline">Details</a>
+                                </div>
+                                <div class="booking-row">
+                                    <div class="w-12 h-12 rounded-lg overflow-hidden"><img src="https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=100&q=80" class="w-full h-full object-cover" alt="resort"></div>
+                                    <div>
+                                        <div class="font-semibold text-white text-sm">Sapphire Coast Premium</div>
+                                        <div class="text-xs text-muted">Jan 5 – 7, 2027 • 2 nights</div>
+                                    </div>
+                                    <div class="text-xs text-white hidden md:block">₹20,400</div>
+                                    <div class="badge badge-warning text-xs hidden md:flex">Pending</div>
+                                    <a href="resort-details.html" class="btn btn-xs btn-outline">Details</a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Wishlist Preview -->
+                        <div class="card reveal">
+                            <div class="card-body border-b border-glass flex justify-between items-center py-4">
+                                <h2 class="text-lg font-display font-bold">Saved Wishlist Preview</h2>
+                                <a href="wishlist.html" class="text-sm text-emerald hover:underline">Manage Wishlist</a>
+                            </div>
+                            <div class="divide-y divide-glass">
+                                <div class="booking-row">
+                                    <div class="w-12 h-12 rounded-lg overflow-hidden"><img src="https://images.unsplash.com/photo-1571896349842-33c89424de2d?auto=format&fit=crop&w=100&q=80" class="w-full h-full object-cover" alt="resort"></div>
+                                    <div>
+                                        <div class="font-semibold text-white text-sm">Emerald Jungle Retreat</div>
+                                        <div class="text-xs text-emerald">Bali, Indonesia</div>
+                                    </div>
+                                    <div class="text-xs text-white hidden md:block">₹12,800/night</div>
+                                    <div class="badge badge-ocean text-xs hidden md:flex">★ 4.8</div>
+                                    <a href="resort-details.html" class="btn btn-xs btn-primary">Book</a>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!-- Column Right: Quick Actions, Payments, Notifications -->
+                    <div class="flex flex-col gap-8">
+                        
+                        <!-- Quick Actions Grid -->
+                        <div class="grid grid-cols-2 gap-4 reveal">
+                            <a href="resorts.html" class="quick-action-btn">
+                                <svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"></path></svg>
+                                <span class="text-sm font-semibold text-white">New Booking</span>
+                            </a>
+                            <a href="wishlist.html" class="quick-action-btn">
+                                <svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+                                <span class="text-sm font-semibold text-white">Wishlist</span>
+                            </a>
+                            <a href="payment-history.html" class="quick-action-btn">
+                                <svg viewBox="0 0 24 24"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect><line x1="1" y1="10" x2="23" y2="10"></line></svg>
+                                <span class="text-sm font-semibold text-white">Billing History</span>
+                            </a>
+                            <a href="settings.html" class="quick-action-btn">
+                                <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06A1.65 1.65 0 0 0 15 19.4a1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+                                <span class="text-sm font-semibold text-white">Settings</span>
+                            </a>
+                        </div>
+
+                        <!-- Recent Notifications & Activity -->
+                        <div class="card reveal">
+                            <div class="card-body border-b border-glass py-4">
+                                <h2 class="text-lg font-display font-bold">Notifications & Updates</h2>
+                            </div>
+                            <div class="card-body flex flex-col gap-4">
+                                <div class="flex items-start gap-3">
+                                    <div class="w-8 h-8 rounded-full bg-emerald-900 bg-opacity-30 flex items-center justify-center text-emerald flex-shrink-0"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg></div>
+                                    <div><div class="text-xs font-semibold text-white">Booking Confirmed for Azure Villas</div><div class="text-3xs text-muted">2 hours ago</div></div>
+                                </div>
+                                <div class="flex items-start gap-3">
+                                    <div class="w-8 h-8 rounded-full bg-emerald-900 bg-opacity-30 flex items-center justify-center text-emerald flex-shrink-0"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect><line x1="1" y1="10" x2="23" y2="10"></line></svg></div>
+                                    <div><div class="text-xs font-semibold text-white">Payment receipt #NNR-883492 available</div><div class="text-3xs text-muted">2 hours ago</div></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Quick Billing Summary -->
+                        <div class="card reveal">
+                            <div class="card-body border-b border-glass py-4">
+                                <h2 class="text-lg font-display font-bold">Recent Billing Activity</h2>
+                            </div>
+                            <div class="card-body flex flex-col gap-3">
+                                <div class="flex justify-between items-center text-xs">
+                                    <span class="text-white font-medium">Azure Ocean Stays</span>
+                                    <span class="text-emerald font-semibold">₹82,320 (Paid)</span>
+                                </div>
+                                <div class="flex justify-between items-center text-xs">
+                                    <span class="text-white font-medium">Sapphire Coast Package</span>
+                                    <span class="text-warning font-semibold">₹20,400 (Pending)</span>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </main>
+
+    <script src="../js/main.js"></script>
+    <script src="../js/animations.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const savedUser = localStorage.getItem("username") || "Monika";
+            
+            // Update greeting header
+            const greetingEl = document.getElementById("user-greeting");
+            if (greetingEl) {
+                greetingEl.innerHTML = `Hello, ${savedUser} <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-warning animate-bounce inline-block" style="transform-origin: bottom right;"><path d="M18 11V6a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2v5"/><path d="M14 10V4a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2v6"/><path d="M10 10.5V6a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2v8"/><path d="M6 14v0a5 5 0 0 0 5 5h3a6 6 0 0 0 6-6V11a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2"/></svg>`;
+            }
+            
+            // Update sidebar user label
+            const sidebarName = document.getElementById("sidebar-username");
+            if (sidebarName) {
+                sidebarName.innerText = savedUser;
+            }
+            
+            // Update Profile card name
+            const profileName = document.getElementById("profile-card-name");
+            if (profileName) {
+                profileName.innerText = savedUser;
+            }
+            
+            // Update visual profile initials icon (first 2 chars or 1st char)
+            const initials = savedUser.substring(0, 2).toUpperCase();
+            document.querySelectorAll(".user-initials").forEach(el => {
+                el.innerText = initials;
+            });
+        });
+    </script>
+</body>
+</html>

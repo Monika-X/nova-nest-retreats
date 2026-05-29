@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Under Maintenance — Nova Nest Retreats</title>
+    <meta name="description" content="Nova Nest Retreats is currently undergoing scheduled maintenance. We'll be back with a faster, more luxurious experience.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        :root {
+            --emerald: #10b981;
+            --emerald-light: #34d399;
+            --ocean: #0ea5e9;
+            --bg-deep: #020617;
+            --bg-card: rgba(15,23,42,0.85);
+            --glass-border: rgba(255,255,255,0.08);
+            --text-primary: #f1f5f9;
+            --text-muted: rgba(148,163,184,0.7);
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg-deep);
+            color: var(--text-primary);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* ================ LAYOUT ================ */
+        .page {
+            display: grid;
+            grid-template-columns: 1.1fr 0.9fr;
+            min-height: 100vh;
+        }
+        @media (max-width: 1024px) {
+            .page { grid-template-columns: 1fr; }
+            .left-side { display: none; }
+        }
+
+        /* ================ LEFT SIDE ================ */
+        .left-side {
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            background: linear-gradient(160deg, #020617 0%, #0a0f1e 50%, #060d1f 100%);
+            border-right: 1px solid var(--glass-border);
+        }
+
+        /* Ambient glows */
+        .glow-1 {
+            position: absolute;
+            width: 500px; height: 500px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(16,185,129,0.18) 0%, transparent 65%);
+            top: 10%; left: -10%;
+            filter: blur(40px);
+            animation: driftA 12s ease-in-out infinite alternate;
+        }
+        .glow-2 {
+            position: absolute;
+            width: 450px; height: 450px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(14,165,233,0.14) 0%, transparent 65%);
+            bottom: 5%; right: -5%;
+            filter: blur(50px);
+            animation: driftB 14s ease-in-out infinite alternate;
+        }
+        .glow-3 {
+            position: absolute;
+            width: 300px; height: 300px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(139,92,246,0.1) 0%, transparent 65%);
+            top: 50%; left: 50%;
+            transform: translate(-50%,-50%);
+            filter: blur(35px);
+            animation: pulse 6s ease-in-out infinite;
+        }
+        @keyframes driftA { from { transform: translate(0,0); } to { transform: translate(40px,30px); } }
+        @keyframes driftB { from { transform: translate(0,0); } to { transform: translate(-30px,-40px); } }
+        @keyframes pulse { 0%,100%{opacity:0.6;transform:translate(-50%,-50%) scale(1);} 50%{opacity:1;transform:translate(-50%,-50%) scale(1.15);} }
+
+        /* Floating grid dots */
+        .dot-grid {
+            position: absolute;
+            inset: 0;
+            background-image:
+                radial-gradient(circle, rgba(255,255,255,0.04) 1px, transparent 1px);
+            background-size: 40px 40px;
+            opacity: 0.6;
+        }
+
+        /* SVG Illustration */
+        .illustration-wrap {
+            position: relative;
+            z-index: 5;
+            width: 82%;
+            max-width: 500px;
+            filter: drop-shadow(0 0 60px rgba(16,185,129,0.12));
+        }
+
+        /* SVG animation classes */
+        .gear-spin { animation: gearSpin 20s linear infinite; transform-origin: 200px 185px; }
+        .gear-spin-rev { animation: gearSpin 15s linear infinite reverse; transform-origin: 300px 275px; }
+        .island-bob { animation: islandBob 4s ease-in-out infinite; }
+        .cloud-drift-1 { animation: cloudDrift 18s linear infinite; }
+        .cloud-drift-2 { animation: cloudDrift 24s linear infinite 3s; }
+        .star-twinkle { animation: twinkle 2.5s ease-in-out infinite; }
+        .star-twinkle-2 { animation: twinkle 3.5s ease-in-out infinite 1s; }
+        .star-twinkle-3 { animation: twinkle 2s ease-in-out infinite 0.5s; }
+        .wave-1 { animation: waveAnim 3s ease-in-out infinite; }
+        .wave-2 { animation: waveAnim 3.5s ease-in-out infinite 0.5s; }
+        .wrench-wiggle { animation: wrenchWiggle 2.5s ease-in-out infinite; transform-origin: 380px 150px; }
+        .sparkle { animation: sparkleAnim 1.8s ease-in-out infinite; }
+
+        @keyframes gearSpin { from{transform:rotate(0deg);} to{transform:rotate(360deg);} }
+        @keyframes islandBob { 0%,100%{transform:translateY(0);} 50%{transform:translateY(-12px);} }
+        @keyframes cloudDrift { 0%{transform:translateX(0);opacity:0.5;} 50%{opacity:1;} 100%{transform:translateX(60px);opacity:0.5;} }
+        @keyframes twinkle { 0%,100%{opacity:0.2;transform:scale(1);} 50%{opacity:1;transform:scale(1.4);} }
+        @keyframes waveAnim { 0%,100%{d:path("M80 330 Q 150 315, 230 330 Q 310 345, 390 330");} 50%{d:path("M80 330 Q 150 345, 230 330 Q 310 315, 390 330");} }
+        @keyframes wrenchWiggle { 0%,100%{transform:rotate(-10deg);} 50%{transform:rotate(10deg);} }
+        @keyframes sparkleAnim { 0%,100%{opacity:0;transform:scale(0);} 40%,60%{opacity:1;transform:scale(1);} }
+
+        /* Orbiting dots */
+        .orbit-ring {
+            position: absolute;
+            border-radius: 50%;
+            border: 1px dashed rgba(16,185,129,0.2);
+            animation: orbitRing 30s linear infinite;
+        }
+        .orbit-dot {
+            width: 8px; height: 8px;
+            border-radius: 50%;
+            background: var(--emerald-light);
+            position: absolute;
+            box-shadow: 0 0 10px rgba(52,211,153,0.8);
+        }
+        @keyframes orbitRing { from{transform:rotate(0deg);} to{transform:rotate(360deg);} }
+
+        /* ================ RIGHT SIDE ================ */
+        .right-side {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 4rem 3.5rem;
+            position: relative;
+            overflow: hidden;
+        }
+        .right-side::before {
+            content: '';
+            position: absolute;
+            top: -100px; right: -100px;
+            width: 400px; height: 400px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(16,185,129,0.06) 0%, transparent 70%);
+            pointer-events: none;
+        }
+        @media (max-width: 768px) { .right-side { padding: 3rem 1.75rem; } }
+
+        /* Logo */
+        .brand { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 3rem; }
+        .brand-icon { width: 40px; height: 40px; }
+        .brand-text { font-family: 'Poppins', sans-serif; font-weight: 900; font-size: 1rem; letter-spacing: 0.12em; color: white; }
+
+        /* Badge */
+        .status-pill {
+            display: inline-flex; align-items: center; gap: 0.5rem;
+            padding: 0.35rem 1rem; border-radius: 30px;
+            background: rgba(16,185,129,0.1);
+            border: 1px solid rgba(16,185,129,0.25);
+            font-size: 0.75rem; font-weight: 600;
+            color: var(--emerald-light);
+            margin-bottom: 1.5rem;
+            width: fit-content;
+        }
+        .status-pill::before { content:''; width:7px;height:7px; border-radius:50%; background:var(--emerald-light); animation:pulseDot 1.5s ease-in-out infinite; }
+        @keyframes pulseDot { 0%,100%{opacity:1;transform:scale(1);} 50%{opacity:0.5;transform:scale(0.7);} }
+
+        /* Heading */
+        h1 {
+            font-family: 'Poppins', sans-serif;
+            font-size: clamp(1.8rem, 3.5vw, 2.6rem);
+            font-weight: 900;
+            color: white;
+            line-height: 1.2;
+            margin-bottom: 1rem;
+        }
+        h1 span {
+            background: linear-gradient(90deg, var(--emerald), var(--ocean));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        p.desc {
+            color: var(--text-muted);
+            font-size: 0.92rem;
+            line-height: 1.75;
+            max-width: 420px;
+            margin-bottom: 2.5rem;
+        }
+
+        /* Progress bar */
+        .progress-label { display: flex; justify-content: space-between; margin-bottom: 0.5rem; font-size: 0.78rem; color: var(--text-muted); }
+        .progress-label strong { color: var(--emerald-light); }
+        .progress-track { height: 6px; background: rgba(255,255,255,0.06); border-radius: 3px; overflow: hidden; margin-bottom: 2rem; }
+        .progress-fill { height: 100%; width: 0%; border-radius: 3px; background: linear-gradient(90deg, var(--emerald), var(--ocean)); animation: progressAnim 2.5s ease-out 0.5s forwards; }
+        @keyframes progressAnim { from{width:0%;} to{width:72%;} }
+
+        /* Countdown */
+        .countdown-label { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.12em; color: var(--text-muted); margin-bottom: 1rem; }
+        .countdown-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 0.85rem;
+            margin-bottom: 2.5rem;
+        }
+        .countdown-box {
+            background: rgba(255,255,255,0.025);
+            border: 1px solid var(--glass-border);
+            border-radius: 14px;
+            padding: 1.1rem 0.5rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            transition: border-color 0.3s;
+        }
+        .countdown-box::before {
+            content: '';
+            position: absolute;
+            bottom: 0; left: 0; right: 0; height: 2px;
+            background: linear-gradient(90deg, var(--emerald), var(--ocean));
+            opacity: 0.4;
+        }
+        .countdown-box:hover { border-color: rgba(16,185,129,0.3); }
+        .cd-num {
+            font-family: 'Poppins', sans-serif;
+            font-size: 2rem;
+            font-weight: 900;
+            color: white;
+            line-height: 1;
+            margin-bottom: 0.35rem;
+            background: linear-gradient(135deg, white, rgba(255,255,255,0.7));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .cd-lbl {
+            font-size: 0.63rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            font-weight: 600;
+        }
+
+        /* Notify form */
+        .notify-card {
+            background: rgba(255,255,255,0.02);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        .notify-card h3 { font-size: 0.9rem; font-weight: 700; color: white; margin-bottom: 0.35rem; }
+        .notify-card p { font-size: 0.78rem; color: var(--text-muted); margin-bottom: 1rem; }
+        .notify-form { display: flex; gap: 0.6rem; }
+        .notify-input {
+            flex: 1;
+            padding: 0.7rem 1rem;
+            background: rgba(255,255,255,0.04);
+            border: 1px solid var(--glass-border);
+            border-radius: 10px;
+            color: white;
+            font-size: 0.84rem;
+            outline: none;
+            transition: border-color 0.2s;
+            font-family: inherit;
+        }
+        .notify-input:focus { border-color: rgba(16,185,129,0.45); }
+        .notify-input::placeholder { color: rgba(148,163,184,0.5); }
+        .notify-btn {
+            padding: 0.7rem 1.4rem;
+            border-radius: 10px;
+            border: none;
+            background: linear-gradient(135deg, var(--emerald), var(--ocean));
+            color: white;
+            font-size: 0.84rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: opacity 0.2s, transform 0.15s;
+            font-family: inherit;
+            white-space: nowrap;
+        }
+        .notify-btn:hover { opacity: 0.9; transform: translateY(-1px); }
+        .notify-success { display: none; align-items: center; gap: 0.5rem; color: var(--emerald-light); font-size: 0.84rem; font-weight: 600; }
+        .notify-success.show { display: flex; }
+
+        /* Bottom row */
+        .bottom-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 1rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--glass-border);
+        }
+
+        /* Social icons */
+        .socials { display: flex; gap: 0.6rem; }
+        .soc-btn {
+            width: 38px; height: 38px;
+            border-radius: 10px;
+            background: rgba(255,255,255,0.04);
+            border: 1px solid var(--glass-border);
+            display: inline-flex; align-items: center; justify-content: center;
+            color: var(--text-muted);
+            cursor: pointer;
+            transition: all 0.2s;
+            text-decoration: none;
+        }
+        .soc-btn svg { width: 15px; height: 15px; fill: currentColor; }
+        .soc-btn svg[fill="none"] { fill: none !important; stroke: currentColor; }
+        .soc-btn:hover {
+            background: linear-gradient(135deg, var(--emerald), var(--ocean));
+            color: white; border-color: transparent;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(16,185,129,0.3);
+        }
+
+        /* Home btn */
+        .home-btn {
+            display: inline-flex; align-items: center; gap: 0.5rem;
+            padding: 0.65rem 1.5rem;
+            border-radius: 10px;
+            border: 1px solid var(--glass-border);
+            background: transparent;
+            color: var(--text-primary);
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.25s;
+            font-family: inherit;
+        }
+        .home-btn:hover { background: rgba(255,255,255,0.06); border-color: rgba(255,255,255,0.18); transform: translateY(-2px); }
+        .home-btn svg { width: 15px; height: 15px; stroke: currentColor; fill: none; stroke-width: 2; }
+
+        /* Toast */
+        .toast-msg {
+            position: fixed; bottom: 2rem; right: 2rem;
+            display: flex; align-items: center; gap: 0.6rem;
+            padding: 0.85rem 1.4rem;
+            background: rgba(15,23,42,0.97);
+            border: 1px solid rgba(16,185,129,0.35);
+            border-radius: 12px;
+            backdrop-filter: blur(16px);
+            color: #e2e8f0; font-size: 0.88rem; font-weight: 500;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.45);
+            opacity: 0; transform: translateY(20px);
+            transition: all 0.35s ease;
+            pointer-events: none; z-index: 999;
+        }
+        .toast-msg.show { opacity: 1; transform: translateY(0); pointer-events: auto; }
+        .toast-msg svg { color: #34d399; flex-shrink: 0; width: 17px; height: 17px; stroke: currentColor; fill: none; stroke-width: 2.5; }
+    </style>
+</head>
+<body>
+
+<div class="page">
+
+    <!-- ============================
+         LEFT SIDE — ILLUSTRATION
+         ============================ -->
+    <div class="left-side">
+        <div class="glow-1"></div>
+        <div class="glow-2"></div>
+        <div class="glow-3"></div>
+        <div class="dot-grid"></div>
+
+        <!-- Orbiting ring -->
+        <div class="orbit-ring" style="width:520px;height:520px;top:50%;left:50%;margin-left:-260px;margin-top:-260px;">
+            <div class="orbit-dot" style="top:-4px;left:50%;margin-left:-4px;"></div>
+        </div>
+        <div class="orbit-ring" style="width:380px;height:380px;top:50%;left:50%;margin-left:-190px;margin-top:-190px;animation-duration:20s;animation-direction:reverse;border-color:rgba(14,165,233,0.15);">
+            <div class="orbit-dot" style="bottom:-4px;right:50%;margin-right:-4px;background:var(--ocean);box-shadow:0 0 10px rgba(14,165,233,0.8);"></div>
+        </div>
+
+        <!-- Main SVG Illustration -->
+        <svg class="illustration-wrap" viewBox="0 0 480 420" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+                <linearGradient id="emeraldGrad" x1="0" y1="0" x2="1" y2="1">
+                    <stop offset="0%" stop-color="#10b981"/>
+                    <stop offset="100%" stop-color="#0ea5e9"/>
+                </linearGradient>
+                <linearGradient id="islandGrad" x1="100" y1="280" x2="380" y2="340" gradientUnits="userSpaceOnUse">
+                    <stop offset="0%" stop-color="#1e293b"/>
+                    <stop offset="100%" stop-color="#0f172a"/>
+                </linearGradient>
+                <linearGradient id="oceanGrad" x1="80" y1="320" x2="400" y2="360" gradientUnits="userSpaceOnUse">
+                    <stop offset="0%" stop-color="#0ea5e9" stop-opacity="0.3"/>
+                    <stop offset="100%" stop-color="#06b6d4" stop-opacity="0.5"/>
+                </linearGradient>
+                <linearGradient id="skyGrad" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stop-color="#020617"/>
+                    <stop offset="100%" stop-color="#0a1628"/>
+                </linearGradient>
+                <filter id="glow">
+                    <feGaussianBlur stdDeviation="3" result="blur"/>
+                    <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+                </filter>
+            </defs>
+
+            <!-- Sky background rect -->
+            <rect width="480" height="420" fill="url(#skyGrad)" rx="20"/>
+
+            <!-- Stars -->
+            <circle class="star-twinkle" cx="60" cy="50" r="2" fill="white"/>
+            <circle class="star-twinkle-2" cx="140" cy="30" r="1.5" fill="white"/>
+            <circle class="star-twinkle-3" cx="350" cy="60" r="2.5" fill="white"/>
+            <circle class="star-twinkle" cx="420" cy="40" r="1.5" fill="white"/>
+            <circle class="star-twinkle-2" cx="280" cy="25" r="2" fill="white"/>
+            <circle class="star-twinkle-3" cx="90" cy="90" r="1.5" fill="rgba(255,255,255,0.6)"/>
+            <circle class="star-twinkle" cx="440" cy="80" r="1.5" fill="rgba(255,255,255,0.6)"/>
+
+            <!-- Moon -->
+            <circle cx="400" cy="55" r="22" fill="rgba(255,255,255,0.05)" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>
+            <circle cx="408" cy="50" r="16" fill="#020617"/>
+
+            <!-- Clouds drifting -->
+            <g class="cloud-drift-1" opacity="0.5">
+                <ellipse cx="100" cy="110" rx="40" ry="14" fill="rgba(255,255,255,0.04)"/>
+                <ellipse cx="115" cy="102" rx="25" ry="12" fill="rgba(255,255,255,0.04)"/>
+                <ellipse cx="80" cy="106" rx="18" ry="10" fill="rgba(255,255,255,0.04)"/>
+            </g>
+            <g class="cloud-drift-2" opacity="0.4">
+                <ellipse cx="330" cy="85" rx="35" ry="12" fill="rgba(255,255,255,0.03)"/>
+                <ellipse cx="345" cy="78" rx="22" ry="10" fill="rgba(255,255,255,0.03)"/>
+            </g>
+
+            <!-- Big rotating gear (background) -->
+            <g class="gear-spin" stroke="rgba(16,185,129,0.1)" stroke-width="5" fill="none">
+                <circle cx="200" cy="185" r="60" stroke-dasharray="18 9"/>
+                <circle cx="200" cy="185" r="38"/>
+                <!-- Gear teeth suggestion -->
+                <line x1="200" y1="120" x2="200" y2="108" stroke-width="10" stroke-linecap="round"/>
+                <line x1="200" y1="250" x2="200" y2="262" stroke-width="10" stroke-linecap="round"/>
+                <line x1="135" y1="185" x2="123" y2="185" stroke-width="10" stroke-linecap="round"/>
+                <line x1="265" y1="185" x2="277" y2="185" stroke-width="10" stroke-linecap="round"/>
+                <line x1="155" y1="140" x2="146" y2="131" stroke-width="10" stroke-linecap="round"/>
+                <line x1="245" y1="230" x2="254" y2="239" stroke-width="10" stroke-linecap="round"/>
+                <line x1="245" y1="140" x2="254" y2="131" stroke-width="10" stroke-linecap="round"/>
+                <line x1="155" y1="230" x2="146" y2="239" stroke-width="10" stroke-linecap="round"/>
+            </g>
+            <circle cx="200" cy="185" r="18" stroke="rgba(16,185,129,0.2)" stroke-width="3" fill="none"/>
+
+            <!-- Smaller counter-spinning gear -->
+            <g class="gear-spin-rev" stroke="rgba(14,165,233,0.1)" stroke-width="4" fill="none">
+                <circle cx="300" cy="275" r="42" stroke-dasharray="12 6"/>
+                <circle cx="300" cy="275" r="26"/>
+                <line x1="300" y1="228" x2="300" y2="220" stroke-width="8" stroke-linecap="round"/>
+                <line x1="300" y1="322" x2="300" y2="330" stroke-width="8" stroke-linecap="round"/>
+                <line x1="253" y1="275" x2="245" y2="275" stroke-width="8" stroke-linecap="round"/>
+                <line x1="347" y1="275" x2="355" y2="275" stroke-width="8" stroke-linecap="round"/>
+            </g>
+            <circle cx="300" cy="275" r="12" stroke="rgba(14,165,233,0.2)" stroke-width="2" fill="none"/>
+
+            <!-- Floating island group -->
+            <g class="island-bob">
+                <!-- Ocean / water reflection -->
+                <path d="M85 330 Q 165 315, 245 328 Q 325 341, 400 326 L 400 360 Q 325 350, 245 350 Q 165 350, 85 355 Z"
+                      fill="url(#oceanGrad)"/>
+
+                <!-- Island base -->
+                <path d="M115 305 C 120 285, 165 268, 245 268 C 325 268, 372 285, 378 305 C 380 318, 340 328, 245 330 C 150 332, 112 318, 115 305 Z"
+                      fill="url(#islandGrad)" stroke="rgba(255,255,255,0.04)" stroke-width="1"/>
+
+                <!-- Grass top of island -->
+                <path d="M135 305 C 140 298, 165 292, 245 292 C 325 292, 352 298, 358 305"
+                      stroke="rgba(16,185,129,0.2)" stroke-width="2" fill="none"/>
+
+                <!-- Palm tree left -->
+                <path d="M168 292 Q 162 260, 155 238" stroke="#047857" stroke-width="5" stroke-linecap="round"/>
+                <path d="M155 238 Q 135 230, 122 242" stroke="#10b981" stroke-width="3.5" stroke-linecap="round"/>
+                <path d="M155 238 Q 172 225, 185 234" stroke="#10b981" stroke-width="3.5" stroke-linecap="round"/>
+                <path d="M155 238 Q 150 218, 163 210" stroke="#10b981" stroke-width="3" stroke-linecap="round"/>
+                <circle cx="155" cy="238" r="3" fill="#34d399" opacity="0.7"/>
+
+                <!-- Palm tree right -->
+                <path d="M322 290 Q 328 260, 334 240" stroke="#047857" stroke-width="4.5" stroke-linecap="round"/>
+                <path d="M334 240 Q 316 232, 305 243" stroke="#10b981" stroke-width="3" stroke-linecap="round"/>
+                <path d="M334 240 Q 350 230, 360 240" stroke="#10b981" stroke-width="3" stroke-linecap="round"/>
+                <path d="M334 240 Q 332 222, 344 215" stroke="#10b981" stroke-width="2.5" stroke-linecap="round"/>
+
+                <!-- Beach hut / bungalow -->
+                <rect x="220" y="272" width="52" height="30" rx="3" fill="rgba(30,41,59,0.9)" stroke="rgba(255,255,255,0.07)" stroke-width="1"/>
+                <path d="M215 272 L 246 250 L 277 272 Z" fill="rgba(16,185,129,0.15)" stroke="rgba(16,185,129,0.3)" stroke-width="1.5"/>
+                <!-- Door -->
+                <rect x="238" y="281" width="16" height="21" rx="2" fill="rgba(14,165,233,0.2)" stroke="rgba(14,165,233,0.3)" stroke-width="1"/>
+                <!-- Windows -->
+                <rect x="223" y="278" width="10" height="8" rx="1.5" fill="rgba(255,255,255,0.06)" stroke="rgba(255,255,255,0.1)" stroke-width="0.5"/>
+                <rect x="259" y="278" width="10" height="8" rx="1.5" fill="rgba(255,255,255,0.06)" stroke="rgba(255,255,255,0.1)" stroke-width="0.5"/>
+                <!-- Light from window -->
+                <path d="M223 286 L 215 295" stroke="rgba(255,200,50,0.2)" stroke-width="4" stroke-linecap="round"/>
+
+                <!-- Hammock strings -->
+                <path d="M190 285 Q 220 298, 260 285" stroke="rgba(255,255,255,0.12)" stroke-width="1.5" fill="none"/>
+                <path d="M195 285 Q 222 294, 255 285" stroke="rgba(255,255,255,0.06)" stroke-width="6" fill="none" stroke-linecap="round"/>
+
+                <!-- Beach umbrella -->
+                <line x1="295" y1="293" x2="295" y2="268" stroke="#0ea5e9" stroke-width="2"/>
+                <path d="M278 274 Q 295 262, 312 274" stroke="#0ea5e9" stroke-width="1.5" fill="rgba(14,165,233,0.15)"/>
+            </g>
+
+            <!-- Wrench / tool floating to the right -->
+            <g class="wrench-wiggle" filter="url(#glow)">
+                <rect x="365" y="120" width="44" height="14" rx="7" fill="url(#emeraldGrad)" opacity="0.7"/>
+                <circle cx="365" cy="127" r="10" fill="none" stroke="url(#emeraldGrad)" stroke-width="4" opacity="0.7"/>
+                <circle cx="409" cy="127" r="8" fill="none" stroke="url(#emeraldGrad)" stroke-width="4" opacity="0.7"/>
+            </g>
+
+            <!-- Sparkles -->
+            <g class="sparkle" style="transform-origin: 360px 220px;">
+                <path d="M360 210 L362 218 L370 220 L362 222 L360 230 L358 222 L350 220 L358 218 Z" fill="url(#emeraldGrad)" opacity="0.8"/>
+            </g>
+            <g class="sparkle" style="transform-origin: 80px 270px; animation-delay: 0.9s;">
+                <path d="M80 262 L82 268 L88 270 L82 272 L80 278 L78 272 L72 270 L78 268 Z" fill="url(#emeraldGrad)" opacity="0.6"/>
+            </g>
+
+            <!-- Subtle grid lines at bottom -->
+            <line x1="0" y1="390" x2="480" y2="390" stroke="rgba(255,255,255,0.03)" stroke-width="1"/>
+
+            <!-- Branding text in illustration -->
+            <text x="240" y="405" text-anchor="middle" fill="rgba(255,255,255,0.08)" font-family="'Poppins', sans-serif" font-size="11" font-weight="700" letter-spacing="4">NOVA NEST RETREATS</text>
+        </svg>
+    </div>
+
+    <!-- ============================
+         RIGHT SIDE — CONTENT
+         ============================ -->
+    <div class="right-side">
+
+        <!-- Brand -->
+        <div class="brand">
+            <svg class="brand-icon" viewBox="0 0 40 40" fill="none">
+                <defs>
+                    <linearGradient id="logoG" x1="4" y1="2" x2="36" y2="38" gradientUnits="userSpaceOnUse">
+                        <stop offset="0%" stop-color="#10b981"/>
+                        <stop offset="100%" stop-color="#0ea5e9"/>
+                    </linearGradient>
+                </defs>
+                <path d="M20 1 L23.5 15 L38 20 L23.5 25 L20 39 L16.5 25 L2 20 L16.5 15 Z" fill="url(#logoG)" opacity="0.95"/>
+                <path d="M20 8 L22 16 L30 20 L22 24 L20 32 L18 24 L10 20 L18 16 Z" fill="url(#logoG)" opacity="0.45"/>
+                <circle cx="20" cy="20" r="3.5" fill="url(#logoG)"/>
+            </svg>
+            <span class="brand-text">NOVA NEST RETREATS</span>
+        </div>
+
+        <!-- Status pill -->
+        <div class="status-pill">Scheduled Upgrade in Progress</div>
+
+        <!-- Headline -->
+        <h1>We're polishing your<br><span>next luxury escape.</span></h1>
+        <p class="desc">Our platform is undergoing a scheduled upgrade to bring you faster bookings, smarter recommendations, and an even more seamless resort experience. Won't be long!</p>
+
+        <!-- Progress bar -->
+        <div class="progress-label">
+            <span>Upgrade progress</span>
+            <strong>72% complete</strong>
+        </div>
+        <div class="progress-track">
+            <div class="progress-fill"></div>
+        </div>
+
+        <!-- Countdown -->
+        <div class="countdown-label"><svg style="display:inline-block; vertical-align:middle; margin-top:-2px; margin-right: 0.35rem;" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>Back online in approximately</div>
+        <div class="countdown-grid">
+            <div class="countdown-box">
+                <div class="cd-num" id="cd-days">00</div>
+                <div class="cd-lbl">Days</div>
+            </div>
+            <div class="countdown-box">
+                <div class="cd-num" id="cd-hours">00</div>
+                <div class="cd-lbl">Hours</div>
+            </div>
+            <div class="countdown-box">
+                <div class="cd-num" id="cd-mins">00</div>
+                <div class="cd-lbl">Mins</div>
+            </div>
+            <div class="countdown-box">
+                <div class="cd-num" id="cd-secs">00</div>
+                <div class="cd-lbl">Secs</div>
+            </div>
+        </div>
+
+        <!-- Notify card -->
+        <div class="notify-card">
+            <h3><svg style="display:inline-block; vertical-align:middle; margin-top:-2px; margin-right: 0.35rem;" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="text-emerald"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9M13.73 21a2 2 0 0 1-3.46 0"/></svg>Get notified when we're back</h3>
+            <p>Drop your email and we'll ping you the moment we go live.</p>
+            <form class="notify-form" id="notify-form" onsubmit="submitNotify(event)">
+                <input class="notify-input" type="email" placeholder="you@example.com" id="notify-email" required>
+                <button class="notify-btn" type="submit">Notify Me</button>
+            </form>
+            <div class="notify-success" id="notify-success">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                You're on the list! We'll notify you shortly.
+            </div>
+        </div>
+
+        <!-- Bottom row -->
+        <div class="bottom-row">
+            <div class="socials">
+                <a href="https://facebook.com/novanest" target="_blank" rel="noopener noreferrer" class="soc-btn" aria-label="Facebook">
+                    <svg viewBox="0 0 24 24"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+                </a>
+                <a href="https://x.com/novanest" target="_blank" rel="noopener noreferrer" class="soc-btn" aria-label="Twitter/X">
+                    <svg viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+                </a>
+                <a href="https://instagram.com/novanest" target="_blank" rel="noopener noreferrer" class="soc-btn" aria-label="Instagram">
+                    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+                </a>
+                <a href="mailto:concierge@novanest.com" class="soc-btn" aria-label="Email">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+                </a>
+            </div>
+            <a href="../index.html" class="home-btn">
+                <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+                Return Home
+            </a>
+        </div>
+    </div>
+
+</div><!-- /page -->
+
+<!-- Toast -->
+<div class="toast-msg" id="toast">
+    <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+    <span id="toast-text">Subscribed successfully!</span>
+</div>
+
+<script>
+    /* ---- Live Countdown: 2 days from now ---- */
+    const target = new Date();
+    target.setDate(target.getDate() + 2);
+    target.setHours(target.getHours() + 6);
+
+    function tick() {
+        const diff = Math.max(0, target.getTime() - Date.now());
+        const d = Math.floor(diff / 86400000);
+        const h = Math.floor((diff % 86400000) / 3600000);
+        const m = Math.floor((diff % 3600000) / 60000);
+        const s = Math.floor((diff % 60000) / 1000);
+
+        document.getElementById('cd-days').innerText  = String(d).padStart(2,'0');
+        document.getElementById('cd-hours').innerText = String(h).padStart(2,'0');
+        document.getElementById('cd-mins').innerText  = String(m).padStart(2,'0');
+        document.getElementById('cd-secs').innerText  = String(s).padStart(2,'0');
+
+        if (diff > 0) setTimeout(tick, 1000);
+    }
+    tick();
+
+    /* ---- Notify form ---- */
+    function submitNotify(e) {
+        e.preventDefault();
+        const form = document.getElementById('notify-form');
+        const success = document.getElementById('notify-success');
+        form.style.display = 'none';
+        success.classList.add('show');
+
+        showToast('You\'re on the list!');
+
+        setTimeout(() => {
+            form.style.display = 'flex';
+            success.classList.remove('show');
+            document.getElementById('notify-email').value = '';
+        }, 5000);
+    }
+
+    /* ---- Toast ---- */
+    function showToast(msg) {
+        const t = document.getElementById('toast');
+        document.getElementById('toast-text').innerText = msg;
+        t.classList.add('show');
+        setTimeout(() => t.classList.remove('show'), 3500);
+    }
+</script>
+
+</body>
+</html>

@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard — Nova Nest Retreats</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/animations.css">
+    <link rel="stylesheet" href="../css/responsive.css">
+    <style>
+        .dash-layout { display: grid; grid-template-columns: 260px 1fr; min-height: 100vh; }
+        @media(max-width:1024px){ .dash-layout { grid-template-columns: 1fr; } .dash-sidebar { display: none; } }
+        .dash-sidebar {
+            position: sticky; top: var(--nav-height); height: calc(100vh - var(--nav-height));
+            background: var(--navy-950); border-right: 1px solid var(--glass-border);
+            overflow-y: auto; padding: 2rem 1rem; display: flex; flex-direction: column; gap: 0.25rem;
+        }
+        .sidebar-label { font-size: var(--fs-2xs); font-weight: var(--fw-semibold); text-transform: uppercase; letter-spacing: 0.12em; color: var(--clr-text-muted); padding: 0.5rem 0.75rem; margin-top: 1.25rem; }
+        .sidebar-link { display: flex; align-items: center; gap: 0.75rem; padding: 0.7rem 0.9rem; border-radius: var(--radius-md); font-size: var(--fs-sm); font-weight: var(--fw-medium); color: var(--clr-text-secondary); transition: all var(--transition-fast); }
+        .sidebar-link:hover { background: rgba(255,255,255,0.05); color: var(--white); }
+        .sidebar-link.active { background: rgba(16,185,129,0.12); color: var(--emerald-400); border-left: 3px solid var(--emerald-500); }
+        .sidebar-link svg { width: 18px; height: 18px; stroke: currentColor; fill: none; stroke-width: 2; flex-shrink: 0; }
+        .stat-card { background: var(--clr-bg-card); border: 1px solid var(--glass-border); border-radius: var(--radius-lg); padding: 1.5rem; transition: all var(--transition-fast); }
+        .stat-card:hover { border-color: rgba(16,185,129,0.25); transform: translateY(-3px); }
+        .admin-table { width: 100%; border-collapse: collapse; }
+        .admin-table th { padding: 0.75rem 1rem; text-align: left; font-size: var(--fs-xs); font-weight: var(--fw-semibold); text-transform: uppercase; letter-spacing: 0.08em; color: var(--clr-text-muted); border-bottom: 1px solid var(--glass-border); }
+        .admin-table td { padding: 0.9rem 1rem; font-size: var(--fs-sm); color: var(--clr-text-secondary); border-bottom: 1px solid rgba(255,255,255,0.04); vertical-align: middle; }
+        .admin-table tr:hover td { background: rgba(255,255,255,0.02); }
+        .revenue-bar { height: 6px; background: var(--navy-700); border-radius: 3px; overflow: hidden; }
+        .revenue-fill { height: 100%; background: var(--grad-primary); border-radius: 3px; }
+        
+        .analytics-grid { display: grid; grid-template-columns: 1fr 1.2fr; gap: 1.75rem; }
+        @media(max-width:992px){ .analytics-grid { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+    <header id="main-header"></header>
+    <main id="main-content" class="page-content bg-deep">
+        <div class="dash-layout">
+            <!-- Sidebar -->
+            <aside class="dash-sidebar">
+                <div class="flex items-center gap-3 mb-6 p-2 bg-emerald-900 bg-opacity-20 rounded-xl border border-emerald-500 border-opacity-20">
+                    <div class="w-10 h-10 rounded-full bg-gradient-to-br from-emerald-500 to-ocean-500 flex items-center justify-center text-white font-bold text-sm flex-shrink-0 admin-initials">AD</div>
+                    <div>
+                        <div class="font-bold text-sm text-white sidebar-admin-name" id="sidebar-admin-name">Admin User</div>
+                        <div class="text-xs text-emerald">Super Admin</div>
+                    </div>
+                </div>
+                <span class="sidebar-label">Overview</span>
+                <a href="admin-dashboard.html" class="sidebar-link active">
+                    <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>Dashboard
+                </a>
+                <span class="sidebar-label">Management</span>
+                <a href="admin-bookings.html" class="sidebar-link">
+                    <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>Manage Bookings
+                </a>
+                <a href="admin-resorts.html" class="sidebar-link">
+                    <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>Manage Resorts
+                </a>
+                <a href="admin-users.html" class="sidebar-link">
+                    <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>Manage Users
+                </a>
+                <span class="sidebar-label">Account</span>
+                <a href="settings.html" class="sidebar-link">
+                    <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06A1.65 1.65 0 0 0 15 19.4a1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>Settings
+                </a>
+                <a href="login.html" class="sidebar-link text-error mt-4">
+                    <svg viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>Logout
+                </a>
+            </aside>
+
+            <!-- Main Content -->
+            <div class="flex flex-col gap-8 p-6 md:p-10">
+                <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 reveal">
+                    <div>
+                        <h1 class="text-3xl font-display font-bold" id="admin-welcome-title">Hello, Admin</h1>
+                        <p class="text-muted mt-1">Platform overview and system metrics.</p>
+                    </div>
+                    <div class="flex gap-3">
+                        <a href="admin-resorts.html" class="btn btn-primary btn-sm">+ Add Resort</a>
+                    </div>
+                </div>
+
+                <!-- Stats (Revenue & Booking Stats) -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 reveal">
+                    <div class="stat-card border-t-2 border-t-emerald-500">
+                        <div class="text-muted text-xs uppercase tracking-wider mb-2">Total Revenue</div>
+                        <div class="text-3xl font-display font-bold text-white">₹48.2L</div>
+                        <div class="text-xs text-emerald mt-2">↑ 12.4% vs last month</div>
+                    </div>
+                    <div class="stat-card border-t-2 border-t-ocean-500">
+                        <div class="text-muted text-xs uppercase tracking-wider mb-2">Bookings Count</div>
+                        <div class="text-3xl font-display font-bold text-white">1,284</div>
+                        <div class="text-xs text-emerald mt-2">↑ 8.1% vs last month</div>
+                    </div>
+                    <div class="stat-card border-t-2 border-t-cyan-500">
+                        <div class="text-muted text-xs uppercase tracking-wider mb-2">Active Users</div>
+                        <div class="text-3xl font-display font-bold text-white">52,040</div>
+                        <div class="text-xs text-emerald mt-2">↑ 5.6% vs last month</div>
+                    </div>
+                    <div class="stat-card border-t-2 border-t-warning">
+                        <div class="text-muted text-xs uppercase tracking-wider mb-2">Conversion Rate</div>
+                        <div class="text-3xl font-display font-bold text-white">94.2%</div>
+                        <div class="text-xs text-muted mt-2">Based on landing searches</div>
+                    </div>
+                </div>
+
+                <!-- Analytics (Charts & Metrics) -->
+                <div class="analytics-grid">
+                    <!-- Revenue by Resort (CSS Chart) -->
+                    <div class="card reveal-left">
+                        <div class="card-body border-b border-glass py-4"><h2 class="text-lg font-display font-bold">Revenue by Resort</h2></div>
+                        <div class="card-body flex flex-col gap-5">
+                            <div>
+                                <div class="flex justify-between text-sm mb-2"><span class="text-white">Azure Ocean Villas</span><span class="text-emerald font-bold">₹18.4L</span></div>
+                                <div class="revenue-bar"><div class="revenue-fill" style="width:82%"></div></div>
+                            </div>
+                            <div>
+                                <div class="flex justify-between text-sm mb-2"><span class="text-white">Sapphire Coast</span><span class="text-emerald font-bold">₹11.2L</span></div>
+                                <div class="revenue-bar"><div class="revenue-fill" style="width:56%"></div></div>
+                            </div>
+                            <div>
+                                <div class="flex justify-between text-sm mb-2"><span class="text-white">Emerald Jungle</span><span class="text-emerald font-bold">₹9.6L</span></div>
+                                <div class="revenue-bar"><div class="revenue-fill" style="width:44%"></div></div>
+                            </div>
+                            <div>
+                                <div class="flex justify-between text-sm mb-2"><span class="text-white">Island Pearl</span><span class="text-emerald font-bold">₹9.0L</span></div>
+                                <div class="revenue-bar"><div class="revenue-fill" style="width:40%"></div></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Occupancy Analytics & User Management Summary -->
+                    <div class="card reveal-right">
+                        <div class="card-body border-b border-glass py-4"><h2 class="text-lg font-display font-bold">Resort Occupancy & Users</h2></div>
+                        <div class="card-body flex flex-col gap-6">
+                            <!-- Occupancy -->
+                            <div>
+                                <h3 class="text-xs text-muted uppercase tracking-wider mb-3">Live Occupancy Rates</h3>
+                                <div class="flex justify-between items-center text-xs mb-2">
+                                    <span class="text-white">Maldives Properties</span>
+                                    <span class="text-emerald font-semibold">92% Occupied</span>
+                                </div>
+                                <div class="flex justify-between items-center text-xs mb-2">
+                                    <span class="text-white">Goa properties</span>
+                                    <span class="text-emerald font-semibold">78% Occupied</span>
+                                </div>
+                                <div class="flex justify-between items-center text-xs">
+                                    <span class="text-white">Bali Eco Stays</span>
+                                    <span class="text-emerald font-semibold">85% Occupied</span>
+                                </div>
+                            </div>
+                            <!-- User Management -->
+                            <div class="border-t border-glass pt-4 flex justify-between items-center">
+                                <div>
+                                    <h3 class="text-xs text-white font-semibold">Quick User Management</h3>
+                                    <p class="text-2xs text-muted mt-1">Configure user roles, suspend handles, and review credentials.</p>
+                                </div>
+                                <a href="admin-users.html" class="btn btn-xs btn-outline">Manage Users</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recent Bookings Table -->
+                <div class="card reveal overflow-hidden">
+                    <div class="card-body border-b border-glass py-4 flex justify-between items-center">
+                        <h2 class="text-lg font-display font-bold">Recent Booking Grids</h2>
+                        <a href="admin-bookings.html" class="text-sm text-emerald hover:underline">View All Bookings</a>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="admin-table">
+                            <thead>
+                                <tr><th>Guest</th><th>Resort</th><th>Dates</th><th>Amount</th><th>Status</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr><td class="font-medium text-white">Sarah J.</td><td>Azure Ocean</td><td>Dec 15–18</td><td>₹82,320</td><td><span class="badge badge-emerald">Confirmed</span></td></tr>
+                                <tr><td class="font-medium text-white">Rahul M.</td><td>Emerald Jungle</td><td>Dec 22–25</td><td>₹38,400</td><td><span class="badge badge-warning">Pending</span></td></tr>
+                                <tr><td class="font-medium text-white">Priya K.</td><td>Sapphire Coast</td><td>Jan 2–4</td><td>₹17,000</td><td><span class="badge badge-emerald">Confirmed</span></td></tr>
+                                <tr><td class="font-medium text-white">Michael D.</td><td>Island Pearl</td><td>Jan 10–14</td><td>₹1,12,000</td><td><span class="badge badge-ocean">In Progress</span></td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    <script src="../js/main.js"></script>
+    <script src="../js/animations.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const savedAdmin = localStorage.getItem("username") || "Super Admin";
+            
+            // Welcome title
+            const welcomeTitle = document.getElementById("admin-welcome-title");
+             if (welcomeTitle) {
+                 welcomeTitle.innerHTML = `Hello, ${savedAdmin} <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-warning animate-bounce inline-block" style="transform-origin: bottom right;"><path d="M18 11V6a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2v5"/><path d="M14 10V4a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2v6"/><path d="M10 10.5V6a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2v8"/><path d="M6 14v0a5 5 0 0 0 5 5h3a6 6 0 0 0 6-6V11a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2"/></svg>`;
+             }
+
+            // Sidebar admin name
+            const sidebarAdminName = document.getElementById("sidebar-admin-name");
+            if (sidebarAdminName) {
+                sidebarAdminName.innerText = savedAdmin;
+            }
+
+            // Initials avatar
+            const initials = savedAdmin.substring(0, 2).toUpperCase();
+            document.querySelectorAll(".admin-initials").forEach(el => {
+                el.innerText = initials;
+            });
+        });
+    </script>
+</body>
+</html>

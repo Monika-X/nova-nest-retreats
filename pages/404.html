@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>404 — Oops Page Not Found | Nova Nest Retreats</title>
+    <meta name="description" content="The page you're looking for doesn't exist. Return to Nova Nest Retreats and discover your next luxury escape.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        :root {
+            --emerald: #10b981;
+            --emerald-light: #34d399;
+            --ocean: #0ea5e9;
+            --purple: #8b5cf6;
+            --bg: #020617;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg);
+            color: #f1f5f9;
+            min-height: 100vh;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* ==================
+           CANVAS PARTICLES
+        ================== */
+        #particles-canvas {
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        /* ==================
+           AMBIENT GLOWS
+        ================== */
+        .glow-orb {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(80px);
+            pointer-events: none;
+            z-index: 1;
+        }
+        .glow-emerald {
+            width: 600px; height: 600px;
+            background: radial-gradient(circle, rgba(16,185,129,0.14) 0%, transparent 65%);
+            top: -100px; left: -100px;
+            animation: orbDrift 14s ease-in-out infinite alternate;
+        }
+        .glow-ocean {
+            width: 500px; height: 500px;
+            background: radial-gradient(circle, rgba(14,165,233,0.12) 0%, transparent 65%);
+            bottom: -80px; right: -80px;
+            animation: orbDrift2 18s ease-in-out infinite alternate;
+        }
+        .glow-purple {
+            width: 350px; height: 350px;
+            background: radial-gradient(circle, rgba(139,92,246,0.1) 0%, transparent 65%);
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            animation: orbPulse 8s ease-in-out infinite;
+        }
+        @keyframes orbDrift { from{transform:translate(0,0);} to{transform:translate(60px,40px);} }
+        @keyframes orbDrift2 { from{transform:translate(0,0);} to{transform:translate(-40px,-60px);} }
+        @keyframes orbPulse { 0%,100%{opacity:0.5;transform:translate(-50%,-50%) scale(1);} 50%{opacity:1;transform:translate(-50%,-50%) scale(1.2);} }
+
+        /* ==================
+           FLOATING SPARKS
+        ================== */
+        .spark {
+            position: fixed;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 2;
+            animation: sparkFloat linear infinite;
+        }
+        @keyframes sparkFloat {
+            0% { transform: translateY(100vh) scale(0); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 0.6; }
+            100% { transform: translateY(-10vh) scale(1); opacity: 0; }
+        }
+
+        /* ==================
+           MAIN CARD
+        ================== */
+        .page-wrapper {
+            position: relative;
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            padding: 2rem 1.5rem;
+            max-width: 700px;
+            width: 100%;
+        }
+
+        /* ==================
+           LOGO
+        ================== */
+        .logo-link {
+            display: flex;
+            align-items: center;
+            gap: 0.65rem;
+            text-decoration: none;
+            margin-bottom: 2.5rem;
+            opacity: 0;
+            animation: fadeDown 0.6s ease 0.2s forwards;
+        }
+        .logo-icon { width: 34px; height: 34px; }
+        .logo-name {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 900;
+            font-size: 0.9rem;
+            letter-spacing: 0.12em;
+            color: white;
+        }
+
+        /* ==================
+           BIG 404 TEXT
+        ================== */
+        .error-number {
+            font-family: 'Poppins', sans-serif;
+            font-size: clamp(7rem, 18vw, 11rem);
+            font-weight: 900;
+            line-height: 0.9;
+            letter-spacing: -0.02em;
+            background: linear-gradient(135deg, #10b981 0%, #34d399 30%, #0ea5e9 60%, #8b5cf6 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            filter: drop-shadow(0 0 40px rgba(16,185,129,0.25));
+            position: relative;
+            opacity: 0;
+            animation: scaleIn 0.7s cubic-bezier(0.34,1.56,0.64,1) 0.3s forwards;
+            margin-bottom: 0.5rem;
+            user-select: none;
+        }
+
+        /* Glitch effect on 404 */
+        .error-number::before,
+        .error-number::after {
+            content: '404';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            background: linear-gradient(135deg, #10b981, #0ea5e9);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .error-number::before {
+            animation: glitch1 4s infinite;
+            clip-path: polygon(0 25%, 100% 25%, 100% 35%, 0 35%);
+        }
+        .error-number::after {
+            animation: glitch2 4s infinite 0.1s;
+            clip-path: polygon(0 65%, 100% 65%, 100% 75%, 0 75%);
+        }
+        @keyframes glitch1 {
+            0%,90%,100% { transform: translate(0); opacity: 0; }
+            91% { transform: translate(-3px,1px); opacity: 0.7; }
+            93% { transform: translate(3px,-1px); opacity: 0.5; }
+            95% { transform: translate(0); opacity: 0; }
+        }
+        @keyframes glitch2 {
+            0%,88%,100% { transform: translate(0); opacity: 0; }
+            89% { transform: translate(3px,2px); opacity: 0.6; }
+            91% { transform: translate(-3px,-1px); opacity: 0.4; }
+            93% { transform: translate(0); opacity: 0; }
+        }
+
+        /* ==================
+           ILLUSTRATION
+        ================== */
+        .illustration {
+            width: 100%;
+            max-width: 340px;
+            margin: 0.5rem auto 1.5rem;
+            opacity: 0;
+            animation: fadeUp 0.8s ease 0.5s forwards;
+        }
+        .island-float { animation: islandFloat 4.5s ease-in-out infinite; }
+        .compass-spin { animation: compassSpin 6s ease-in-out infinite; transform-origin: 230px 90px; }
+        .search-bob { animation: searchBob 3s ease-in-out infinite; transform-origin: 160px 100px; }
+        .signal-1 { animation: signalPulse 2s ease-in-out infinite; }
+        .signal-2 { animation: signalPulse 2s ease-in-out infinite 0.35s; }
+        .signal-3 { animation: signalPulse 2s ease-in-out infinite 0.7s; }
+        @keyframes islandFloat { 0%,100%{transform:translateY(0);} 50%{transform:translateY(-10px);} }
+        @keyframes compassSpin { 0%,100%{transform:rotate(-25deg);} 50%{transform:rotate(25deg);} }
+        @keyframes searchBob { 0%,100%{transform:translateY(0) rotate(-8deg);} 50%{transform:translateY(-8px) rotate(-8deg);} }
+        @keyframes signalPulse { 0%,100%{opacity:0.1;} 50%{opacity:0.7;} }
+
+        /* ==================
+           TEXT CONTENT
+        ================== */
+        .error-title {
+            font-family: 'Poppins', sans-serif;
+            font-size: clamp(1.5rem, 4vw, 2.2rem);
+            font-weight: 800;
+            color: white;
+            margin-bottom: 0.85rem;
+            opacity: 0;
+            animation: fadeUp 0.7s ease 0.65s forwards;
+        }
+        .error-desc {
+            color: rgba(148,163,184,0.75);
+            font-size: 0.95rem;
+            line-height: 1.75;
+            max-width: 420px;
+            margin: 0 auto 2.5rem;
+            opacity: 0;
+            animation: fadeUp 0.7s ease 0.75s forwards;
+        }
+
+        /* ==================
+           LINKS / BUTTONS
+        ================== */
+        .action-row {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-bottom: 3rem;
+            opacity: 0;
+            animation: fadeUp 0.7s ease 0.85s forwards;
+        }
+        .btn-home {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.85rem 2rem;
+            border-radius: 12px;
+            background: linear-gradient(135deg, var(--emerald), var(--ocean));
+            color: white;
+            font-family: 'Poppins', sans-serif;
+            font-size: 0.9rem;
+            font-weight: 700;
+            text-decoration: none;
+            border: none;
+            cursor: pointer;
+            transition: all 0.25s;
+            box-shadow: 0 8px 32px rgba(16,185,129,0.3);
+            position: relative;
+            overflow: hidden;
+        }
+        .btn-home::before {
+            content: '';
+            position: absolute;
+            top: 0; left: -100%;
+            width: 100%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent);
+            transition: left 0.5s ease;
+        }
+        .btn-home:hover::before { left: 100%; }
+        .btn-home:hover { transform: translateY(-3px); box-shadow: 0 16px 48px rgba(16,185,129,0.4); }
+        .btn-home svg { width: 17px; height: 17px; stroke: currentColor; fill: none; stroke-width: 2.5; }
+
+        .btn-back {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.85rem 1.75rem;
+            border-radius: 12px;
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.1);
+            color: rgba(226,232,240,0.8);
+            font-family: 'Poppins', sans-serif;
+            font-size: 0.9rem;
+            font-weight: 600;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.25s;
+            backdrop-filter: blur(8px);
+        }
+        .btn-back:hover { background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.2); color: white; transform: translateY(-2px); }
+        .btn-back svg { width: 16px; height: 16px; stroke: currentColor; fill: none; stroke-width: 2; }
+
+        /* ==================
+           QUICK LINKS
+        ================== */
+        .quick-links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.6rem;
+            justify-content: center;
+            opacity: 0;
+            animation: fadeUp 0.7s ease 1s forwards;
+        }
+        .quick-link {
+            padding: 0.4rem 1.1rem;
+            border-radius: 30px;
+            border: 1px solid rgba(255,255,255,0.08);
+            background: rgba(255,255,255,0.03);
+            color: rgba(148,163,184,0.7);
+            font-size: 0.8rem;
+            font-weight: 500;
+            text-decoration: none;
+            transition: all 0.2s;
+            backdrop-filter: blur(4px);
+        }
+        .quick-link:hover {
+            background: rgba(16,185,129,0.1);
+            border-color: rgba(16,185,129,0.3);
+            color: var(--emerald-light);
+            transform: translateY(-2px);
+        }
+
+        /* ==================
+           KEYFRAMES
+        ================== */
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(24px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes fadeDown {
+            from { opacity: 0; transform: translateY(-16px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes scaleIn {
+            from { opacity: 0; transform: scale(0.7); }
+            to   { opacity: 1; transform: scale(1); }
+        }
+
+        /* Responsive */
+        @media (max-width: 480px) {
+            body { overflow: auto; }
+            .action-row { flex-direction: column; align-items: center; }
+            .btn-home, .btn-back { width: 100%; justify-content: center; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Canvas particles -->
+    <canvas id="particles-canvas"></canvas>
+
+    <!-- Ambient glows -->
+    <div class="glow-orb glow-emerald"></div>
+    <div class="glow-orb glow-ocean"></div>
+    <div class="glow-orb glow-purple"></div>
+
+    <!-- Floating sparks -->
+    <div class="spark" style="width:4px;height:4px;background:rgba(52,211,153,0.7);left:10%;animation-duration:12s;animation-delay:0s;box-shadow:0 0 8px rgba(52,211,153,0.9);"></div>
+    <div class="spark" style="width:6px;height:6px;background:rgba(14,165,233,0.6);left:25%;animation-duration:15s;animation-delay:2s;box-shadow:0 0 10px rgba(14,165,233,0.8);"></div>
+    <div class="spark" style="width:3px;height:3px;background:rgba(139,92,246,0.8);left:40%;animation-duration:10s;animation-delay:4s;box-shadow:0 0 6px rgba(139,92,246,0.9);"></div>
+    <div class="spark" style="width:5px;height:5px;background:rgba(52,211,153,0.5);left:60%;animation-duration:18s;animation-delay:1s;box-shadow:0 0 8px rgba(52,211,153,0.7);"></div>
+    <div class="spark" style="width:4px;height:4px;background:rgba(14,165,233,0.7);left:75%;animation-duration:13s;animation-delay:3s;box-shadow:0 0 8px rgba(14,165,233,0.8);"></div>
+    <div class="spark" style="width:7px;height:7px;background:rgba(52,211,153,0.4);left:88%;animation-duration:16s;animation-delay:0.5s;box-shadow:0 0 12px rgba(52,211,153,0.6);"></div>
+    <div class="spark" style="width:3px;height:3px;background:rgba(139,92,246,0.6);left:50%;animation-duration:11s;animation-delay:5s;box-shadow:0 0 6px rgba(139,92,246,0.8);"></div>
+
+    <!-- Main content -->
+    <div class="page-wrapper">
+
+        <!-- Logo -->
+        <a href="../index.html" class="logo-link">
+            <svg class="logo-icon" viewBox="0 0 40 40" fill="none">
+                <defs>
+                    <linearGradient id="lG" x1="4" y1="2" x2="36" y2="38" gradientUnits="userSpaceOnUse">
+                        <stop offset="0%" stop-color="#10b981"/>
+                        <stop offset="100%" stop-color="#0ea5e9"/>
+                    </linearGradient>
+                </defs>
+                <path d="M20 1 L23.5 15 L38 20 L23.5 25 L20 39 L16.5 25 L2 20 L16.5 15 Z" fill="url(#lG)" opacity="0.95"/>
+                <path d="M20 8 L22 16 L30 20 L22 24 L20 32 L18 24 L10 20 L18 16 Z" fill="url(#lG)" opacity="0.45"/>
+                <circle cx="20" cy="20" r="3.5" fill="url(#lG)"/>
+            </svg>
+            <span class="logo-name">NOVA NEST RETREATS</span>
+        </a>
+
+        <!-- Big 404 -->
+        <div class="error-number">404</div>
+
+        <!-- Animated SVG Illustration -->
+        <svg class="illustration" viewBox="0 0 340 185" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+                <linearGradient id="iG" x1="60" y1="130" x2="280" y2="165" gradientUnits="userSpaceOnUse">
+                    <stop offset="0%" stop-color="#1e293b"/>
+                    <stop offset="100%" stop-color="#0f172a"/>
+                </linearGradient>
+                <linearGradient id="oG" x1="40" y1="155" x2="300" y2="180" gradientUnits="userSpaceOnUse">
+                    <stop offset="0%" stop-color="#0ea5e9" stop-opacity="0.25"/>
+                    <stop offset="100%" stop-color="#06b6d4" stop-opacity="0.4"/>
+                </linearGradient>
+                <linearGradient id="eG" x1="0" y1="0" x2="1" y2="1">
+                    <stop offset="0%" stop-color="#10b981"/>
+                    <stop offset="100%" stop-color="#0ea5e9"/>
+                </linearGradient>
+                <filter id="gf"><feGaussianBlur stdDeviation="2.5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+                <filter id="glow2"><feGaussianBlur stdDeviation="4" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+            </defs>
+
+            <!-- Background stars -->
+            <circle cx="20" cy="20" r="1.5" fill="white" opacity="0.3"/>
+            <circle cx="80" cy="10" r="1" fill="white" opacity="0.4"/>
+            <circle cx="260" cy="15" r="1.5" fill="white" opacity="0.3"/>
+            <circle cx="320" cy="25" r="1" fill="white" opacity="0.4"/>
+            <circle cx="300" cy="8" r="1.5" fill="white" opacity="0.25"/>
+            <circle cx="150" cy="5" r="1" fill="white" opacity="0.35"/>
+
+            <!-- Island group floating -->
+            <g class="island-float">
+                <!-- Ocean shimmer -->
+                <path d="M45 158 Q 110 148, 170 156 Q 230 164, 295 152 L 295 175 Q 230 172, 170 172 Q 110 172, 45 170 Z" fill="url(#oG)"/>
+
+                <!-- Island base -->
+                <path d="M68 147 C 72 133, 102 122, 170 122 C 238 122, 268 133, 272 147 C 274 156, 240 163, 170 165 C 100 167, 66 156, 68 147 Z" fill="url(#iG)" stroke="rgba(255,255,255,0.04)" stroke-width="1"/>
+
+                <!-- Grass -->
+                <path d="M85 147 C 90 141, 112 136, 170 136 C 228 136, 252 141, 255 147" stroke="rgba(16,185,129,0.18)" stroke-width="1.5" fill="none"/>
+
+                <!-- Palm tree left -->
+                <line x1="112" y1="143" x2="105" y2="112" stroke="#047857" stroke-width="3.5" stroke-linecap="round"/>
+                <path d="M105 112 Q 90 107, 82 116" stroke="#10b981" stroke-width="2.5" stroke-linecap="round"/>
+                <path d="M105 112 Q 118 104, 127 112" stroke="#10b981" stroke-width="2.5" stroke-linecap="round"/>
+                <path d="M105 112 Q 101 98, 111 92" stroke="#10b981" stroke-width="2" stroke-linecap="round"/>
+                <circle cx="105" cy="112" r="2.5" fill="#34d399" opacity="0.8" filter="url(#gf)"/>
+
+                <!-- Palm tree right -->
+                <line x1="228" y1="142" x2="234" y2="112" stroke="#047857" stroke-width="3" stroke-linecap="round"/>
+                <path d="M234 112 Q 220 106, 212 114" stroke="#10b981" stroke-width="2" stroke-linecap="round"/>
+                <path d="M234 112 Q 247 106, 254 114" stroke="#10b981" stroke-width="2" stroke-linecap="round"/>
+                <path d="M234 112 Q 232 97, 242 91" stroke="#10b981" stroke-width="1.8" stroke-linecap="round"/>
+
+                <!-- Tiny resort hut -->
+                <rect x="153" y="128" width="36" height="21" rx="2.5" fill="rgba(30,41,59,0.95)" stroke="rgba(255,255,255,0.06)" stroke-width="0.8"/>
+                <path d="M149 128 L 171 113 L 193 128 Z" fill="rgba(16,185,129,0.12)" stroke="rgba(16,185,129,0.25)" stroke-width="1.2"/>
+                <rect x="161" y="136" width="11" height="13" rx="1.5" fill="rgba(14,165,233,0.18)" stroke="rgba(14,165,233,0.3)" stroke-width="0.7"/>
+                <rect x="155" y="132" width="7" height="5" rx="1" fill="rgba(255,255,255,0.05)"/>
+                <rect x="181" y="132" width="7" height="5" rx="1" fill="rgba(255,255,255,0.05)"/>
+            </g>
+
+            <!-- Magnifying glass (floating, tilted) -->
+            <g class="search-bob">
+                <circle cx="148" cy="85" r="24" stroke="url(#eG)" stroke-width="3" fill="rgba(16,185,129,0.06)" filter="url(#glow2)"/>
+                <line x1="166" y1="103" x2="178" y2="118" stroke="url(#eG)" stroke-width="4" stroke-linecap="round"/>
+                <!-- X inside the glass -->
+                <line x1="138" y1="75" x2="158" y2="95" stroke="rgba(244,63,94,0.6)" stroke-width="2.5" stroke-linecap="round"/>
+                <line x1="158" y1="75" x2="138" y2="95" stroke="rgba(244,63,94,0.6)" stroke-width="2.5" stroke-linecap="round"/>
+            </g>
+
+            <!-- Compass / direction needle -->
+            <g class="compass-spin">
+                <circle cx="230" cy="90" r="22" stroke="rgba(139,92,246,0.25)" stroke-width="2" fill="rgba(139,92,246,0.04)"/>
+                <!-- Cardinal marks -->
+                <line x1="230" y1="69" x2="230" y2="73" stroke="rgba(255,255,255,0.2)" stroke-width="1.5"/>
+                <line x1="230" y1="107" x2="230" y2="111" stroke="rgba(255,255,255,0.2)" stroke-width="1.5"/>
+                <line x1="209" y1="90" x2="213" y2="90" stroke="rgba(255,255,255,0.2)" stroke-width="1.5"/>
+                <line x1="247" y1="90" x2="251" y2="90" stroke="rgba(255,255,255,0.2)" stroke-width="1.5"/>
+                <!-- Needles -->
+                <polygon points="230,72 226,90 230,88 234,90" fill="rgba(244,63,94,0.8)"/>
+                <polygon points="230,108 226,90 230,92 234,90" fill="rgba(255,255,255,0.25)"/>
+                <circle cx="230" cy="90" r="3" fill="white" opacity="0.8"/>
+            </g>
+
+            <!-- Signal / wifi lost -->
+            <g>
+                <path class="signal-3" d="M40 55 Q 60 35, 85 45" stroke="rgba(16,185,129,0.6)" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+                <path class="signal-2" d="M47 62 Q 62 48, 78 55" stroke="rgba(16,185,129,0.5)" stroke-width="2" fill="none" stroke-linecap="round"/>
+                <path class="signal-1" d="M54 69 Q 64 60, 71 65" stroke="rgba(16,185,129,0.4)" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+                <circle cx="62" cy="73" r="3" fill="rgba(16,185,129,0.7)" filter="url(#gf)"/>
+                <!-- X mark over signal -->
+                <line x1="30" y1="38" x2="95" y2="80" stroke="rgba(244,63,94,0.3)" stroke-width="1.5" stroke-linecap="round" stroke-dasharray="4 3"/>
+            </g>
+
+            <!-- Question marks floating -->
+            <text x="295" y="70" fill="rgba(139,92,246,0.35)" font-family="'Poppins',sans-serif" font-size="20" font-weight="900">?</text>
+            <text x="22" y="100" fill="rgba(14,165,233,0.25)" font-family="'Poppins',sans-serif" font-size="16" font-weight="900">?</text>
+            <text x="308" y="130" fill="rgba(16,185,129,0.2)" font-family="'Poppins',sans-serif" font-size="13" font-weight="900">?</text>
+        </svg>
+
+        <!-- Text -->
+        <h1 class="error-title">Oops! Page Not Found</h1>
+        <p class="error-desc">
+            The luxury destination, booking, or account page you're searching for seems to have sailed away. Let's navigate you back to paradise.
+        </p>
+
+        <!-- Action buttons -->
+        <div class="action-row">
+            <a href="../index.html" class="btn-home">
+                <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+                Back to Home
+            </a>
+            <button onclick="history.back()" class="btn-back">
+                <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
+                Go Back
+            </button>
+        </div>
+
+        <!-- Quick links -->
+        <div class="quick-links">
+            <a href="../pages/resorts.html" class="quick-link">Resorts</a>
+            <a href="../pages/packages.html" class="quick-link">Packages</a>
+            <a href="../pages/offers.html" class="quick-link">Offers</a>
+            <a href="../pages/bookings.html" class="quick-link">My Bookings</a>
+            <a href="../pages/contact.html" class="quick-link">Contact</a>
+            <a href="../pages/faq.html" class="quick-link">FAQ</a>
+        </div>
+
+    </div>
+
+    <script>
+        /* ---- Canvas Particle System ---- */
+        const canvas = document.getElementById('particles-canvas');
+        const ctx = canvas.getContext('2d');
+
+        let W, H, particles = [];
+
+        function resize() {
+            W = canvas.width = window.innerWidth;
+            H = canvas.height = window.innerHeight;
+        }
+        resize();
+        window.addEventListener('resize', resize);
+
+        function createParticles(n) {
+            particles = [];
+            for (let i = 0; i < n; i++) {
+                particles.push({
+                    x: Math.random() * W,
+                    y: Math.random() * H,
+                    r: Math.random() * 2 + 0.5,
+                    vx: (Math.random() - 0.5) * 0.35,
+                    vy: (Math.random() - 0.5) * 0.35,
+                    alpha: Math.random() * 0.4 + 0.1,
+                    color: Math.random() < 0.6 ? '52,211,153' : Math.random() < 0.5 ? '14,165,233' : '139,92,246'
+                });
+            }
+        }
+        createParticles(80);
+
+        function drawParticles() {
+            ctx.clearRect(0, 0, W, H);
+
+            // Draw connecting lines
+            for (let i = 0; i < particles.length; i++) {
+                for (let j = i + 1; j < particles.length; j++) {
+                    const dx = particles[i].x - particles[j].x;
+                    const dy = particles[i].y - particles[j].y;
+                    const dist = Math.sqrt(dx*dx + dy*dy);
+                    if (dist < 90) {
+                        ctx.beginPath();
+                        ctx.moveTo(particles[i].x, particles[i].y);
+                        ctx.lineTo(particles[j].x, particles[j].y);
+                        ctx.strokeStyle = `rgba(52,211,153,${0.05 * (1 - dist/90)})`;
+                        ctx.lineWidth = 0.7;
+                        ctx.stroke();
+                    }
+                }
+            }
+
+            // Draw particles
+            particles.forEach(p => {
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, p.r, 0, Math.PI*2);
+                ctx.fillStyle = `rgba(${p.color},${p.alpha})`;
+                ctx.fill();
+
+                // Glow on some
+                if (p.r > 1.5) {
+                    ctx.beginPath();
+                    ctx.arc(p.x, p.y, p.r * 2.5, 0, Math.PI*2);
+                    ctx.fillStyle = `rgba(${p.color},${p.alpha * 0.2})`;
+                    ctx.fill();
+                }
+
+                p.x += p.vx;
+                p.y += p.vy;
+
+                if (p.x < 0) p.x = W;
+                if (p.x > W) p.x = 0;
+                if (p.y < 0) p.y = H;
+                if (p.y > H) p.y = 0;
+            });
+
+            requestAnimationFrame(drawParticles);
+        }
+
+        drawParticles();
+
+        /* ---- Mouse interaction: particles flee cursor ---- */
+        let mouse = { x: -999, y: -999 };
+        document.addEventListener('mousemove', e => {
+            mouse.x = e.clientX;
+            mouse.y = e.clientY;
+        });
+
+        function applyMouseRepulsion() {
+            particles.forEach(p => {
+                const dx = p.x - mouse.x;
+                const dy = p.y - mouse.y;
+                const dist = Math.sqrt(dx*dx + dy*dy);
+                if (dist < 80) {
+                    const force = (80 - dist) / 80;
+                    p.vx += (dx / dist) * force * 0.5;
+                    p.vy += (dy / dist) * force * 0.5;
+                    // Dampen velocity
+                    p.vx *= 0.95;
+                    p.vy *= 0.95;
+                }
+            });
+            requestAnimationFrame(applyMouseRepulsion);
+        }
+        applyMouseRepulsion();
+    </script>
+
+</body>
+</html>

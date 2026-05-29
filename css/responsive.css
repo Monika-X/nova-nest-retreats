@@ -1,0 +1,977 @@
+/* Global overrides/helper rules */
+.mobile-close-container {
+    display: none;
+}
+
+
+/* ---- Large Desktop (1280px+) ---- */
+/* Default styles in style.css handle this */
+
+
+/* ---- Desktop / Small Laptop (max-width: 1200px) ---- */
+@media (max-width: 1200px) {
+    .nav-list {
+        gap: 0.05rem !important;
+    }
+
+    .nav-link {
+        padding: 0.5rem 0.5rem !important;
+        font-size: 0.85rem !important;
+    }
+
+    .nav-logo {
+        gap: 0.4rem !important;
+    }
+
+    .logo-primary {
+        font-size: 1.15rem !important;
+    }
+
+    .logo-icon svg {
+        width: 32px !important;
+        height: 32px !important;
+    }
+}
+
+@media (max-width: 1100px) {
+    .footer-grid {
+        grid-template-columns: 1.3fr 1fr 1fr 1.2fr;
+        gap: var(--space-xl);
+    }
+}
+
+
+/* ---- Tablet (max-width: 1024px) ---- */
+@media (max-width: 1024px) {
+    :root {
+        --nav-height: 70px;
+    }
+
+    /* Show hamburger */
+    .hamburger {
+        display: flex;
+    }
+
+    /* Mobile slide-in menu */
+    .nav-menu {
+        position: fixed;
+        top: 0;
+        right: 0;
+        width: 320px;
+        max-width: 85vw;
+        height: 100vh;
+        height: 100dvh;
+        background: var(--clr-bg-surface);
+        flex-direction: column;
+        justify-content: flex-start;
+        padding: calc(var(--nav-height) + var(--space-xl)) var(--space-xl) var(--space-xl);
+        transform: translateX(100%);
+        transition: transform var(--transition-base);
+        z-index: calc(var(--z-sticky) - 1);
+        overflow-y: auto;
+        border-left: 1px solid var(--glass-border);
+        box-shadow: -10px 0 40px rgba(0, 0, 0, 0.4);
+    }
+
+    .nav-menu.active {
+        transform: translateX(0);
+    }
+
+    .nav-list {
+        flex-direction: column;
+        align-items: center !important;
+        gap: var(--space-xs) !important;
+        width: 100%;
+    }
+
+    .nav-item {
+        width: 100%;
+        text-align: center;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+    }
+
+    .nav-link {
+        padding: 0.9rem 0.5rem;
+        font-size: var(--fs-base);
+        width: 100%;
+        justify-content: center !important;
+        text-align: center !important;
+    }
+
+    /* Hide exit symbol from top when menu is active */
+    .hamburger.active {
+        display: none !important;
+    }
+
+    /* Hide profile dropdown when menu drawer is open */
+    body.menu-open .profile-dropdown {
+        display: none !important;
+    }
+
+    /* Sleek profile/login user icon on tablets/mobile */
+    .profile-btn span {
+        display: none !important;
+    }
+
+    .profile-btn {
+        padding: 0.4rem !important;
+        border-radius: var(--radius-full) !important;
+        width: 36px !important;
+        height: 36px !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        background: rgba(255, 255, 255, 0.05) !important;
+        border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    }
+
+    /* Prevent header overlapping with home page hero contents */
+    .hero-home {
+        padding-top: calc(var(--nav-height) + 2rem) !important;
+    }
+
+    .nav-link::after {
+        bottom: 0;
+        left: 0;
+        right: auto;
+        width: 3px;
+        height: 100%;
+        transform: scaleY(0);
+        transform-origin: bottom;
+        border-radius: 0 2px 2px 0;
+    }
+
+    .nav-link:hover::after,
+    .nav-link.active::after {
+        transform: scaleY(1);
+        transform-origin: top;
+    }
+
+    /* Mobile menu social CTA */
+    .nav-menu-footer {
+        display: flex;
+        flex-direction: column;
+        gap: var(--space-md);
+        margin-top: auto;
+        padding-top: var(--space-xl);
+        border-top: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    /* Mobile Close Button Style */
+    .mobile-close-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        margin-top: var(--space-xl);
+        padding-top: var(--space-md);
+    }
+
+    .mobile-close-btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 44px;
+        height: 44px;
+        border-radius: var(--radius-full);
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        color: var(--clr-text-secondary);
+        font-size: 1.25rem;
+        cursor: pointer;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    .mobile-close-btn:hover,
+    .mobile-close-btn:focus {
+        background: rgba(255, 255, 255, 0.1);
+        color: var(--clr-text-primary);
+        border-color: var(--clr-primary);
+        transform: scale(1.08);
+        box-shadow: 0 0 12px rgba(16, 185, 129, 0.3);
+    }
+
+    .mobile-close-btn:active {
+        transform: scale(0.95);
+    }
+
+    /* Footer */
+    .footer-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: var(--space-2xl);
+    }
+
+    /* Booking card sticky override */
+    .booking-card {
+        position: relative !important;
+        top: 0 !important;
+    }
+}
+
+
+/* ---- Mobile (max-width: 768px) ---- */
+@media (max-width: 768px) {
+    :root {
+        --nav-height: 64px;
+        --container-pad: 1.25rem;
+    }
+
+    /* Footer */
+    .footer-main {
+        padding: var(--space-3xl) 0 var(--space-xl);
+    }
+
+    .footer-grid {
+        grid-template-columns: 1fr;
+        gap: var(--space-2xl);
+    }
+
+    .footer-brand-text {
+        max-width: 100%;
+    }
+
+    .footer-bottom {
+        flex-direction: column;
+        gap: var(--space-md);
+        text-align: center;
+    }
+
+    /* Hero */
+    .hero {
+        min-height: 90vh;
+        padding-top: calc(var(--nav-height) + var(--space-2xl));
+    }
+
+    .hero-home {
+        padding-top: calc(var(--nav-height) + 2.5rem) !important;
+    }
+
+    .hero h1 {
+        font-size: clamp(var(--fs-2xl), 7vw, var(--fs-4xl));
+    }
+
+    /* Newsletter */
+    .newsletter-form {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+
+    .newsletter-input {
+        border-right: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: var(--radius-full);
+    }
+
+    .newsletter-btn {
+        border-radius: var(--radius-full);
+        padding: 0.8rem 1.5rem;
+    }
+
+    /* Logo */
+    .logo-icon svg {
+        width: 32px;
+        height: 32px;
+    }
+
+    .logo-primary {
+        font-size: 1.1rem;
+    }
+
+    .logo-secondary {
+        font-size: 0.55rem;
+    }
+}
+
+
+/* ---- Small Mobile (max-width: 480px) ---- */
+@media (max-width: 480px) {
+    :root {
+        --nav-height: 60px;
+        --container-pad: 1rem;
+    }
+
+    .nav-menu {
+        width: 260px;
+        max-width: 75vw;
+    }
+
+    .profile-btn {
+        padding: 0.4rem !important;
+        width: 34px !important;
+        height: 34px !important;
+    }
+
+    .profile-btn span {
+        display: none !important;
+    }
+
+    .hero-home {
+        padding-top: calc(var(--nav-height) + 3rem) !important;
+    }
+
+    /* Hero */
+    .hero {
+        min-height: 85vh;
+    }
+
+    .hero h1 {
+        font-size: var(--fs-2xl);
+    }
+
+    .hero p {
+        font-size: var(--fs-sm);
+    }
+
+    .btn {
+        padding: 0.65rem 1.25rem;
+        font-size: var(--fs-xs);
+    }
+
+    /* Footer */
+    .social-links {
+        justify-content: flex-start;
+    }
+
+    .footer-heading {
+        margin-bottom: var(--space-md);
+    }
+}
+
+
+/* ---- Landscape phones ---- */
+@media (max-height: 500px) and (orientation: landscape) {
+    .hero {
+        min-height: 100vh;
+        padding-top: calc(var(--nav-height) + var(--space-lg));
+        padding-bottom: var(--space-lg);
+    }
+}
+
+
+/* ---- Hover media query (touch devices) ---- */
+@media (hover: none) {
+    .nav-link::after {
+        display: none;
+    }
+
+    .nav-link.active::after {
+        display: block;
+    }
+
+    .footer-link:hover {
+        transform: none;
+    }
+
+    .social-link:hover {
+        transform: none;
+    }
+}
+
+/* ---- Hover & Focus Selector Utilities ---- */
+.hover\:text-emerald:hover {
+    color: var(--emerald-400) !important;
+}
+
+.hover\:text-ocean:hover {
+    color: var(--ocean-400) !important;
+}
+
+.hover\:text-white:hover {
+    color: var(--white) !important;
+}
+
+.hover\:underline:hover {
+    text-decoration: underline !important;
+}
+
+.hover\:scale-110:hover {
+    transform: scale(1.1) !important;
+}
+
+.hover\:border-emerald-500:hover {
+    border-color: var(--emerald-500) !important;
+}
+
+.hover\:bg-emerald-900:hover {
+    background-color: var(--emerald-900) !important;
+}
+
+.hover\:bg-opacity-20:hover {
+    background-color: rgba(16, 185, 129, 0.2) !important;
+}
+
+.hover\:bg-opacity-30:hover {
+    background-color: rgba(15, 23, 42, 0.3) !important;
+}
+
+.focus\:border-emerald-500:focus {
+    border-color: var(--emerald-500) !important;
+}
+
+/* ---- Responsive BREAKPOINT SELECTOR UTILITIES (Mobile-First) ---- */
+
+/* ---- Small Screens (min-width: 576px) ---- */
+@media (min-width: 576px) {
+    .sm\:block {
+        display: block !important;
+    }
+
+    .sm\:flex-row {
+        flex-direction: row !important;
+    }
+
+    .sm\:items-center {
+        align-items: center !important;
+    }
+
+    .sm\:grid-cols-3 {
+        grid-template-columns: repeat(3, 1fr) !important;
+    }
+
+    .sm\:w-2\/3 {
+        width: 66.666667% !important;
+    }
+}
+
+/* ---- Medium Screens (min-width: 768px) ---- */
+@media (min-width: 768px) {
+    .md\:block {
+        display: block !important;
+    }
+
+    .md\:flex {
+        display: flex !important;
+    }
+
+    .md\:flex-row {
+        flex-direction: row !important;
+    }
+
+    .md\:gap-4 {
+        gap: 1rem !important;
+    }
+
+    .md\:grid-cols-2 {
+        grid-template-columns: repeat(2, 1fr) !important;
+    }
+
+    .md\:grid-cols-3 {
+        grid-template-columns: repeat(3, 1fr) !important;
+    }
+
+    .md\:grid-cols-4 {
+        grid-template-columns: repeat(4, 1fr) !important;
+    }
+
+    .md\:col-span-2 {
+        grid-column: span 2 / span 2 !important;
+    }
+
+    .md\:h-auto {
+        height: auto !important;
+    }
+
+    .md\:items-center {
+        align-items: center !important;
+    }
+
+    .md\:items-end {
+        align-items: flex-end !important;
+    }
+
+    .md\:justify-end {
+        justify-content: flex-end !important;
+    }
+
+    .md\:mt-0 {
+        margin-top: 0 !important;
+    }
+
+    .md\:w-24 {
+        width: 6rem !important;
+    }
+
+    .md\:w-48 {
+        width: 12rem !important;
+    }
+
+    .md\:w-72 {
+        width: 18rem !important;
+    }
+
+    .md\:w-auto {
+        width: auto !important;
+    }
+
+    .md\:p-10 {
+        padding: 2.5rem !important;
+    }
+
+    .md\:p-12 {
+        padding: 3rem !important;
+    }
+
+    .md\:p-14 {
+        padding: 3.5rem !important;
+    }
+
+    .md\:p-16 {
+        padding: 4rem !important;
+    }
+
+    .md\:text-xl {
+        font-size: var(--fs-xl) !important;
+    }
+
+    .md\:text-4xl {
+        font-size: var(--fs-4xl) !important;
+    }
+
+    .md\:text-5xl {
+        font-size: var(--fs-5xl) !important;
+    }
+
+    .md\:text-6xl {
+        font-size: var(--fs-6xl) !important;
+    }
+
+    .md\:text-left {
+        text-align: left !important;
+    }
+}
+
+/* ---- Large Screens (min-width: 1024px) ---- */
+@media (min-width: 1024px) {
+    .lg\:block {
+        display: block !important;
+    }
+
+    .lg\:flex {
+        display: flex !important;
+    }
+
+    .lg\:flex-row {
+        flex-direction: row !important;
+    }
+
+    .lg\:hidden {
+        display: none !important;
+    }
+
+    .lg\:justify-start {
+        justify-content: flex-start !important;
+    }
+
+    .lg\:text-left {
+        text-align: left !important;
+    }
+
+    .lg\:w-1\/2 {
+        width: 50% !important;
+    }
+
+    .lg\:gap-8 {
+        gap: 2rem !important;
+    }
+
+    .lg\:gap-20 {
+        gap: 5rem !important;
+    }
+
+    .lg\:grid-cols-2 {
+        grid-template-columns: repeat(2, 1fr) !important;
+    }
+
+    .lg\:grid-cols-3 {
+        grid-template-columns: repeat(3, 1fr) !important;
+    }
+
+    .lg\:grid-cols-4 {
+        grid-template-columns: repeat(4, 1fr) !important;
+    }
+
+    .lg\:grid-cols-12 {
+        grid-template-columns: repeat(12, 1fr) !important;
+    }
+
+    .lg\:col-span-1 {
+        grid-column: span 1 / span 1 !important;
+    }
+
+    .lg\:col-span-2 {
+        grid-column: span 2 / span 2 !important;
+    }
+
+    .lg\:col-span-3 {
+        grid-column: span 3 / span 3 !important;
+    }
+
+    .lg\:col-span-5 {
+        grid-column: span 5 / span 5 !important;
+    }
+
+    .lg\:col-span-7 {
+        grid-column: span 7 / span 7 !important;
+    }
+
+    .lg\:col-span-9 {
+        grid-column: span 9 / span 9 !important;
+    }
+
+    .lg\:col-start-1 {
+        grid-column-start: 1 !important;
+    }
+
+    .lg\:col-start-2 {
+        grid-column-start: 2 !important;
+    }
+
+    .lg\:col-end-2 {
+        grid-column-end: 2 !important;
+    }
+
+    .lg\:col-end-3 {
+        grid-column-end: 3 !important;
+    }
+
+    .lg\:translate-x-1\/2 {
+        transform: translateX(50%) !important;
+    }
+}
+
+/* ---- Dashboard Sidebar Drawer Utilities ---- */
+@media (max-width: 1024px) {
+    .dash-layout {
+        grid-template-columns: 1fr !important;
+    }
+
+    .dash-sidebar {
+        display: flex !important;
+        position: fixed !important;
+        top: 0 !important;
+        left: 0 !important;
+        width: 280px !important;
+        max-width: 80vw !important;
+        height: 100vh !important;
+        height: 100dvh !important;
+        z-index: 9999 !important;
+        transform: translateX(-100%) !important;
+        transition: transform var(--transition-base) !important;
+        box-shadow: 10px 0 40px rgba(0, 0, 0, 0.4) !important;
+        background: var(--clr-bg-surface) !important;
+        padding-top: calc(var(--nav-height) + var(--space-6)) !important;
+    }
+
+    .dash-sidebar.active {
+        transform: translateX(0) !important;
+    }
+
+    .dash-overlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(2, 6, 23, 0.7);
+        backdrop-filter: blur(4px);
+        -webkit-backdrop-filter: blur(4px);
+        z-index: 9998;
+        opacity: 0;
+        visibility: hidden;
+        transition: all var(--transition-base);
+    }
+
+    .dash-overlay.active {
+        opacity: 1;
+        visibility: visible;
+    }
+
+    .dash-mobile-bar {
+        display: flex !important;
+        align-items: center;
+        gap: 0.75rem;
+        background: rgba(13, 24, 41, 0.8);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border: 1px solid var(--glass-border);
+        padding: 0.75rem 1.25rem;
+        border-radius: var(--radius-lg);
+        margin-bottom: 1.5rem;
+        width: fit-content;
+    }
+
+    .dash-mobile-toggle-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        color: var(--emerald-400);
+        font-weight: var(--fw-semibold);
+        font-size: var(--fs-sm);
+        cursor: pointer;
+    }
+
+    .dash-mobile-toggle-btn svg {
+        width: 18px;
+        height: 18px;
+        stroke: currentColor;
+        fill: none;
+        stroke-width: 2;
+    }
+}
+
+@media (min-width: 1025px) {
+    .dash-mobile-bar {
+        display: none !important;
+    }
+
+    .dash-overlay {
+        display: none !important;
+    }
+}
+
+/* ============================================================
+   GLOBAL RESPONSIVE WORKAROUNDS & CUSTOM HELPER CONTROLS
+   ============================================================ */
+
+/* ---- Table Horizontal Scroll Wrapper & Styling ---- */
+.overflow-x-auto {
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(16, 185, 129, 0.2) transparent;
+    padding-bottom: 0.5rem;
+}
+
+.overflow-x-auto::-webkit-scrollbar {
+    height: 6px;
+}
+
+.overflow-x-auto::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.overflow-x-auto::-webkit-scrollbar-thumb {
+    background-color: rgba(16, 185, 129, 0.2);
+    border-radius: 3px;
+}
+
+.overflow-x-auto::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(16, 185, 129, 0.4);
+}
+
+/* ---- Input Elements zooming fix (iOS/Mobile Safari) ---- */
+@media (max-width: 768px) {
+
+    .form-input,
+    .form-select,
+    .form-textarea,
+    .modal-search-input,
+    .modal-select {
+        font-size: 16px !important;
+    }
+
+    .newsletter-input {
+        text-align: center;
+    }
+}
+
+/* ---- Small Mobile (max-width: 480px) Padding overrides ---- */
+@media (max-width: 480px) {
+
+    /* Dashboards main padding */
+    .dash-main {
+        padding: 1.25rem 0.75rem !important;
+    }
+
+    .page-content {
+        padding: calc(var(--nav-height) + 1.5rem) 0.5rem 1.5rem 0.5rem !important;
+    }
+
+    .card {
+        padding: 1.25rem 1rem !important;
+    }
+
+    /* Booking list rows spacing */
+    .booking-row {
+        padding: 0.75rem 0.65rem !important;
+        gap: 0.5rem !important;
+    }
+
+    /* Modal Layout on Extra Small screens (320px-375px) */
+    .modal-overlay {
+        padding: 0.5rem !important;
+    }
+
+    .modal-box {
+        max-height: 94vh !important;
+        border-radius: var(--radius-lg) !important;
+    }
+
+    .modal-body {
+        padding: 1.25rem 1rem !important;
+    }
+
+    .modal-filters {
+        flex-direction: column !important;
+        align-items: stretch !important;
+        gap: 0.75rem !important;
+        margin-bottom: 1.25rem !important;
+    }
+
+    .modal-search-input {
+        min-width: 100% !important;
+        width: 100% !important;
+    }
+
+    .modal-select {
+        width: 100% !important;
+    }
+
+    .modal-grid {
+        grid-template-columns: 1fr !important;
+        gap: 1rem !important;
+    }
+
+    .resort-pick-card img {
+        height: 125px !important;
+    }
+
+    /* Hero booking form date fields alignment */
+    .hero-booking .flex.gap-4 {
+        flex-direction: column !important;
+        gap: 0.75rem !important;
+    }
+}
+
+/* ---- Prevention of horizontal overflow on extreme viewports ---- */
+@media (max-width: 350px) {
+    body {
+        word-break: break-word;
+    }
+
+    .logo-text {
+        display: none !important;
+    }
+
+    .nav-logo {
+        gap: 0 !important;
+    }
+
+    .btn {
+        width: 100% !important;
+        padding: 0.65rem 1rem !important;
+        font-size: var(--fs-2xs) !important;
+    }
+
+    .hero h1 {
+        font-size: 1.8rem !important;
+    }
+}
+
+
+/* ============================================================
+   FIX: Hero "Plan Your Retreat" card — navbar overlap at large screens
+   The pt-24 utility (96px) doesn't account for the 80px fixed navbar
+   at desktop breakpoints. Force proper clearance at all large sizes.
+   ============================================================ */
+@media (min-width: 1025px) {
+    .hero-home {
+        padding-top: calc(var(--nav-height) + 3.5rem) !important;
+    }
+}
+
+/* Also ensure booking card never overflows behind navbar on any width */
+.hero-booking {
+    position: relative;
+    z-index: 1;
+}
+
+
+/* ============================================================
+   ADMIN PAGES — Text & Layout Responsiveness
+   Fixes: text flowing vertically, tables overflowing, stat values
+   too large on small screens, toolbars not wrapping gracefully.
+   ============================================================ */
+
+/* Force horizontal scroll on admin tables so text never wraps vertically */
+.admin-table {
+    min-width: 640px;
+}
+
+.admin-table th,
+.admin-table td {
+    white-space: nowrap;
+}
+
+/* Admin dashboard content padding for medium screens */
+@media (max-width: 1024px) {
+    .dash-main {
+        padding: 1.5rem !important;
+    }
+}
+
+/* Admin stat cards — tighten values on small screens */
+@media (max-width: 640px) {
+    .stats-grid {
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 0.75rem !important;
+    }
+
+    .analytics-grid {
+        grid-template-columns: 1fr !important;
+    }
+
+    .stat-value {
+        font-size: 1.5rem !important;
+    }
+
+    .stat-label {
+        font-size: 0.65rem !important;
+        letter-spacing: 0.05em !important;
+    }
+
+    .stat-trend {
+        font-size: 0.65rem !important;
+    }
+
+    /* Admin toolbar stacks vertically on mobile */
+    .table-toolbar {
+        flex-direction: column !important;
+        align-items: stretch !important;
+    }
+
+    .search-input-wrap {
+        max-width: 100% !important;
+        width: 100% !important;
+        min-width: unset !important;
+    }
+
+    .filter-tabs {
+        flex-wrap: wrap !important;
+    }
+}
+
+/* Extra small screens */
+@media (max-width: 480px) {
+    .stat-value {
+        font-size: 1.3rem !important;
+    }
+
+    .dash-main {
+        padding: 1rem !important;
+    }
+
+    /* Resort cards grid to single column */
+    .resorts-grid {
+        grid-template-columns: 1fr !important;
+    }
+}
+
+/* Admin sidebar links — prevent text from overflowing */
+.sidebar-link {
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Ensure admin table wrappers always scroll horizontally */
+[style*="overflow-x:auto"],
+.overflow-x-auto {
+    -webkit-overflow-scrolling: touch;
+}

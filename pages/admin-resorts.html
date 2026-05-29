@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Resorts — Admin Panel | Nova Nest Retreats</title>
+    <meta name="description" content="Admin panel for managing resort listings, pricing, availability and media at Nova Nest Retreats.">
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/animations.css">
+    <link rel="stylesheet" href="../css/responsive.css">
+    <style>
+        .dash-layout { display: grid; grid-template-columns: 260px 1fr; min-height: 100vh; }
+        @media(max-width:1024px){ .dash-layout { grid-template-columns: 1fr; } .dash-sidebar { display: none; } }
+        .dash-sidebar { position: sticky; top: var(--nav-height); height: calc(100vh - var(--nav-height)); background: rgba(5,10,22,0.98); border-right: 1px solid var(--glass-border); overflow-y: auto; padding: 1.5rem 1rem; display: flex; flex-direction: column; gap: 0.2rem; }
+        .sidebar-label { font-size: 0.65rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.14em; color: var(--clr-text-muted); padding: 0.5rem 0.75rem; margin-top: 1.25rem; }
+        .sidebar-link { display: flex; align-items: center; gap: 0.75rem; padding: 0.65rem 0.9rem; border-radius: 10px; font-size: 0.85rem; font-weight: 500; color: var(--clr-text-secondary); transition: all 0.2s; text-decoration: none; }
+        .sidebar-link:hover { background: rgba(255,255,255,0.05); color: var(--white); }
+        .sidebar-link.active { background: rgba(16,185,129,0.12); color: #34d399; border-left: 3px solid #10b981; padding-left: calc(0.9rem - 3px); }
+        .sidebar-link svg { width: 17px; height: 17px; stroke: currentColor; fill: none; stroke-width: 2; flex-shrink: 0; }
+        .sidebar-avatar { display: flex; align-items: center; gap: 0.75rem; padding: 0.9rem; background: rgba(16,185,129,0.06); border: 1px solid rgba(16,185,129,0.15); border-radius: 12px; margin-bottom: 0.5rem; }
+        .avatar-circle { width: 38px; height: 38px; border-radius: 50%; background: linear-gradient(135deg,#10b981,#0ea5e9); display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 0.8rem; color: white; flex-shrink: 0; }
+        .dash-main { padding: 2rem 2.5rem; display: flex; flex-direction: column; gap: 1.75rem; }
+        @media(max-width:768px){ .dash-main { padding: 1.25rem; } }
+
+        /* Stats */
+        .stats-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 1.25rem; }
+        @media(max-width:900px){ .stats-grid { grid-template-columns: repeat(2,1fr); } }
+        .stat-card { background: var(--clr-bg-card); border: 1px solid var(--glass-border); border-radius: 16px; padding: 1.4rem 1.5rem; transition: all 0.25s; position: relative; overflow: hidden; }
+        .stat-card::before { content:''; position:absolute; top:0; left:0; right:0; height:2px; background: var(--grad-primary); opacity:0; transition: opacity 0.25s; }
+        .stat-card:hover { transform: translateY(-4px); border-color: rgba(16,185,129,0.2); }
+        .stat-card:hover::before { opacity:1; }
+        .stat-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem; }
+        .stat-icon { width: 42px; height: 42px; border-radius: 10px; display: flex; align-items: center; justify-content: center; }
+        .stat-icon svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 2; }
+        .stat-icon.emerald { background: rgba(16,185,129,0.12); color: #34d399; }
+        .stat-icon.warning { background: rgba(245,158,11,0.12); color: #fbbf24; }
+        .stat-icon.ocean { background: rgba(14,165,233,0.12); color: #38bdf8; }
+        .stat-icon.purple { background: rgba(139,92,246,0.12); color: #a78bfa; }
+        .stat-trend { font-size: 0.72rem; font-weight: 600; padding: 0.2rem 0.5rem; border-radius: 20px; }
+        .stat-trend.up { background: rgba(16,185,129,0.15); color: #34d399; }
+        .stat-value { font-size: 1.85rem; font-weight: 800; color: white; font-family: var(--font-display); line-height: 1; margin-bottom: 0.3rem; }
+        .stat-label { font-size: 0.75rem; color: var(--clr-text-muted); text-transform: uppercase; letter-spacing: 0.07em; }
+
+        /* Toolbar */
+        .toolbar { display: flex; gap: 0.75rem; flex-wrap: wrap; align-items: center; }
+        .search-wrap { position: relative; flex: 1; min-width: 180px; max-width: 300px; }
+        .search-wrap svg { position: absolute; left: 0.85rem; top: 50%; transform: translateY(-50%); width: 15px; height: 15px; stroke: var(--clr-text-muted); fill: none; stroke-width: 2; pointer-events: none; }
+        .search-inp { width: 100%; padding: 0.6rem 0.9rem 0.6rem 2.3rem; background: rgba(255,255,255,0.04); border: 1px solid var(--glass-border); border-radius: 10px; color: var(--clr-text-primary); font-size: 0.84rem; outline: none; transition: border-color 0.2s; }
+        .search-inp:focus { border-color: rgba(16,185,129,0.4); }
+        .search-inp::placeholder { color: var(--clr-text-muted); }
+        .view-toggle { display: flex; border: 1px solid var(--glass-border); border-radius: 10px; overflow: hidden; }
+        .view-btn { padding: 0.5rem 0.75rem; background: transparent; border: none; cursor: pointer; color: var(--clr-text-muted); transition: all 0.2s; display: flex; align-items: center; }
+        .view-btn svg { width: 15px; height: 15px; stroke: currentColor; fill: none; stroke-width: 2; }
+        .view-btn.active { background: rgba(16,185,129,0.15); color: #34d399; }
+
+        /* Resort Cards Grid */
+        .resorts-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 1.25rem; }
+        @media(max-width:1200px){ .resorts-grid { grid-template-columns: repeat(2,1fr); } }
+        @media(max-width:640px){ .resorts-grid { grid-template-columns: 1fr; } }
+
+        .resort-admin-card { background: var(--clr-bg-card); border: 1px solid var(--glass-border); border-radius: 16px; overflow: hidden; transition: all 0.25s; }
+        .resort-admin-card:hover { transform: translateY(-4px); border-color: rgba(16,185,129,0.2); box-shadow: 0 16px 48px rgba(0,0,0,0.35); }
+        .resort-card-img { height: 160px; background: linear-gradient(135deg,#0f2027,#203a43,#2c5364); position: relative; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+        .resort-card-img svg { width: 64px; height: 64px; opacity: 0.2; }
+        .resort-card-status { position: absolute; top: 0.75rem; left: 0.75rem; }
+        .resort-card-actions { position: absolute; top: 0.75rem; right: 0.75rem; display: flex; gap: 0.35rem; }
+        .card-act-btn { width: 30px; height: 30px; border-radius: 8px; background: rgba(0,0,0,0.6); backdrop-filter: blur(8px); border: 1px solid rgba(255,255,255,0.1); display: flex; align-items: center; justify-content: center; cursor: pointer; color: white; transition: all 0.2s; }
+        .card-act-btn svg { width: 13px; height: 13px; stroke: currentColor; fill: none; stroke-width: 2; }
+        .card-act-btn:hover { background: rgba(16,185,129,0.3); border-color: rgba(16,185,129,0.5); }
+        .card-act-btn.del:hover { background: rgba(244,63,94,0.3); border-color: rgba(244,63,94,0.5); }
+        .resort-card-body { padding: 1.1rem 1.25rem; }
+        .rc-name { font-weight: 700; color: white; font-size: 0.95rem; margin-bottom: 0.25rem; }
+        .rc-loc { font-size: 0.75rem; color: var(--clr-text-muted); margin-bottom: 0.75rem; }
+        .rc-meta { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem; }
+        .rc-price { font-weight: 800; color: #34d399; font-size: 1rem; }
+        .rc-price span { font-size: 0.7rem; color: var(--clr-text-muted); font-weight: 400; }
+        .rc-rating { display: flex; align-items: center; gap: 0.3rem; font-size: 0.78rem; color: #fbbf24; font-weight: 600; }
+        .rc-stats { display: flex; gap: 1rem; padding: 0.85rem 1.25rem; border-top: 1px solid var(--glass-border); }
+        .rc-stat { flex: 1; text-align: center; }
+        .rc-stat-val { font-size: 0.9rem; font-weight: 700; color: white; }
+        .rc-stat-lbl { font-size: 0.65rem; color: var(--clr-text-muted); text-transform: uppercase; letter-spacing: 0.07em; margin-top: 0.15rem; }
+
+        /* Status badges */
+        .badge-active { background: rgba(16,185,129,0.12); color: #34d399; padding: 0.2rem 0.6rem; border-radius: 20px; font-size: 0.7rem; font-weight: 600; }
+        .badge-inactive { background: rgba(244,63,94,0.1); color: #fb7185; padding: 0.2rem 0.6rem; border-radius: 20px; font-size: 0.7rem; font-weight: 600; }
+        .badge-maintenance { background: rgba(245,158,11,0.12); color: #fbbf24; padding: 0.2rem 0.6rem; border-radius: 20px; font-size: 0.7rem; font-weight: 600; }
+
+        /* Color swatches for resort cards */
+        .rc-img-1 { background: linear-gradient(135deg, #0ea5e9 0%, #06b6d4 50%, #0f172a 100%); }
+        .rc-img-2 { background: linear-gradient(135deg, #10b981 0%, #059669 50%, #0f172a 100%); }
+        .rc-img-3 { background: linear-gradient(135deg, #8b5cf6 0%, #6366f1 50%, #0f172a 100%); }
+        .rc-img-4 { background: linear-gradient(135deg, #f59e0b 0%, #ef4444 50%, #1e1010 100%); }
+        .rc-img-5 { background: linear-gradient(135deg, #ec4899 0%, #8b5cf6 50%, #0f172a 100%); }
+        .rc-img-6 { background: linear-gradient(135deg, #14b8a6 0%, #0ea5e9 50%, #0f172a 100%); }
+
+        /* Modal */
+        .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.75); backdrop-filter: blur(6px); z-index: 1000; display: flex; align-items: center; justify-content: center; padding: 1.5rem; opacity: 0; visibility: hidden; transition: all 0.3s; }
+        .modal-overlay.open { opacity: 1; visibility: visible; }
+        .modal-box { background: var(--clr-bg-surface); border: 1px solid var(--glass-border); border-radius: 20px; width: 100%; max-width: 560px; max-height: 90vh; overflow-y: auto; padding: 2rem; transform: scale(0.95); transition: transform 0.3s; }
+        .modal-overlay.open .modal-box { transform: scale(1); }
+        .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.75rem; }
+        .modal-title { font-size: 1.2rem; font-weight: 800; color: white; font-family: var(--font-display); }
+        .modal-close { width: 34px; height: 34px; border-radius: 8px; border: 1px solid var(--glass-border); background: transparent; color: var(--clr-text-muted); cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s; }
+        .modal-close:hover { background: rgba(244,63,94,0.1); color: #fb7185; border-color: rgba(244,63,94,0.3); }
+        .modal-close svg { width: 15px; height: 15px; stroke: currentColor; fill: none; stroke-width: 2; }
+        .form-group { margin-bottom: 1.1rem; }
+        .form-label { display: block; font-size: 0.78rem; font-weight: 600; color: var(--clr-text-secondary); margin-bottom: 0.4rem; letter-spacing: 0.04em; }
+        .form-ctrl { width: 100%; padding: 0.7rem 0.9rem; background: rgba(255,255,255,0.04); border: 1px solid var(--glass-border); border-radius: 10px; color: var(--clr-text-primary); font-size: 0.85rem; outline: none; transition: border-color 0.2s; font-family: inherit; }
+        .form-ctrl:focus { border-color: rgba(16,185,129,0.45); }
+        .form-ctrl::placeholder { color: var(--clr-text-muted); }
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+        .modal-actions { display: flex; gap: 0.75rem; justify-content: flex-end; margin-top: 1.5rem; }
+    </style>
+</head>
+<body>
+    <header id="main-header"></header>
+
+    <main id="main-content" class="page-content bg-deep">
+        <div class="dash-layout">
+            <!-- SIDEBAR -->
+            <aside class="dash-sidebar">
+                <div class="sidebar-avatar">
+                    <div class="avatar-circle admin-initials">AD</div>
+                    <div>
+                        <div style="font-weight:700;font-size:0.85rem;color:white;" id="sidebar-admin-name">Admin User</div>
+                        <div style="font-size:0.7rem;color:#34d399;">Super Admin</div>
+                    </div>
+                </div>
+                <span class="sidebar-label">Overview</span>
+                <a href="admin-dashboard.html" class="sidebar-link">
+                    <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>Dashboard
+                </a>
+                <span class="sidebar-label">Management</span>
+                <a href="admin-bookings.html" class="sidebar-link">
+                    <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>Manage Bookings
+                </a>
+                <a href="admin-resorts.html" class="sidebar-link active">
+                    <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>Manage Resorts
+                </a>
+                <a href="admin-users.html" class="sidebar-link">
+                    <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>Manage Users
+                </a>
+                <span class="sidebar-label">Account</span>
+                <a href="settings.html" class="sidebar-link">
+                    <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>Settings
+                </a>
+                <a href="login.html" class="sidebar-link" style="color:#fb7185;margin-top:auto;">
+                    <svg viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>Logout
+                </a>
+            </aside>
+
+            <!-- MAIN -->
+            <div class="dash-main">
+                <!-- Header -->
+                <div class="reveal" style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:1rem;">
+                    <div>
+                        <h1 style="font-size:1.75rem;font-weight:800;color:white;font-family:var(--font-display);">Manage Resorts</h1>
+                        <p style="color:var(--clr-text-muted);font-size:0.85rem;margin-top:0.3rem;">Add, edit and manage all resort listings, pricing and availability.</p>
+                    </div>
+                    <button class="btn btn-primary" onclick="openModal()" style="font-size:0.85rem;">+ Add New Resort</button>
+                </div>
+
+                <!-- Stats -->
+                <div class="stats-grid reveal">
+                    <div class="stat-card">
+                        <div class="stat-top"><div class="stat-icon emerald"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg></div><span class="stat-trend up">↑ 3</span></div>
+                        <div class="stat-value" data-count="42">0</div>
+                        <div class="stat-label">Total Resorts</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-top"><div class="stat-icon ocean"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div><span class="stat-trend up">↑ 2</span></div>
+                        <div class="stat-value" data-count="38">0</div>
+                        <div class="stat-label">Active Listings</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-top"><div class="stat-icon warning"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg></div><span class="stat-trend up">↑ 1</span></div>
+                        <div class="stat-value" data-count="3">0</div>
+                        <div class="stat-label">Under Maintenance</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-top"><div class="stat-icon purple"><svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div><span class="stat-trend up">↑ 0.1</span></div>
+                        <div class="stat-value">4.8</div>
+                        <div class="stat-label">Avg. Rating</div>
+                    </div>
+                </div>
+
+                <!-- Toolbar -->
+                <div class="toolbar reveal">
+                    <div class="search-wrap">
+                        <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                        <input class="search-inp" type="text" placeholder="Search resorts…" oninput="searchResorts(this.value)">
+                    </div>
+                    <select class="search-inp" style="max-width:180px;" onchange="filterByStatus(this.value)">
+                        <option value="all">All Status</option>
+                        <option value="active">Active</option>
+                        <option value="maintenance">Maintenance</option>
+                        <option value="inactive">Inactive</option>
+                    </select>
+                    <select class="search-inp" style="max-width:180px;">
+                        <option>All Locations</option>
+                        <option>Maldives</option>
+                        <option>Bali</option>
+                        <option>Goa</option>
+                        <option>Phuket</option>
+                        <option>Greece</option>
+                    </select>
+                    <div class="view-toggle">
+                        <button class="view-btn active" id="grid-view-btn" onclick="setView('grid')" title="Grid view">
+                            <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+                        </button>
+                        <button class="view-btn" id="list-view-btn" onclick="setView('list')" title="List view">
+                            <svg viewBox="0 0 24 24"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+                        </button>
+                    </div>
+                    <span style="font-size:0.8rem;color:var(--clr-text-muted);margin-left:auto;" id="resort-count">Showing 6 of 42 resorts</span>
+                </div>
+
+                <!-- Resort Cards -->
+                <div class="resorts-grid reveal" id="resorts-grid">
+
+                    <!-- Card 1 -->
+                    <div class="resort-admin-card" data-status="active" data-name="azure ocean water villas" data-loc="maldives">
+                        <div class="resort-card-img rc-img-1">
+                            <svg viewBox="0 0 64 64"><path d="M32 10 C 20 10, 10 22, 10 32 C 10 44, 20 54, 32 54 C 44 54, 54 44, 54 32 C 54 22, 44 10, 32 10 Z" stroke="#fff" stroke-width="2" fill="none"/><path d="M10 32 C 20 28, 44 28, 54 32" stroke="#fff" stroke-width="2" fill="none"/></svg>
+                            <div class="resort-card-status"><span class="badge-active">● Active</span></div>
+                            <div class="resort-card-actions">
+                                <button class="card-act-btn" title="Edit" onclick="openModal()"><svg viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button>
+                                <button class="card-act-btn del" title="Delete"><svg viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/></svg></button>
+                            </div>
+                        </div>
+                        <div class="resort-card-body">
+                            <div class="rc-name">Azure Ocean Water Villas</div>
+                            <div class="rc-loc flex items-center gap-1"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="inline-block"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg> Maldives, Indian Ocean</div>
+                            <div class="rc-meta">
+                                <div class="rc-price">₹27,440 <span>/ night</span></div>
+                                <div class="rc-rating">★ 4.9 <span style="color:var(--clr-text-muted);font-weight:400;">(312)</span></div>
+                            </div>
+                        </div>
+                        <div class="rc-stats">
+                            <div class="rc-stat"><div class="rc-stat-val">48</div><div class="rc-stat-lbl">Bookings</div></div>
+                            <div class="rc-stat"><div class="rc-stat-val">94%</div><div class="rc-stat-lbl">Occupancy</div></div>
+                            <div class="rc-stat"><div class="rc-stat-val">₹13.2L</div><div class="rc-stat-lbl">Revenue</div></div>
+                        </div>
+                    </div>
+
+                    <!-- Card 2 -->
+                    <div class="resort-admin-card" data-status="active" data-name="emerald jungle retreat" data-loc="bali">
+                        <div class="resort-card-img rc-img-2">
+                            <svg viewBox="0 0 64 64"><path d="M32 8 Q 25 20, 15 28 Q 22 26, 32 32 Q 42 26, 49 28 Q 39 20, 32 8 Z" stroke="#fff" stroke-width="2" fill="rgba(255,255,255,0.1)"/><line x1="32" y1="32" x2="32" y2="56" stroke="#fff" stroke-width="2"/></svg>
+                            <div class="resort-card-status"><span class="badge-active">● Active</span></div>
+                            <div class="resort-card-actions">
+                                <button class="card-act-btn" onclick="openModal()"><svg viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button>
+                                <button class="card-act-btn del"><svg viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/></svg></button>
+                            </div>
+                        </div>
+                        <div class="resort-card-body">
+                            <div class="rc-name">Emerald Jungle Retreat</div>
+                            <div class="rc-loc flex items-center gap-1"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="inline-block"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg> Ubud, Bali, Indonesia</div>
+                            <div class="rc-meta">
+                                <div class="rc-price">₹12,800 <span>/ night</span></div>
+                                <div class="rc-rating">★ 4.8 <span style="color:var(--clr-text-muted);font-weight:400;">(186)</span></div>
+                            </div>
+                        </div>
+                        <div class="rc-stats">
+                            <div class="rc-stat"><div class="rc-stat-val">62</div><div class="rc-stat-lbl">Bookings</div></div>
+                            <div class="rc-stat"><div class="rc-stat-val">88%</div><div class="rc-stat-lbl">Occupancy</div></div>
+                            <div class="rc-stat"><div class="rc-stat-val">₹7.9L</div><div class="rc-stat-lbl">Revenue</div></div>
+                        </div>
+                    </div>
+
+                    <!-- Card 3 -->
+                    <div class="resort-admin-card" data-status="active" data-name="sky terrace infinity pool" data-loc="greece">
+                        <div class="resort-card-img rc-img-3">
+                            <svg viewBox="0 0 64 64"><circle cx="32" cy="28" r="18" stroke="#fff" stroke-width="2" fill="none"/><line x1="14" y1="48" x2="50" y2="48" stroke="#fff" stroke-width="3"/></svg>
+                            <div class="resort-card-status"><span class="badge-active">● Active</span></div>
+                            <div class="resort-card-actions">
+                                <button class="card-act-btn" onclick="openModal()"><svg viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button>
+                                <button class="card-act-btn del"><svg viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/></svg></button>
+                            </div>
+                        </div>
+                        <div class="resort-card-body">
+                            <div class="rc-name">Sky Terrace Infinity Pool</div>
+                            <div class="rc-loc flex items-center gap-1"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="inline-block"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg> Santorini, Greece</div>
+                            <div class="rc-meta">
+                                <div class="rc-price">₹52,800 <span>/ night</span></div>
+                                <div class="rc-rating">★ 5.0 <span style="color:var(--clr-text-muted);font-weight:400;">(94)</span></div>
+                            </div>
+                        </div>
+                        <div class="rc-stats">
+                            <div class="rc-stat"><div class="rc-stat-val">31</div><div class="rc-stat-lbl">Bookings</div></div>
+                            <div class="rc-stat"><div class="rc-stat-val">97%</div><div class="rc-stat-lbl">Occupancy</div></div>
+                            <div class="rc-stat"><div class="rc-stat-val">₹16.4L</div><div class="rc-stat-lbl">Revenue</div></div>
+                        </div>
+                    </div>
+
+                    <!-- Card 4 -->
+                    <div class="resort-admin-card" data-status="maintenance" data-name="golden sands resort" data-loc="dubai">
+                        <div class="resort-card-img rc-img-4">
+                            <svg viewBox="0 0 64 64"><polygon points="32,8 56,54 8,54" stroke="#fff" stroke-width="2" fill="rgba(255,255,255,0.08)"/></svg>
+                            <div class="resort-card-status"><span class="badge-maintenance">⚙ Maintenance</span></div>
+                            <div class="resort-card-actions">
+                                <button class="card-act-btn" onclick="openModal()"><svg viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button>
+                                <button class="card-act-btn del"><svg viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/></svg></button>
+                            </div>
+                        </div>
+                        <div class="resort-card-body">
+                            <div class="rc-name">Golden Sands Resort</div>
+                            <div class="rc-loc flex items-center gap-1"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="inline-block"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg> Dubai, UAE</div>
+                            <div class="rc-meta">
+                                <div class="rc-price">₹22,600 <span>/ night</span></div>
+                                <div class="rc-rating">★ 4.7 <span style="color:var(--clr-text-muted);font-weight:400;">(229)</span></div>
+                            </div>
+                        </div>
+                        <div class="rc-stats">
+                            <div class="rc-stat"><div class="rc-stat-val">54</div><div class="rc-stat-lbl">Bookings</div></div>
+                            <div class="rc-stat"><div class="rc-stat-val">76%</div><div class="rc-stat-lbl">Occupancy</div></div>
+                            <div class="rc-stat"><div class="rc-stat-val">₹12.2L</div><div class="rc-stat-lbl">Revenue</div></div>
+                        </div>
+                    </div>
+
+                    <!-- Card 5 -->
+                    <div class="resort-admin-card" data-status="active" data-name="crystal lagoon villas" data-loc="phuket">
+                        <div class="resort-card-img rc-img-5">
+                            <svg viewBox="0 0 64 64"><path d="M10 44 Q 20 28, 32 32 Q 44 36, 54 20" stroke="#fff" stroke-width="3" fill="none"/><circle cx="32" cy="32" r="8" stroke="#fff" stroke-width="2" fill="rgba(255,255,255,0.1)"/></svg>
+                            <div class="resort-card-status"><span class="badge-active">● Active</span></div>
+                            <div class="resort-card-actions">
+                                <button class="card-act-btn" onclick="openModal()"><svg viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button>
+                                <button class="card-act-btn del"><svg viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/></svg></button>
+                            </div>
+                        </div>
+                        <div class="resort-card-body">
+                            <div class="rc-name">Crystal Lagoon Villas</div>
+                            <div class="rc-loc flex items-center gap-1"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="inline-block"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg> Phuket, Thailand</div>
+                            <div class="rc-meta">
+                                <div class="rc-price">₹19,600 <span>/ night</span></div>
+                                <div class="rc-rating">★ 4.9 <span style="color:var(--clr-text-muted);font-weight:400;">(147)</span></div>
+                            </div>
+                        </div>
+                        <div class="rc-stats">
+                            <div class="rc-stat"><div class="rc-stat-val">39</div><div class="rc-stat-lbl">Bookings</div></div>
+                            <div class="rc-stat"><div class="rc-stat-val">91%</div><div class="rc-stat-lbl">Occupancy</div></div>
+                            <div class="rc-stat"><div class="rc-stat-val">₹7.6L</div><div class="rc-stat-lbl">Revenue</div></div>
+                        </div>
+                    </div>
+
+                    <!-- Card 6 -->
+                    <div class="resort-admin-card" data-status="active" data-name="sapphire coast premium" data-loc="goa">
+                        <div class="resort-card-img rc-img-6">
+                            <svg viewBox="0 0 64 64"><rect x="16" y="16" width="32" height="32" rx="8" stroke="#fff" stroke-width="2" fill="rgba(255,255,255,0.08)"/><circle cx="32" cy="32" r="8" stroke="#fff" stroke-width="2" fill="rgba(255,255,255,0.15)"/></svg>
+                            <div class="resort-card-status"><span class="badge-active">● Active</span></div>
+                            <div class="resort-card-actions">
+                                <button class="card-act-btn" onclick="openModal()"><svg viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button>
+                                <button class="card-act-btn del"><svg viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/></svg></button>
+                            </div>
+                        </div>
+                        <div class="resort-card-body">
+                            <div class="rc-name">Sapphire Coast Premium</div>
+                            <div class="rc-loc flex items-center gap-1"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="inline-block"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg> North Goa, India</div>
+                            <div class="rc-meta">
+                                <div class="rc-price">₹8,500 <span>/ night</span></div>
+                                <div class="rc-rating">★ 4.6 <span style="color:var(--clr-text-muted);font-weight:400;">(408)</span></div>
+                            </div>
+                        </div>
+                        <div class="rc-stats">
+                            <div class="rc-stat"><div class="rc-stat-val">87</div><div class="rc-stat-lbl">Bookings</div></div>
+                            <div class="rc-stat"><div class="rc-stat-val">82%</div><div class="rc-stat-lbl">Occupancy</div></div>
+                            <div class="rc-stat"><div class="rc-stat-val">₹7.4L</div><div class="rc-stat-lbl">Revenue</div></div>
+                        </div>
+                    </div>
+
+                </div><!-- /resorts-grid -->
+
+                <!-- Load More -->
+                <div style="display:flex;justify-content:center;padding-bottom:1rem;" class="reveal">
+                    <button class="btn btn-outline" style="font-size:0.85rem;">Load More Resorts (36 remaining)</button>
+                </div>
+
+            </div><!-- /dash-main -->
+        </div>
+    </main>
+
+    <!-- ADD RESORT MODAL -->
+    <div class="modal-overlay" id="resort-modal">
+        <div class="modal-box">
+            <div class="modal-header">
+                <h2 class="modal-title">Add New Resort</h2>
+                <button class="modal-close" onclick="closeModal()"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+            </div>
+            <form onsubmit="submitResort(event)">
+                <div class="form-group">
+                    <label class="form-label">Resort Name</label>
+                    <input class="form-ctrl" type="text" placeholder="e.g. Azure Pearl Villas" required>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">Location</label>
+                        <input class="form-ctrl" type="text" placeholder="City, Country" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Category</label>
+                        <select class="form-ctrl">
+                            <option>Beach</option>
+                            <option>Jungle</option>
+                            <option>Mountain</option>
+                            <option>City</option>
+                            <option>Desert</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">Price / Night (₹)</label>
+                        <input class="form-ctrl" type="number" placeholder="e.g. 12000" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Max Guests</label>
+                        <input class="form-ctrl" type="number" placeholder="e.g. 6" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Description</label>
+                    <textarea class="form-ctrl" rows="3" placeholder="Brief resort description…"></textarea>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Status</label>
+                    <select class="form-ctrl">
+                        <option value="active">Active</option>
+                        <option value="maintenance">Under Maintenance</option>
+                        <option value="inactive">Inactive</option>
+                    </select>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-outline btn-sm" onclick="closeModal()">Cancel</button>
+                    <button type="submit" class="btn btn-primary btn-sm">Add Resort</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="../js/main.js"></script>
+    <script src="../js/animations.js"></script>
+    <script src="../js/dashboard.js"></script>
+    <script>
+        function openModal() {
+            document.getElementById('resort-modal').classList.add('open');
+            document.body.style.overflow = 'hidden';
+        }
+        function closeModal() {
+            document.getElementById('resort-modal').classList.remove('open');
+            document.body.style.overflow = '';
+        }
+        document.getElementById('resort-modal').addEventListener('click', function(e) {
+            if (e.target === this) closeModal();
+        });
+        function submitResort(e) {
+            e.preventDefault();
+            const inputs = e.target.querySelectorAll('.form-ctrl');
+            const name = inputs[0].value;
+            const loc = inputs[1].value;
+            const category = inputs[2].value;
+            const price = parseFloat(inputs[3].value).toLocaleString('en-IN');
+            const maxGuests = inputs[4].value;
+            const desc = inputs[5].value;
+            const status = inputs[6].value;
+
+            closeModal();
+
+            const grid = document.getElementById('resorts-grid');
+            const newCard = document.createElement('div');
+            newCard.className = 'resort-admin-card';
+            newCard.dataset.status = status;
+            newCard.dataset.name = name.toLowerCase();
+            newCard.dataset.loc = loc.toLowerCase();
+
+            const imgClass = 'rc-img-' + (Math.floor(Math.random() * 6) + 1);
+
+            let statusHtml = '';
+            if (status === 'active') statusHtml = '<span class="badge-active">● Active</span>';
+            else if (status === 'maintenance') statusHtml = '<span class="badge-maintenance">⚙ Maintenance</span>';
+            else statusHtml = '<span class="badge-inactive">● Inactive</span>';
+
+            newCard.innerHTML = `
+                <div class="resort-card-img ${imgClass}">
+                    <svg viewBox="0 0 64 64"><path d="M32 10 C 20 10, 10 22, 10 32 C 10 44, 20 54, 32 54 C 44 54, 54 44, 54 32 C 54 22, 44 10, 32 10 Z" stroke="#fff" stroke-width="2" fill="none"/><path d="M10 32 C 20 28, 44 28, 54 32" stroke="#fff" stroke-width="2" fill="none"/></svg>
+                    <div class="resort-card-status">${statusHtml}</div>
+                    <div class="resort-card-actions">
+                        <button class="card-act-btn" title="Edit" onclick="openModal()"><svg viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button>
+                        <button class="card-act-btn del" title="Delete"><svg viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/></svg></button>
+                    </div>
+                </div>
+                <div class="resort-card-body">
+                    <div class="rc-name">${name}</div>
+                    <div class="rc-loc flex items-center gap-1"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="inline-block"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg> ${loc}</div>
+                    <div class="rc-meta">
+                        <div class="rc-price">₹${price} <span>/ night</span></div>
+                        <div class="rc-rating">★ 5.0 <span style="color:var(--clr-text-muted);font-weight:400;">(0)</span></div>
+                    </div>
+                </div>
+                <div class="rc-stats">
+                    <div class="rc-stat"><div class="rc-stat-val">0</div><div class="rc-stat-lbl">Bookings</div></div>
+                    <div class="rc-stat"><div class="rc-stat-val">0%</div><div class="rc-stat-lbl">Occupancy</div></div>
+                    <div class="rc-stat"><div class="rc-stat-val">₹0</div><div class="rc-stat-lbl">Revenue</div></div>
+                </div>
+            `;
+
+            grid.prepend(newCard);
+            
+            // Increment Stats
+            const totalResortsStat = document.querySelector('.stats-grid .stat-card:nth-child(1) .stat-value');
+            if (totalResortsStat) {
+                let currentTotal = parseInt(totalResortsStat.getAttribute('data-count')) || 0;
+                currentTotal++;
+                totalResortsStat.setAttribute('data-count', currentTotal);
+                totalResortsStat.innerText = currentTotal;
+            }
+            if (status === 'active') {
+                const activeStat = document.querySelector('.stats-grid .stat-card:nth-child(2) .stat-value');
+                if (activeStat) {
+                    let currentActive = parseInt(activeStat.getAttribute('data-count')) || 0;
+                    currentActive++;
+                    activeStat.setAttribute('data-count', currentActive);
+                    activeStat.innerText = currentActive;
+                }
+            } else if (status === 'maintenance') {
+                const maintStat = document.querySelector('.stats-grid .stat-card:nth-child(3) .stat-value');
+                if (maintStat) {
+                    let currentMaint = parseInt(maintStat.getAttribute('data-count')) || 0;
+                    currentMaint++;
+                    maintStat.setAttribute('data-count', currentMaint);
+                    maintStat.innerText = currentMaint;
+                }
+            }
+
+            updateCount();
+            e.target.reset();
+        }
+
+        function updateCount() {
+            const countEl = document.getElementById('resort-count');
+            if (countEl) {
+                const total = document.querySelectorAll('#resorts-grid .resort-admin-card').length;
+                const visible = document.querySelectorAll('#resorts-grid .resort-admin-card:not([style*="display: none"])').length;
+                countEl.innerText = `Showing ${visible} of ${total} resorts`;
+            }
+        }
+
+        // Global Event Delegation for Delete Buttons
+        document.getElementById('resorts-grid')?.addEventListener('click', function(e) {
+            const delBtn = e.target.closest('.card-act-btn.del');
+            if (delBtn) {
+                const card = delBtn.closest('.resort-admin-card');
+                if (card) {
+                    const status = card.dataset.status;
+                    card.remove();
+
+                    // Decrement Dashboard Stats
+                    const totalResortsStat = document.querySelector('.stats-grid .stat-card:nth-child(1) .stat-value');
+                    if (totalResortsStat) {
+                        let currentTotal = parseInt(totalResortsStat.getAttribute('data-count')) || 0;
+                        currentTotal = Math.max(0, currentTotal - 1);
+                        totalResortsStat.setAttribute('data-count', currentTotal);
+                        totalResortsStat.innerText = currentTotal;
+                    }
+                    if (status === 'active') {
+                        const activeStat = document.querySelector('.stats-grid .stat-card:nth-child(2) .stat-value');
+                        if (activeStat) {
+                            let currentActive = parseInt(activeStat.getAttribute('data-count')) || 0;
+                            currentActive = Math.max(0, currentActive - 1);
+                            activeStat.setAttribute('data-count', currentActive);
+                            activeStat.innerText = currentActive;
+                        }
+                    } else if (status === 'maintenance') {
+                        const maintStat = document.querySelector('.stats-grid .stat-card:nth-child(3) .stat-value');
+                        if (maintStat) {
+                            let currentMaint = parseInt(maintStat.getAttribute('data-count')) || 0;
+                            currentMaint = Math.max(0, currentMaint - 1);
+                            maintStat.setAttribute('data-count', currentMaint);
+                            maintStat.innerText = currentMaint;
+                        }
+                    }
+
+                    updateCount();
+                }
+            }
+        });
+        function searchResorts(q) {
+            q = q.toLowerCase();
+            document.querySelectorAll('#resorts-grid .resort-admin-card').forEach(card => {
+                const name = card.dataset.name || '';
+                const loc = card.dataset.loc || '';
+                card.style.display = (!q || name.includes(q) || loc.includes(q)) ? '' : 'none';
+            });
+        }
+        function filterByStatus(status) {
+            document.querySelectorAll('#resorts-grid .resort-admin-card').forEach(card => {
+                card.style.display = (status === 'all' || card.dataset.status === status) ? '' : 'none';
+            });
+        }
+        function setView(v) {
+            const grid = document.getElementById('resorts-grid');
+            document.getElementById('grid-view-btn').classList.toggle('active', v === 'grid');
+            document.getElementById('list-view-btn').classList.toggle('active', v === 'list');
+            grid.style.gridTemplateColumns = v === 'list' ? '1fr' : '';
+        }
+    </script>
+</body>
+</html>

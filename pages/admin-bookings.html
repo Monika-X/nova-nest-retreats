@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Bookings — Admin Panel | Nova Nest Retreats</title>
+    <meta name="description" content="Admin panel for managing all guest bookings, statuses, and revenue at Nova Nest Retreats.">
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/animations.css">
+    <link rel="stylesheet" href="../css/responsive.css">
+    <style>
+        /* ---- Layout ---- */
+        .dash-layout { display: grid; grid-template-columns: 260px 1fr; min-height: 100vh; }
+        @media(max-width:1024px){ .dash-layout { grid-template-columns: 1fr; } .dash-sidebar { display: none; } }
+
+        /* ---- Sidebar ---- */
+        .dash-sidebar {
+            position: sticky; top: var(--nav-height);
+            height: calc(100vh - var(--nav-height));
+            background: rgba(5,10,22,0.98);
+            border-right: 1px solid var(--glass-border);
+            overflow-y: auto; padding: 1.5rem 1rem;
+            display: flex; flex-direction: column; gap: 0.2rem;
+        }
+        .sidebar-label { font-size: 0.65rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.14em; color: var(--clr-text-muted); padding: 0.5rem 0.75rem; margin-top: 1.25rem; }
+        .sidebar-link { display: flex; align-items: center; gap: 0.75rem; padding: 0.65rem 0.9rem; border-radius: 10px; font-size: 0.85rem; font-weight: 500; color: var(--clr-text-secondary); transition: all 0.2s; text-decoration: none; }
+        .sidebar-link:hover { background: rgba(255,255,255,0.05); color: var(--white); }
+        .sidebar-link.active { background: rgba(16,185,129,0.12); color: #34d399; border-left: 3px solid #10b981; padding-left: calc(0.9rem - 3px); }
+        .sidebar-link svg { width: 17px; height: 17px; stroke: currentColor; fill: none; stroke-width: 2; flex-shrink: 0; }
+        .sidebar-avatar { display: flex; align-items: center; gap: 0.75rem; padding: 0.9rem; background: rgba(16,185,129,0.06); border: 1px solid rgba(16,185,129,0.15); border-radius: 12px; margin-bottom: 0.5rem; }
+        .avatar-circle { width: 38px; height: 38px; border-radius: 50%; background: linear-gradient(135deg,#10b981,#0ea5e9); display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 0.8rem; color: white; flex-shrink: 0; }
+
+        /* ---- Content Area ---- */
+        .dash-main { padding: 2rem 2.5rem; display: flex; flex-direction: column; gap: 1.75rem; overflow-y: auto; }
+        @media(max-width:768px){ .dash-main { padding: 1.25rem; } }
+
+        /* ---- Stats Grid ---- */
+        .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.25rem; }
+        @media(max-width:900px){ .stats-grid { grid-template-columns: repeat(2,1fr); } }
+        @media(max-width:500px){ .stats-grid { grid-template-columns: 1fr; } }
+
+        .stat-card {
+            background: var(--clr-bg-card);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px; padding: 1.4rem 1.5rem;
+            display: flex; flex-direction: column; gap: 0.75rem;
+            transition: all 0.25s ease; position: relative; overflow: hidden;
+        }
+        .stat-card::before {
+            content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+            background: var(--grad-primary); opacity: 0;
+            transition: opacity 0.25s;
+        }
+        .stat-card:hover { transform: translateY(-4px); border-color: rgba(16,185,129,0.2); box-shadow: 0 12px 40px rgba(0,0,0,0.3); }
+        .stat-card:hover::before { opacity: 1; }
+        .stat-header { display: flex; justify-content: space-between; align-items: center; }
+        .stat-icon { width: 42px; height: 42px; border-radius: 10px; display: flex; align-items: center; justify-content: center; }
+        .stat-icon svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 2; }
+        .stat-icon.emerald { background: rgba(16,185,129,0.12); color: #34d399; }
+        .stat-icon.warning { background: rgba(245,158,11,0.12); color: #fbbf24; }
+        .stat-icon.ocean { background: rgba(14,165,233,0.12); color: #38bdf8; }
+        .stat-icon.rose { background: rgba(244,63,94,0.12); color: #fb7185; }
+        .stat-trend { font-size: 0.72rem; font-weight: 600; padding: 0.2rem 0.5rem; border-radius: 20px; }
+        .stat-trend.up { background: rgba(16,185,129,0.15); color: #34d399; }
+        .stat-trend.down { background: rgba(244,63,94,0.12); color: #fb7185; }
+        .stat-value { font-size: 1.85rem; font-weight: 800; color: white; font-family: var(--font-display); line-height: 1; }
+        .stat-label { font-size: 0.78rem; color: var(--clr-text-muted); text-transform: uppercase; letter-spacing: 0.07em; }
+
+        /* ---- Toolbar ---- */
+        .table-toolbar { display: flex; gap: 0.75rem; flex-wrap: wrap; align-items: center; justify-content: space-between; }
+        .search-input-wrap { position: relative; flex: 1; min-width: 200px; max-width: 320px; }
+        .search-input-wrap svg { position: absolute; left: 0.85rem; top: 50%; transform: translateY(-50%); width: 16px; height: 16px; color: var(--clr-text-muted); stroke: currentColor; fill: none; stroke-width: 2; pointer-events: none; }
+        .search-input { width: 100%; padding: 0.6rem 0.9rem 0.6rem 2.4rem; background: rgba(255,255,255,0.04); border: 1px solid var(--glass-border); border-radius: 10px; color: var(--clr-text-primary); font-size: 0.85rem; outline: none; transition: border-color 0.2s; }
+        .search-input:focus { border-color: rgba(16,185,129,0.4); }
+        .search-input::placeholder { color: var(--clr-text-muted); }
+
+        .filter-tabs { display: flex; gap: 0.4rem; flex-wrap: wrap; }
+        .ftab { padding: 0.4rem 1rem; border-radius: 8px; border: 1px solid var(--glass-border); background: transparent; color: var(--clr-text-muted); font-size: 0.8rem; cursor: pointer; transition: all 0.2s; }
+        .ftab:hover { color: white; border-color: rgba(255,255,255,0.2); }
+        .ftab.active { background: linear-gradient(135deg,#10b981,#0ea5e9); border-color: transparent; color: white; }
+        .btn-export { display: flex; align-items: center; gap: 0.4rem; padding: 0.5rem 1rem; border-radius: 9px; border: 1px solid var(--glass-border); background: transparent; color: var(--clr-text-secondary); font-size: 0.8rem; cursor: pointer; transition: all 0.2s; white-space: nowrap; }
+        .btn-export:hover { background: rgba(255,255,255,0.05); color: white; }
+        .btn-export svg { width: 14px; height: 14px; stroke: currentColor; fill: none; stroke-width: 2; }
+
+        /* ---- Table ---- */
+        .table-card { background: var(--clr-bg-card); border: 1px solid var(--glass-border); border-radius: 16px; overflow: hidden; }
+        .table-card-header { display: flex; align-items: center; justify-content: space-between; padding: 1.25rem 1.5rem; border-bottom: 1px solid var(--glass-border); }
+        .table-title { font-weight: 700; color: white; font-size: 0.95rem; }
+        .table-count { font-size: 0.75rem; color: var(--clr-text-muted); background: rgba(255,255,255,0.05); padding: 0.2rem 0.6rem; border-radius: 20px; }
+
+        .admin-table { width: 100%; border-collapse: collapse; }
+        .admin-table th { padding: 0.75rem 1.25rem; text-align: left; font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--clr-text-muted); border-bottom: 1px solid var(--glass-border); white-space: nowrap; }
+        .admin-table td { padding: 1rem 1.25rem; font-size: 0.85rem; color: var(--clr-text-secondary); border-bottom: 1px solid rgba(255,255,255,0.03); vertical-align: middle; }
+        .admin-table tr:last-child td { border-bottom: none; }
+        .admin-table tbody tr:hover td { background: rgba(255,255,255,0.02); }
+
+        .guest-info { display: flex; align-items: center; gap: 0.75rem; }
+        .guest-avatar { width: 34px; height: 34px; border-radius: 50%; background: linear-gradient(135deg,#10b981,#0ea5e9); display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.72rem; color: white; flex-shrink: 0; }
+        .guest-name { font-weight: 600; color: white; font-size: 0.87rem; }
+        .guest-email { font-size: 0.73rem; color: var(--clr-text-muted); }
+
+        .resort-name { font-weight: 600; color: white; font-size: 0.85rem; }
+        .resort-loc { font-size: 0.73rem; color: var(--clr-text-muted); }
+
+        .booking-id { font-size: 0.72rem; font-family: monospace; background: rgba(255,255,255,0.04); padding: 0.2rem 0.5rem; border-radius: 5px; color: var(--clr-text-muted); }
+
+        .status-badge { display: inline-flex; align-items: center; gap: 0.3rem; padding: 0.25rem 0.7rem; border-radius: 20px; font-size: 0.72rem; font-weight: 600; }
+        .status-badge::before { content: ''; width: 5px; height: 5px; border-radius: 50%; background: currentColor; }
+        .status-confirmed { background: rgba(16,185,129,0.12); color: #34d399; }
+        .status-pending { background: rgba(245,158,11,0.12); color: #fbbf24; }
+        .status-completed { background: rgba(14,165,233,0.12); color: #38bdf8; }
+        .status-cancelled { background: rgba(244,63,94,0.1); color: #fb7185; }
+
+        .status-select { background: rgba(255,255,255,0.04); border: 1px solid var(--glass-border); border-radius: 7px; color: var(--clr-text-primary); font-size: 0.75rem; padding: 0.3rem 0.6rem; outline: none; cursor: pointer; transition: border-color 0.2s; }
+        .status-select:focus { border-color: rgba(16,185,129,0.4); }
+        .status-select option { background: #0f172a; }
+
+        .action-btns { display: flex; gap: 0.4rem; }
+        .act-btn { width: 30px; height: 30px; border-radius: 7px; border: 1px solid var(--glass-border); background: transparent; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.2s; color: var(--clr-text-muted); }
+        .act-btn svg { width: 13px; height: 13px; stroke: currentColor; fill: none; stroke-width: 2; }
+        .act-btn:hover { background: rgba(255,255,255,0.06); color: white; border-color: rgba(255,255,255,0.2); }
+        .act-btn.delete:hover { background: rgba(244,63,94,0.1); color: #fb7185; border-color: rgba(244,63,94,0.25); }
+
+        /* ---- Pagination ---- */
+        .pagination { display: flex; align-items: center; justify-content: space-between; padding: 1rem 1.5rem; border-top: 1px solid var(--glass-border); }
+        .pagination-info { font-size: 0.78rem; color: var(--clr-text-muted); }
+        .pagination-btns { display: flex; gap: 0.35rem; }
+        .pg-btn { padding: 0.35rem 0.75rem; border-radius: 7px; border: 1px solid var(--glass-border); background: transparent; color: var(--clr-text-muted); font-size: 0.78rem; cursor: pointer; transition: all 0.2s; }
+        .pg-btn.active { background: rgba(16,185,129,0.15); color: #34d399; border-color: rgba(16,185,129,0.3); }
+        .pg-btn:hover:not(.active) { background: rgba(255,255,255,0.05); color: white; }
+    </style>
+</head>
+<body>
+    <header id="main-header"></header>
+
+    <main id="main-content" class="page-content bg-deep">
+        <div class="dash-layout">
+
+            <!-- ===== SIDEBAR ===== -->
+            <aside class="dash-sidebar">
+                <div class="sidebar-avatar">
+                    <div class="avatar-circle admin-initials">AD</div>
+                    <div>
+                        <div style="font-weight:700;font-size:0.85rem;color:white;" id="sidebar-admin-name">Admin User</div>
+                        <div style="font-size:0.7rem;color:#34d399;">Super Admin</div>
+                    </div>
+                </div>
+
+                <span class="sidebar-label">Overview</span>
+                <a href="admin-dashboard.html" class="sidebar-link">
+                    <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+                    Dashboard
+                </a>
+
+                <span class="sidebar-label">Management</span>
+                <a href="admin-bookings.html" class="sidebar-link active">
+                    <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+                    Manage Bookings
+                </a>
+                <a href="admin-resorts.html" class="sidebar-link">
+                    <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+                    Manage Resorts
+                </a>
+                <a href="admin-users.html" class="sidebar-link">
+                    <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                    Manage Users
+                </a>
+
+                <span class="sidebar-label">Account</span>
+                <a href="settings.html" class="sidebar-link">
+                    <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+                    Settings
+                </a>
+                <a href="login.html" class="sidebar-link" style="color:#fb7185;margin-top:auto;">
+                    <svg viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+                    Logout
+                </a>
+            </aside>
+
+            <!-- ===== MAIN CONTENT ===== -->
+            <div class="dash-main">
+
+                <!-- Page Header -->
+                <div class="reveal" style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:1rem;">
+                    <div>
+                        <h1 style="font-size:1.75rem;font-weight:800;color:white;font-family:var(--font-display);">Manage Bookings</h1>
+                        <p style="color:var(--clr-text-muted);font-size:0.85rem;margin-top:0.3rem;">Review guest reservations, update statuses and track revenue flow.</p>
+                    </div>
+                    <div style="display:flex;gap:0.75rem;">
+                        <button class="btn-export" onclick="exportCSV()">
+                            <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                            Export CSV
+                        </button>
+                        <button class="btn btn-primary btn-sm" style="font-size:0.82rem;">+ New Booking</button>
+                    </div>
+                </div>
+
+                <!-- Stats Grid -->
+                <div class="stats-grid reveal">
+                    <div class="stat-card">
+                        <div class="stat-header">
+                            <div class="stat-icon emerald">
+                                <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                            </div>
+                            <span class="stat-trend up">↑ 12%</span>
+                        </div>
+                        <div class="stat-value" data-count="284">0</div>
+                        <div class="stat-label">Total Bookings</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-header">
+                            <div class="stat-icon warning">
+                                <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                            </div>
+                            <span class="stat-trend up">↑ 3%</span>
+                        </div>
+                        <div class="stat-value" id="pending-count" data-count="18">0</div>
+                        <div class="stat-label">Pending Approvals</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-header">
+                            <div class="stat-icon ocean">
+                                <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+                            </div>
+                            <span class="stat-trend up">↑ 8%</span>
+                        </div>
+                        <div class="stat-value" data-count="241">0</div>
+                        <div class="stat-label">Completed</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-header">
+                            <div class="stat-icon rose">
+                                <svg viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+                            </div>
+                            <span class="stat-trend up">↑ 18%</span>
+                        </div>
+                        <div class="stat-value" style="font-size:1.55rem;">₹24.9L</div>
+                        <div class="stat-label">Net Revenue</div>
+                    </div>
+                </div>
+
+                <!-- Toolbar -->
+                <div class="table-toolbar reveal">
+                    <div style="display:flex;gap:0.75rem;align-items:center;flex-wrap:wrap;flex:1;">
+                        <div class="search-input-wrap">
+                            <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                            <input type="text" class="search-input" id="booking-search" placeholder="Search guest, resort…" oninput="searchBookings(this.value)">
+                        </div>
+                        <div class="filter-tabs">
+                            <button class="ftab active" onclick="filterBookings('all',this)">All</button>
+                            <button class="ftab" onclick="filterBookings('confirmed',this)">Confirmed</button>
+                            <button class="ftab" onclick="filterBookings('pending',this)">Pending</button>
+                            <button class="ftab" onclick="filterBookings('completed',this)">Completed</button>
+                            <button class="ftab" onclick="filterBookings('cancelled',this)">Cancelled</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Table -->
+                <div class="table-card reveal">
+                    <div class="table-card-header">
+                        <span class="table-title">All Reservations</span>
+                        <span class="table-count" id="row-count">8 bookings</span>
+                    </div>
+                    <div style="overflow-x:auto;">
+                        <table class="admin-table">
+                            <thead>
+                                <tr>
+                                    <th>Guest</th>
+                                    <th>Booking ID</th>
+                                    <th>Resort / Location</th>
+                                    <th>Check-in → Out</th>
+                                    <th>Guests</th>
+                                    <th>Amount</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="bookings-tbody">
+                                <tr data-status="confirmed" data-guest="sarah jenkins" data-resort="azure ocean water villas">
+                                    <td>
+                                        <div class="guest-info">
+                                            <div class="guest-avatar">SJ</div>
+                                            <div>
+                                                <div class="guest-name">Sarah Jenkins</div>
+                                                <div class="guest-email">sarah.j@example.com</div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td><span class="booking-id">#BK-10481</span></td>
+                                    <td><div class="resort-name">Azure Ocean Water Villas</div><div class="resort-loc flex items-center gap-1"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="inline-block"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg> Maldives</div></td>
+                                    <td style="white-space:nowrap;font-size:0.82rem;">Dec 15 – 18, 2026</td>
+                                    <td style="text-align:center;">2</td>
+                                    <td><span style="font-weight:700;color:white;">₹82,320</span></td>
+                                    <td><span class="status-badge status-confirmed" id="badge-1">Confirmed</span></td>
+                                    <td>
+                                        <div class="action-btns">
+                                            <select class="status-select" onchange="updateStatus('badge-1','row-1',this.value)" id="sel-1">
+                                                <option value="confirmed" selected>Confirmed</option>
+                                                <option value="pending">Pending</option>
+                                                <option value="completed">Completed</option>
+                                                <option value="cancelled">Cancelled</option>
+                                            </select>
+                                            <button class="act-btn delete" title="Delete"><svg viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4h6v2"/></svg></button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr id="row-2" data-status="pending" data-guest="rahul mehta" data-resort="emerald jungle retreat">
+                                    <td>
+                                        <div class="guest-info">
+                                            <div class="guest-avatar" style="background:linear-gradient(135deg,#f59e0b,#ef4444);">RM</div>
+                                            <div>
+                                                <div class="guest-name">Rahul Mehta</div>
+                                                <div class="guest-email">rahul.m@example.com</div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td><span class="booking-id">#BK-10482</span></td>
+                                    <td><div class="resort-name">Emerald Jungle Retreat</div><div class="resort-loc flex items-center gap-1"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="inline-block"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg> Bali, Indonesia</div></td>
+                                    <td style="white-space:nowrap;font-size:0.82rem;">Dec 22 – 25, 2026</td>
+                                    <td style="text-align:center;">4</td>
+                                    <td><span style="font-weight:700;color:white;">₹38,400</span></td>
+                                    <td><span class="status-badge status-pending" id="badge-2">Pending</span></td>
+                                    <td>
+                                        <div class="action-btns">
+                                            <select class="status-select" onchange="updateStatus('badge-2','row-2',this.value)">
+                                                <option value="confirmed">Confirmed</option>
+                                                <option value="pending" selected>Pending</option>
+                                                <option value="completed">Completed</option>
+                                                <option value="cancelled">Cancelled</option>
+                                            </select>
+                                            <button class="act-btn delete" title="Delete"><svg viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/></svg></button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr id="row-3" data-status="confirmed" data-guest="priya kapoor" data-resort="sapphire coast premium">
+                                    <td>
+                                        <div class="guest-info">
+                                            <div class="guest-avatar" style="background:linear-gradient(135deg,#8b5cf6,#ec4899);">PK</div>
+                                            <div>
+                                                <div class="guest-name">Priya Kapoor</div>
+                                                <div class="guest-email">priya.k@example.com</div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td><span class="booking-id">#BK-10483</span></td>
+                                    <td><div class="resort-name">Sapphire Coast Premium</div><div class="resort-loc flex items-center gap-1"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="inline-block"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg> Goa, India</div></td>
+                                    <td style="white-space:nowrap;font-size:0.82rem;">Jan 2 – 4, 2027</td>
+                                    <td style="text-align:center;">2</td>
+                                    <td><span style="font-weight:700;color:white;">₹17,000</span></td>
+                                    <td><span class="status-badge status-confirmed" id="badge-3">Confirmed</span></td>
+                                    <td>
+                                        <div class="action-btns">
+                                            <select class="status-select" onchange="updateStatus('badge-3','row-3',this.value)">
+                                                <option value="confirmed" selected>Confirmed</option>
+                                                <option value="pending">Pending</option>
+                                                <option value="completed">Completed</option>
+                                                <option value="cancelled">Cancelled</option>
+                                            </select>
+                                            <button class="act-btn delete" title="Delete"><svg viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/></svg></button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr id="row-4" data-status="completed" data-guest="michael davis" data-resort="island pearl bungalows">
+                                    <td>
+                                        <div class="guest-info">
+                                            <div class="guest-avatar" style="background:linear-gradient(135deg,#0ea5e9,#6366f1);">MD</div>
+                                            <div>
+                                                <div class="guest-name">Michael Davis</div>
+                                                <div class="guest-email">m.davis@example.com</div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td><span class="booking-id">#BK-10484</span></td>
+                                    <td><div class="resort-name">Island Pearl Bungalows</div><div class="resort-loc flex items-center gap-1"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="inline-block"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg> Goa, India</div></td>
+                                    <td style="white-space:nowrap;font-size:0.82rem;">Jan 10 – 14, 2027</td>
+                                    <td style="text-align:center;">6</td>
+                                    <td><span style="font-weight:700;color:white;">₹1,12,000</span></td>
+                                    <td><span class="status-badge status-completed" id="badge-4">Completed</span></td>
+                                    <td>
+                                        <div class="action-btns">
+                                            <select class="status-select" onchange="updateStatus('badge-4','row-4',this.value)">
+                                                <option value="confirmed">Confirmed</option>
+                                                <option value="pending">Pending</option>
+                                                <option value="completed" selected>Completed</option>
+                                                <option value="cancelled">Cancelled</option>
+                                            </select>
+                                            <button class="act-btn delete" title="Delete"><svg viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/></svg></button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr id="row-5" data-status="confirmed" data-guest="ana rodriguez" data-resort="crystal lagoon villas">
+                                    <td>
+                                        <div class="guest-info">
+                                            <div class="guest-avatar" style="background:linear-gradient(135deg,#f97316,#eab308);">AR</div>
+                                            <div>
+                                                <div class="guest-name">Ana Rodriguez</div>
+                                                <div class="guest-email">a.rodriguez@example.com</div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td><span class="booking-id">#BK-10485</span></td>
+                                    <td><div class="resort-name">Crystal Lagoon Villas</div><div class="resort-loc flex items-center gap-1"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="inline-block"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg> Phuket, Thailand</div></td>
+                                    <td style="white-space:nowrap;font-size:0.82rem;">Feb 5 – 9, 2027</td>
+                                    <td style="text-align:center;">3</td>
+                                    <td><span style="font-weight:700;color:white;">₹65,800</span></td>
+                                    <td><span class="status-badge status-confirmed" id="badge-5">Confirmed</span></td>
+                                    <td>
+                                        <div class="action-btns">
+                                            <select class="status-select" onchange="updateStatus('badge-5','row-5',this.value)">
+                                                <option value="confirmed" selected>Confirmed</option>
+                                                <option value="pending">Pending</option>
+                                                <option value="completed">Completed</option>
+                                                <option value="cancelled">Cancelled</option>
+                                            </select>
+                                            <button class="act-btn delete" title="Delete"><svg viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/></svg></button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr id="row-6" data-status="cancelled" data-guest="james wilson" data-resort="golden sands resort">
+                                    <td>
+                                        <div class="guest-info">
+                                            <div class="guest-avatar" style="background:linear-gradient(135deg,#64748b,#94a3b8);">JW</div>
+                                            <div>
+                                                <div class="guest-name">James Wilson</div>
+                                                <div class="guest-email">j.wilson@example.com</div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td><span class="booking-id">#BK-10486</span></td>
+                                    <td><div class="resort-name">Golden Sands Resort</div><div class="resort-loc flex items-center gap-1"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="inline-block"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg> Dubai, UAE</div></td>
+                                    <td style="white-space:nowrap;font-size:0.82rem;">Nov 20 – 22, 2026</td>
+                                    <td style="text-align:center;">2</td>
+                                    <td><span style="font-weight:700;color:white;">₹45,200</span></td>
+                                    <td><span class="status-badge status-cancelled" id="badge-6">Cancelled</span></td>
+                                    <td>
+                                        <div class="action-btns">
+                                            <select class="status-select" onchange="updateStatus('badge-6','row-6',this.value)">
+                                                <option value="confirmed">Confirmed</option>
+                                                <option value="pending">Pending</option>
+                                                <option value="completed">Completed</option>
+                                                <option value="cancelled" selected>Cancelled</option>
+                                            </select>
+                                            <button class="act-btn delete" title="Delete"><svg viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/></svg></button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr id="row-7" data-status="pending" data-guest="aisha patel" data-resort="misty hills eco lodge">
+                                    <td>
+                                        <div class="guest-info">
+                                            <div class="guest-avatar" style="background:linear-gradient(135deg,#10b981,#3b82f6);">AP</div>
+                                            <div>
+                                                <div class="guest-name">Aisha Patel</div>
+                                                <div class="guest-email">aisha.p@example.com</div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td><span class="booking-id">#BK-10487</span></td>
+                                    <td><div class="resort-name">Misty Hills Eco Lodge</div><div class="resort-loc flex items-center gap-1"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="inline-block"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg> Coorg, India</div></td>
+                                    <td style="white-space:nowrap;font-size:0.82rem;">Mar 1 – 5, 2027</td>
+                                    <td style="text-align:center;">4</td>
+                                    <td><span style="font-weight:700;color:white;">₹28,600</span></td>
+                                    <td><span class="status-badge status-pending" id="badge-7">Pending</span></td>
+                                    <td>
+                                        <div class="action-btns">
+                                            <select class="status-select" onchange="updateStatus('badge-7','row-7',this.value)">
+                                                <option value="confirmed">Confirmed</option>
+                                                <option value="pending" selected>Pending</option>
+                                                <option value="completed">Completed</option>
+                                                <option value="cancelled">Cancelled</option>
+                                            </select>
+                                            <button class="act-btn delete" title="Delete"><svg viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/></svg></button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr id="row-8" data-status="completed" data-guest="chen wei" data-resort="sky terrace infinity pool">
+                                    <td>
+                                        <div class="guest-info">
+                                            <div class="guest-avatar" style="background:linear-gradient(135deg,#a78bfa,#f472b6);">CW</div>
+                                            <div>
+                                                <div class="guest-name">Chen Wei</div>
+                                                <div class="guest-email">chen.w@example.com</div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td><span class="booking-id">#BK-10488</span></td>
+                                    <td><div class="resort-name">Sky Terrace Infinity Pool</div><div class="resort-loc flex items-center gap-1"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="inline-block"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg> Santorini, Greece</div></td>
+                                    <td style="white-space:nowrap;font-size:0.82rem;">Oct 5 – 8, 2026</td>
+                                    <td style="text-align:center;">2</td>
+                                    <td><span style="font-weight:700;color:white;">₹1,58,400</span></td>
+                                    <td><span class="status-badge status-completed" id="badge-8">Completed</span></td>
+                                    <td>
+                                        <div class="action-btns">
+                                            <select class="status-select" onchange="updateStatus('badge-8','row-8',this.value)">
+                                                <option value="confirmed">Confirmed</option>
+                                                <option value="pending">Pending</option>
+                                                <option value="completed" selected>Completed</option>
+                                                <option value="cancelled">Cancelled</option>
+                                            </select>
+                                            <button class="act-btn delete" title="Delete"><svg viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/></svg></button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Pagination -->
+                    <div class="pagination">
+                        <span class="pagination-info">Showing <strong style="color:white;">8</strong> of <strong style="color:white;">284</strong> bookings</span>
+                        <div class="pagination-btns">
+                            <button class="pg-btn">‹ Prev</button>
+                            <button class="pg-btn active">1</button>
+                            <button class="pg-btn">2</button>
+                            <button class="pg-btn">3</button>
+                            <span style="color:var(--clr-text-muted);padding:0 0.25rem;font-size:0.8rem;">…</span>
+                            <button class="pg-btn">36</button>
+                            <button class="pg-btn">Next ›</button>
+                        </div>
+                    </div>
+                </div>
+
+            </div><!-- /dash-main -->
+        </div>
+    </main>
+
+    <script src="../js/main.js"></script>
+    <script src="../js/animations.js"></script>
+    <script src="../js/dashboard.js"></script>
+    <script>
+        // Status update
+        function updateStatus(badgeId, rowId, status) {
+            const badge = document.getElementById(badgeId);
+            if (!badge) return;
+            const map = {
+                confirmed: ['status-confirmed','Confirmed'],
+                pending:   ['status-pending','Pending'],
+                completed: ['status-completed','Completed'],
+                cancelled: ['status-cancelled','Cancelled']
+            };
+            badge.className = 'status-badge ' + (map[status]?.[0] || '');
+            badge.innerText = map[status]?.[1] || status;
+
+            const row = document.getElementById(rowId);
+            if (row) row.dataset.status = status;
+
+            // Recount pending
+            const pCount = document.querySelectorAll('#bookings-tbody tr[data-status="pending"]').length;
+            const el = document.getElementById('pending-count');
+            if (el) el.innerText = pCount;
+        }
+
+        // Filter
+        function filterBookings(status, btn) {
+            document.querySelectorAll('.ftab').forEach(b => b.classList.remove('active'));
+            if (btn) btn.classList.add('active');
+            const rows = document.querySelectorAll('#bookings-tbody tr');
+            let count = 0;
+            rows.forEach(r => {
+                const show = status === 'all' || r.dataset.status === status;
+                r.style.display = show ? '' : 'none';
+                if (show) count++;
+            });
+            const el = document.getElementById('row-count');
+            if (el) el.innerText = count + ' booking' + (count !== 1 ? 's' : '');
+        }
+
+        // Search
+        function searchBookings(q) {
+            const rows = document.querySelectorAll('#bookings-tbody tr');
+            q = q.toLowerCase();
+            let count = 0;
+            rows.forEach(r => {
+                const g = r.dataset.guest || '';
+                const res = r.dataset.resort || '';
+                const show = !q || g.includes(q) || res.includes(q);
+                r.style.display = show ? '' : 'none';
+                if (show) count++;
+            });
+            const el = document.getElementById('row-count');
+            if (el) el.innerText = count + ' booking' + (count !== 1 ? 's' : '');
+        }
+
+        // Export CSV stub
+        function exportCSV() {
+            const toast = document.createElement('div');
+            toast.className = 'toast show';
+            toast.innerHTML = '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg><span>CSV exported successfully!</span>';
+            document.body.appendChild(toast);
+            setTimeout(() => toast.remove(), 3000);
+        }
+    </script>
+</body>
+</html>

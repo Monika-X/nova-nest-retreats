@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Explore Resorts — Nova Nest Retreats</title>
+    <meta name="description"
+        content="Browse 400+ luxury resorts worldwide. Filter by budget, location, and category to find your perfect retreat.">
+
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/animations.css">
+    <link rel="stylesheet" href="../css/responsive.css">
+</head>
+
+<body>
+
+    <!-- ===== HEADER ===== -->
+    <header id="main-header"></header>
+
+    <!-- ===== MAIN CONTENT ===== -->
+    <main id="main-content" class="page-content bg-deep min-h-screen">
+
+        <!-- Page Header -->
+        <section class="pt-8 pb-8 relative">
+            <div class="container reveal">
+                <nav class="text-sm text-muted mb-4 flex items-center gap-2">
+                    <a href="../index.html" class="hover:text-emerald">Home</a>
+                    <span>/</span>
+                    <span class="text-white">Resorts</span>
+                </nav>
+                <h1 class="text-4xl md:text-5xl font-display font-bold mb-4">Explore Our Resorts</h1>
+                <p class="text-muted text-lg max-w-2xl">Find your perfect sanctuary. Filter by budget, location, and
+                    category to discover the luxury retreat that matches your dream vacation.</p>
+            </div>
+        </section>
+
+        <!-- Search & Filters -->
+        <section class="pb-10">
+            <div class="container reveal-scale">
+                <div class="card p-6 border-emerald-500 border-opacity-30">
+                    <div class="flex flex-col md:flex-row gap-6">
+
+                        <!-- Search Bar -->
+                        <div class="flex-1">
+                            <label class="form-label text-xs uppercase tracking-wider mb-2 block"
+                                for="search-input">Search Destination</label>
+                            <div class="relative">
+                                <input type="text" id="search-input" class="form-input"
+                                    style="padding-left: 2.75rem; height: 3rem;" placeholder="Where do you want to go?">
+                                <svg style="position: absolute; left: 0.95rem; top: 50%; transform: translateY(-50%); width: 16px; height: 16px; color: var(--clr-text-muted); stroke: currentColor; fill: none; stroke-width: 2; pointer-events: none;"
+                                    viewBox="0 0 24 24">
+                                    <circle cx="11" cy="11" r="8"></circle>
+                                    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                                </svg>
+                            </div>
+                        </div>
+
+                        <!-- Budget Filter -->
+                        <div class="w-full md:w-72">
+                            <label class="form-label flex justify-between text-xs uppercase tracking-wider mb-2"
+                                for="filter-budget">
+                                <span>Max Budget / Night</span>
+                                <span class="text-emerald font-bold" id="filter-budget-val">₹1,00,000</span>
+                            </label>
+                            <input type="range" id="filter-budget" min="2000" max="100000" step="1000" value="100000"
+                                class="w-full cursor-pointer accent-emerald-500 mt-3">
+                        </div>
+
+                        <!-- Sort Filter -->
+                        <div class="w-full md:w-48">
+                            <label class="form-label text-xs uppercase tracking-wider mb-2 block" for="sort-select">Sort
+                                By</label>
+                            <select id="sort-select" class="form-select h-12">
+                                <option value="recommended">Recommended</option>
+                                <option value="price_low">Price: Low to High</option>
+                                <option value="price_high">Price: High to Low</option>
+                                <option value="rating">Highest Rated</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Category Filters -->
+                    <div class="mt-6 pt-6 border-t border-glass flex flex-wrap gap-3 items-center">
+                        <span class="text-xs uppercase tracking-wider text-muted mr-2">Categories:</span>
+                        <button class="tag active" data-cat="all">All</button>
+                        <button class="tag" data-cat="beachfront">Beachfront</button>
+                        <button class="tag" data-cat="jungle">Jungle &amp; Safari</button>
+                        <button class="tag" data-cat="mountain">Mountains</button>
+                        <button class="tag" data-cat="city">City Luxury</button>
+                        <button class="tag" data-cat="island">Private Island</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== Resorts Grid ===== -->
+        <!-- pt-8 adds gap between filter card and resort cards -->
+        <section class="pt-8 pb-24" id="resorts-section">
+            <div class="container">
+
+                <!-- Results info bar -->
+                <div class="flex justify-between items-center mb-8 reveal">
+                    <p id="results-info" class="text-muted text-sm font-medium"></p>
+                    <p id="page-info" class="text-muted text-sm"></p>
+                </div>
+
+                <!-- Cards grid — populated by JS -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" id="resort-grid"></div>
+
+                <!-- No-results message -->
+                <div id="no-results" class="hidden text-center py-24">
+                    <div
+                        class="w-16 h-16 mx-auto bg-slate-800 bg-opacity-40 rounded-full flex items-center justify-center text-muted mb-4">
+                        <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="11" cy="11" r="8" />
+                            <line x1="21" y1="21" x2="16.65" y2="16.65" />
+                        </svg>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-2">No Resorts Found</h3>
+                    <p class="text-muted">Try adjusting your filters or search term.</p>
+                </div>
+
+                <!-- Pagination — populated by JS -->
+                <div class="mt-16 flex justify-center" id="pagination-wrap">
+                    <nav class="flex items-center gap-2" id="pagination-nav" aria-label="Resort pages"></nav>
+                </div>
+
+            </div>
+        </section>
+
+    </main>
+
+    <!-- ===== FOOTER ===== -->
+    <div id="main-footer"></div>
+
+    <!-- Scripts -->
+    <script src="../js/main.js"></script>
+    <script src="../js/animations.js"></script>
+
+    <script>
+        /* ================================================================
+           RESORT DATA — 400 entries generated programmatically
+           ================================================================ */
+        const RESORTS = (() => {
+            const pfx = [
+                'Azure', 'Emerald', 'Sapphire', 'Golden', 'Crystal', 'Coral', 'Amber', 'Silver',
+                'Ruby', 'Topaz', 'Jade', 'Opal', 'Turquoise', 'Cobalt', 'Ivory', 'Onyx',
+                'Pearl', 'Indigo', 'Citrine', 'Platinum', 'Sunset', 'Sunrise', 'Midnight',
+                'Dawn', 'Royal', 'Imperial', 'Grand', 'Majestic', 'Elite', 'Premier',
+                'Prestige', 'Luxe', 'Serene', 'Tranquil', 'Mystic', 'Celestial', 'Horizon',
+                'Cascade', 'Radiant', 'Zenith'
+            ];
+            const noun = ['Ocean', 'Beach', 'Island', 'Mountain', 'Jungle', 'Lake', 'Valley', 'Bay', 'Cliff', 'Garden'];
+            const type = ['Resort', 'Lodge', 'Retreat', 'Villas', 'Hotel', 'Sanctuary', 'Haven', 'Palace', 'Estate', 'Oasis'];
+
+            const locations = [
+                { name: 'Maldives', cat: 'island', min: 18000, max: 95000 },
+                { name: 'Bali, Indonesia', cat: 'jungle', min: 6000, max: 45000 },
+                { name: 'Goa, India', cat: 'beachfront', min: 4000, max: 35000 },
+                { name: 'Kerala, India', cat: 'jungle', min: 3500, max: 25000 },
+                { name: 'Swiss Alps', cat: 'mountain', min: 20000, max: 80000 },
+                { name: 'Singapore', cat: 'city', min: 18000, max: 70000 },
+                { name: 'Bora Bora', cat: 'island', min: 28000, max: 100000 },
+                { name: 'Phuket, Thailand', cat: 'beachfront', min: 5000, max: 40000 },
+                { name: 'Dubai, UAE', cat: 'city', min: 15000, max: 90000 },
+                { name: 'Santorini, Greece', cat: 'beachfront', min: 12000, max: 75000 },
+                { name: 'Seychelles', cat: 'island', min: 22000, max: 85000 },
+                { name: 'Coorg, India', cat: 'mountain', min: 3000, max: 18000 },
+                { name: 'Manali, India', cat: 'mountain', min: 2500, max: 15000 },
+                { name: 'Andaman Islands', cat: 'beachfront', min: 5000, max: 32000 },
+                { name: 'Sri Lanka', cat: 'jungle', min: 5000, max: 35000 },
+                { name: 'Rajasthan, India', cat: 'city', min: 8000, max: 55000 },
+                { name: 'Ooty, India', cat: 'mountain', min: 2800, max: 14000 },
+                { name: 'Tuscany, Italy', cat: 'city', min: 16000, max: 72000 },
+                { name: 'Langkawi, Malaysia', cat: 'island', min: 6000, max: 42000 },
+                { name: 'Queenstown, NZ', cat: 'mountain', min: 14000, max: 65000 }
+            ];
+
+            const badges = [
+                { text: 'Best Seller', cls: '' },
+                { text: 'Trending', cls: 'badge-warning' },
+                { text: 'Exclusive Deal', cls: 'badge-ocean' },
+                { text: 'Top Rated', cls: '' },
+                { text: 'Flash Sale', cls: 'badge-warning' },
+                { text: 'Most Popular', cls: '' },
+                { text: "Editor's Pick", cls: 'badge-ocean' },
+                { text: 'Award Winner', cls: '' },
+                { text: 'Member Deal', cls: 'badge-warning' },
+                { text: 'New Arrival', cls: 'badge-ocean' },
+                null, null, null, null, null   // ~1/3 cards have no badge
+            ];
+
+            const imgs = [
+                '1582719478250-c89cae4dc85b', '1571896349842-33c89424de2d',
+                '1566073771259-6a8506099945', '1522798514-97ceb8c4f1c8',
+                '1544365558-35aa4afcf11f', '1498307833015-e7b400441eb8',
+                '1520250497591-112f2f40a3f4', '1551882547-ff40c63fe5fa',
+                '1578683010236-d716f9a3f461', '1540541338287-41700207dee6',
+                '1537996194471-e657df975ab4', '1615880484746-a134be9a6ecf',
+                '1506905925346-21bda4d32df4', '1445019980597-93fa8acb246c',
+                '1518684079-3c830dcef090', '1542838132-92c53300491e',
+                '1613395877344-13d4a8e0d49e', '1504701954957-2010ec3bcec1',
+                '1499793983690-e29da59ef1c2', '1610641818989-c2051b5e2cfd'
+            ];
+
+            const ratingPool = [3.5, 4.0, 4.2, 4.5, 4.7, 4.8, 5.0];
+
+            const list = [];
+            for (let i = 0; i < 400; i++) {
+                const loc = locations[i % 20];
+                const range = loc.max - loc.min;
+                const raw = loc.min + ((i * 1237 + i * i * 19) % range);
+                const price = Math.round(raw / 500) * 500;
+
+                const name = `${pfx[i % pfx.length]} ${noun[Math.floor(i / 4) % noun.length]} ${type[Math.floor(i / 40) % type.length]}`;
+                const badge = badges[i % badges.length];
+                const rating = ratingPool[i % ratingPool.length];
+                const reviews = 20 + ((i * 37 + 117) % 780);
+                const img = imgs[i % imgs.length];
+
+                list.push({ id: i + 1, name, location: loc.name, cat: loc.cat, price, badge, rating, reviews, img });
+            }
+            return list;
+        })();
+
+        /* ================================================================
+           STATE
+           ================================================================ */
+        const PER_PAGE = 50;
+        const TOTAL_PAGES = 8;
+        let currentPage = 1;
+        let filtered = [...RESORTS];
+        let isInitialLoad = true;
+
+        /* ================================================================
+           HELPERS
+           ================================================================ */
+        const heartSvg = () =>
+            `<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="white" stroke-width="2">
+            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+        </svg>`;
+
+        const pinSvg = () =>
+            `<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+            <circle cx="12" cy="10" r="3"></circle>
+        </svg>`;
+
+        function starsHtml(r) {
+            let s = '';
+            for (let i = 1; i <= 5; i++) {
+                if (r >= i) s += '<span style="color:#facc15">★</span>';
+                else if (r >= i - 0.5) s += '<span style="color:#facc15;opacity:.5">★</span>';
+                else s += '<span style="opacity:.25">★</span>';
+            }
+            return s;
+        }
+
+        function fmt(p) { return '₹' + p.toLocaleString('en-IN'); }
+
+        function getWishlist() {
+            try {
+                return JSON.parse(localStorage.getItem('novanest_wishlist')) || [];
+            } catch {
+                return [];
+            }
+        }
+
+        function cardHtml(r, idx) {
+            const stagger = ['stagger-1', 'stagger-2', 'stagger-3'][idx % 3];
+            const badge = r.badge
+                ? `<div class="card-resort-badge ${r.badge.cls}">${r.badge.text}</div>` : '';
+
+            const wishlist = getWishlist();
+            const isInWishlist = wishlist.some(item => item.id === r.id || item.id === String(r.id));
+            const heartFill = isInWishlist ? '#ef4444' : 'none';
+            const heartStroke = isInWishlist ? '#ef4444' : 'white';
+
+            return `
+        <div class="card-resort hover-lift reveal ${stagger}" data-id="${r.id}">
+            ${badge}
+            <button class="card-resort-wishlist hover-scale" aria-label="Add to wishlist" data-id="${r.id}">
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="${heartFill}" stroke="${heartStroke}" stroke-width="2">
+                    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                </svg>
+            </button>
+            <div class="card-resort-img">
+                <img src="https://images.unsplash.com/photo-${r.img}?auto=format&fit=crop&w=800&q=80"
+                     alt="${r.name}" loading="lazy">
+            </div>
+            <div class="card-resort-body">
+                <div class="card-resort-location">${pinSvg()} ${r.location}</div>
+                <h3 class="card-resort-title">${r.name}</h3>
+                <div class="card-resort-meta">
+                    <div class="card-resort-rating">
+                        ${starsHtml(r.rating)}
+                        <span class="text-white-80 ml-1">(${r.reviews})</span>
+                    </div>
+                </div>
+                <div class="card-resort-footer">
+                    <div class="card-resort-price">${fmt(r.price)} <span>/ night</span></div>
+                    <a href="resort-details.html" class="btn btn-sm btn-primary">Details</a>
+                </div>
+            </div>
+        </div>`;
+        }
+
+        /* ================================================================
+           RENDER GRID
+           ================================================================ */
+        function renderPage(page) {
+            currentPage = page;
+
+            const totalPages = Math.min(TOTAL_PAGES, Math.ceil(filtered.length / PER_PAGE));
+            const start = (page - 1) * PER_PAGE;
+            const end = Math.min(start + PER_PAGE, filtered.length);
+            const slice = filtered.slice(start, end);
+
+            const grid = document.getElementById('resort-grid');
+            const noRes = document.getElementById('no-results');
+            const resInfo = document.getElementById('results-info');
+            const pgInfo = document.getElementById('page-info');
+
+            if (slice.length === 0) {
+                grid.innerHTML = '';
+                noRes.classList.remove('hidden');
+                resInfo.textContent = '0 resorts found';
+                pgInfo.textContent = '';
+            } else {
+                noRes.classList.add('hidden');
+                grid.innerHTML = slice.map((r, i) => cardHtml(r, i)).join('');
+                resInfo.textContent = `Showing ${start + 1}–${end} of ${filtered.length} resorts`;
+                pgInfo.textContent = `Page ${page} of ${totalPages}`;
+
+                // Trigger beautiful reveal transitions for the dynamic cards
+                setTimeout(() => {
+                    grid.querySelectorAll('.card-resort').forEach(card => {
+                        card.classList.add('visible');
+                    });
+                }, 50);
+
+                // Wishlist toggle
+                grid.querySelectorAll('.card-resort-wishlist').forEach(btn => {
+                    btn.addEventListener('click', function (e) {
+                        e.preventDefault();
+                        const resortId = parseInt(this.dataset.id, 10);
+                        const resort = RESORTS.find(res => res.id === resortId);
+                        if (!resort) return;
+
+                        let wishlist = getWishlist();
+                        const index = wishlist.findIndex(item => item.id === resortId || item.id === String(resortId));
+
+                        const svg = this.querySelector('svg');
+                        let filled = false;
+
+                        if (index > -1) {
+                            // Remove
+                            wishlist.splice(index, 1);
+                            svg.setAttribute('fill', 'none');
+                            svg.setAttribute('stroke', 'white');
+                        } else {
+                            // Add
+                            wishlist.push(resort);
+                            svg.setAttribute('fill', '#ef4444');
+                            svg.setAttribute('stroke', '#ef4444');
+                            filled = true;
+                        }
+
+                        localStorage.setItem('novanest_wishlist', JSON.stringify(wishlist));
+
+                        this.style.transform = 'scale(1.2)';
+                        setTimeout(() => this.style.transform = '', 200);
+                    });
+                });
+            }
+
+            renderPagination(page, totalPages);
+
+            // Scroll to top of resort section (account for fixed navbar ~72px)
+            if (!isInitialLoad) {
+                const section = document.getElementById('resorts-section');
+                if (section) {
+                    const top = section.getBoundingClientRect().top + window.scrollY - 80;
+                    window.scrollTo({ top, behavior: 'smooth' });
+                }
+            } else {
+                isInitialLoad = false;
+            }
+        }
+
+        /* ================================================================
+           RENDER PAGINATION
+           ================================================================ */
+        function renderPagination(page, totalPages) {
+            const nav = document.getElementById('pagination-nav');
+
+            const base = 'w-10 h-10 rounded-lg flex items-center justify-center font-medium transition-fast select-none';
+            const inactive = `${base} border border-glass text-muted hover:text-white hover:border-emerald-500 hover:bg-emerald-900 hover:bg-opacity-20 cursor-pointer`;
+            const active = `${base} bg-emerald-500 text-white font-bold shadow-glow-emerald border-emerald-500 cursor-default`;
+            const disabled = `${base} border border-glass text-muted opacity-30 cursor-not-allowed`;
+
+            let html = '';
+
+            // ← Prev
+            html += `<button id="pg-prev" class="${page === 1 ? disabled : inactive}" aria-label="Previous page"${page === 1 ? ' disabled' : ''}>«</button>`;
+
+            // Page numbers — show all 8 for simplicity; smart ellipsis for larger sets
+            for (let p = 1; p <= totalPages; p++) {
+                const show = (
+                    p === 1 || p === totalPages ||              // always first & last
+                    Math.abs(p - page) <= 1                     // current ± 1
+                );
+                if (!show) {
+                    // Insert ellipsis once per gap
+                    if (p === 2 || p === totalPages - 1) {
+                        html += `<span class="text-muted px-1">…</span>`;
+                    }
+                    continue;
+                }
+                html += `<button class="${p === page ? active : inactive}" data-page="${p}" aria-label="Page ${p}" aria-current="${p === page ? 'page' : 'false'}">${p}</button>`;
+            }
+
+            // Next →
+            html += `<button id="pg-next" class="${page === totalPages ? disabled : inactive}" aria-label="Next page"${page === totalPages ? ' disabled' : ''}>»</button>`;
+
+            nav.innerHTML = html;
+
+            // Listeners — page numbers
+            nav.querySelectorAll('[data-page]').forEach(btn => {
+                btn.addEventListener('click', () => renderPage(parseInt(btn.dataset.page, 10)));
+            });
+
+            // Listeners — prev / next
+            const prevBtn = document.getElementById('pg-prev');
+            const nextBtn = document.getElementById('pg-next');
+            if (prevBtn && !prevBtn.disabled) {
+                prevBtn.addEventListener('click', () => { if (currentPage > 1) renderPage(currentPage - 1); });
+            }
+            if (nextBtn && !nextBtn.disabled) {
+                nextBtn.addEventListener('click', () => { if (currentPage < totalPages) renderPage(currentPage + 1); });
+            }
+        }
+
+        /* ================================================================
+           FILTERS & SORT
+           ================================================================ */
+        function applyFilters() {
+            const query = document.getElementById('search-input').value.trim().toLowerCase();
+            const budget = parseInt(document.getElementById('filter-budget').value, 10);
+            const sort = document.getElementById('sort-select').value;
+            const activeCat = (document.querySelector('.tag.active') || {}).dataset?.cat || 'all';
+
+            filtered = RESORTS.filter(r => {
+                if (r.price > budget) return false;
+                if (activeCat !== 'all' && r.cat !== activeCat) return false;
+                if (query && !r.name.toLowerCase().includes(query) && !r.location.toLowerCase().includes(query)) return false;
+                return true;
+            });
+
+            if (sort === 'price_low') filtered.sort((a, b) => a.price - b.price);
+            if (sort === 'price_high') filtered.sort((a, b) => b.price - a.price);
+            if (sort === 'rating') filtered.sort((a, b) => b.rating - a.rating);
+
+            renderPage(1);
+        }
+
+        /* ================================================================
+           INIT
+           ================================================================ */
+        document.addEventListener('DOMContentLoaded', () => {
+            // Parse search and budget parameters from URL
+            const urlParams = new URLSearchParams(window.location.search);
+            const searchParam = urlParams.get('search');
+            const budgetParam = urlParams.get('budget');
+
+            if (searchParam) {
+                const searchInput = document.getElementById('search-input');
+                if (searchInput) {
+                    searchInput.value = searchParam;
+                }
+            }
+
+            if (budgetParam) {
+                const budgetSlider = document.getElementById('filter-budget');
+                const budgetLabel = document.getElementById('filter-budget-val');
+                if (budgetSlider) {
+                    budgetSlider.value = budgetParam;
+                    if (budgetLabel) {
+                        budgetLabel.textContent = '₹' + parseInt(budgetParam).toLocaleString('en-IN');
+                    }
+                }
+            }
+
+            // Initial render with filters applied
+            applyFilters();
+
+            // Budget slider
+            const budgetSlider = document.getElementById('filter-budget');
+            const budgetLabel = document.getElementById('filter-budget-val');
+            budgetSlider.addEventListener('input', () => {
+                budgetLabel.textContent = '₹' + parseInt(budgetSlider.value).toLocaleString('en-IN');
+                applyFilters();
+            });
+
+            // Search (debounced 300ms)
+            let searchTimer;
+            document.getElementById('search-input').addEventListener('input', () => {
+                clearTimeout(searchTimer);
+                searchTimer = setTimeout(applyFilters, 300);
+            });
+
+            // Sort
+            document.getElementById('sort-select').addEventListener('change', applyFilters);
+
+            // Category tags
+            document.querySelectorAll('.tag').forEach(tag => {
+                tag.addEventListener('click', () => {
+                    document.querySelectorAll('.tag').forEach(t => t.classList.remove('active'));
+                    tag.classList.add('active');
+                    applyFilters();
+                });
+            });
+        });
+    </script>
+
+</body>
+
+</html>

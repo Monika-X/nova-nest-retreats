@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Secure Payment — Nova Nest Retreats</title>
+    <meta name="description" content="Complete your secure booking payment for Nova Nest Retreats. Choose credit card, UPI, or net banking.">
+
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/animations.css">
+    <link rel="stylesheet" href="../css/responsive.css">
+
+    <style>
+        /* Card flip and hover styles */
+        .credit-card-wrapper {
+            perspective: 1000px;
+            width: 100%;
+            max-width: 360px;
+            height: 210px;
+            margin: 0 auto 2rem;
+            position: relative;
+        }
+
+        .credit-card-body {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+            border-radius: 16px;
+            box-shadow: var(--shadow-glow-premium);
+        }
+
+        .credit-card-wrapper.flipped .credit-card-body {
+            transform: rotateY(180deg);
+        }
+
+        .credit-card-front, .credit-card-back {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, #0d1e3d 0%, #153366 50%, #0d1e3d 100%);
+            border: 1px solid rgba(255,255,255,0.12);
+            border-radius: 16px;
+            backface-visibility: hidden;
+            -webkit-backface-visibility: hidden;
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            color: #ffffff;
+            z-index: 2;
+        }
+
+        .credit-card-back {
+            transform: rotateY(180deg);
+            background: linear-gradient(135deg, #0a1326 0%, #0d1e3d 100%);
+            padding-inline: 0;
+            justify-content: flex-start;
+            gap: 1.5rem;
+        }
+
+        /* Pay Method Tabs */
+        .pay-tab {
+            padding: 1rem;
+            border-radius: 12px;
+            border: 1px solid var(--glass-border);
+            background: rgba(255, 255, 255, 0.02);
+            color: var(--clr-text-secondary);
+            cursor: pointer;
+            transition: all var(--transition-fast);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-weight: 600;
+        }
+
+        .pay-tab.active {
+            border-color: var(--emerald-500);
+            background: rgba(16, 185, 129, 0.08);
+            color: var(--white);
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.15);
+        }
+
+        .pay-tab:hover:not(.active) {
+            border-color: rgba(255,255,255,0.15);
+            background: rgba(255,255,255,0.04);
+            color: var(--white);
+        }
+
+        /* Success Overlay */
+        .success-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(2, 6, 23, 0.95);
+            z-index: 99999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.5s ease;
+        }
+
+        .success-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        /* Loader */
+        .pay-loader {
+            width: 50px;
+            height: 50px;
+            border: 4px solid rgba(16, 185, 129, 0.15);
+            border-top: 4px solid var(--emerald-500);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ===== HEADER ===== -->
+    <header id="main-header"></header>
+
+    <!-- ===== MAIN CONTENT ===== -->
+    <main id="main-content" class="page-content bg-deep min-h-screen">
+
+        <!-- Page Header -->
+        <section class="pt-8 pb-4">
+            <div class="container reveal">
+                <nav class="text-sm text-muted mb-4 flex items-center gap-2">
+                    <a href="../index.html" class="hover:text-emerald">Home</a>
+                    <span>/</span>
+                    <a href="resorts.html" class="hover:text-emerald">Resorts</a>
+                    <span>/</span>
+                    <span class="text-white">Secure Checkout</span>
+                </nav>
+                <h1 class="text-4xl md:text-5xl font-display font-bold mb-2">Secure Checkout</h1>
+                <p class="text-muted text-lg max-w-xl">Complete your booking. Transactions are encrypted and processed securely.</p>
+            </div>
+        </section>
+
+        <!-- Checkout Split Section -->
+        <section class="pb-24 pt-4">
+            <div class="container">
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-12">
+
+                    <!-- Left: Payment Methods -->
+                    <div class="lg:col-span-2 flex flex-col gap-8 reveal-left">
+                        
+                        <!-- Tabs -->
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <button class="pay-tab active" onclick="switchMethod('card')">
+                                <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
+                                Credit / Debit Card
+                            </button>
+                            <button class="pay-tab" onclick="switchMethod('upi')">
+                                <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><rect x="7" y="7" width="3" height="3"/><rect x="14" y="7" width="3" height="3"/><rect x="7" y="14" width="3" height="3"/><rect x="14" y="14" width="3" height="3"/></svg>
+                                UPI / QR Code
+                            </button>
+                            <button class="pay-tab" onclick="switchMethod('net')">
+                                <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 21h18M3 10h18M5 6l7-3 7 3M4 10v11M20 10v11M8 14v3M12 14v3M16 14v3"/></svg>
+                                Net Banking
+                            </button>
+                        </div>
+
+                        <!-- Card payment details -->
+                        <div id="method-card" class="card card-glass p-6 md:p-8">
+                            <h2 class="text-xl font-bold mb-6 flex items-center gap-2 text-white">
+                                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
+                                Card Information
+                            </h2>
+
+                            <!-- Credit Card Preview -->
+                            <div class="credit-card-wrapper" id="card-wrap">
+                                <div class="credit-card-body">
+                                    
+                                    <!-- Front Face -->
+                                    <div class="credit-card-front">
+                                        <div class="flex justify-between items-start">
+                                            <span class="text-xs uppercase tracking-widest text-slate-400 font-bold">Secure Card</span>
+                                            <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" class="text-slate-300"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
+                                        </div>
+                                        <div class="text-xl md:text-2xl font-mono tracking-widest text-white mt-4" id="prev-number">•••• •••• •••• ••••</div>
+                                        <div class="flex justify-between items-end mt-4">
+                                            <div class="flex flex-col">
+                                                <span class="text-[0.55rem] uppercase tracking-wider text-slate-400">Cardholder</span>
+                                                <span class="text-sm font-semibold tracking-wider font-display uppercase" id="prev-name">Your Name</span>
+                                            </div>
+                                            <div class="flex flex-col text-right">
+                                                <span class="text-[0.55rem] uppercase tracking-wider text-slate-400">Expires</span>
+                                                <span class="text-sm font-semibold font-mono" id="prev-expiry">MM/YY</span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Back Face -->
+                                    <div class="credit-card-back">
+                                        <div class="w-full h-10 bg-slate-950 mt-4"></div>
+                                        <div class="px-6 flex justify-end items-center">
+                                            <div class="flex flex-col items-end">
+                                                <span class="text-[0.55rem] uppercase tracking-wider text-slate-400 mr-2">CVV</span>
+                                                <div class="bg-white text-slate-900 font-mono font-bold text-sm px-3 py-1 rounded tracking-widest mt-1" id="prev-cvv">•••</div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                            <!-- Card inputs -->
+                            <form id="card-form" class="flex flex-col gap-4" onsubmit="processPayment(event)">
+                                <div class="form-group">
+                                    <label class="form-label" for="card-holder">Cardholder Name</label>
+                                    <input type="text" id="card-holder" class="form-input" placeholder="JOHN DOE" required oninput="updateCardPreview()" onfocus="flipCard(false)">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label" for="card-num">Card Number</label>
+                                    <input type="text" id="card-num" class="form-input" maxlength="19" placeholder="4532 7182 9182 3019" required oninput="formatCardNumber(this); updateCardPreview();" onfocus="flipCard(false)">
+                                </div>
+                                <div class="grid grid-cols-2 gap-4">
+                                    <div class="form-group mb-0">
+                                        <label class="form-label" for="card-expiry">Expiry Date</label>
+                                        <input type="text" id="card-expiry" class="form-input" placeholder="MM/YY" maxlength="5" required oninput="formatExpiry(this); updateCardPreview();" onfocus="flipCard(false)">
+                                    </div>
+                                    <div class="form-group mb-0">
+                                        <label class="form-label" for="card-cvv">CVV</label>
+                                        <input type="password" id="card-cvv" class="form-input" placeholder="***" maxlength="3" required oninput="updateCardPreview()" onfocus="flipCard(true)" onblur="flipCard(false)">
+                                    </div>
+                                </div>
+                                <button type="submit" class="btn btn-primary btn-block btn-lg mt-6" id="btn-pay-card">Pay Securely ₹82,320</button>
+                            </form>
+                        </div>
+
+                        <!-- UPI details -->
+                        <div id="method-upi" class="card card-glass p-6 md:p-8 hidden">
+                            <h2 class="text-xl font-bold mb-6 flex items-center gap-2 text-white">
+                                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><rect x="7" y="7" width="3" height="3"/><rect x="14" y="7" width="3" height="3"/><rect x="7" y="14" width="3" height="3"/><rect x="14" y="14" width="3" height="3"/></svg>
+                                UPI Payment / Scan QR
+                            </h2>
+                            <div class="flex flex-col md:flex-row items-center gap-8 bg-primary bg-opacity-20 p-6 rounded-xl border border-glass">
+                                <div class="text-center bg-white p-4 rounded-xl">
+                                    <!-- Simulated QR Code SVG -->
+                                    <svg width="160" height="160" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M0 0h30v30H0V0zm10 10v10h10V10H10zM0 70h30v30H0V70zm10 10v10h10V80H10zM70 0h30v30H70V0zm10 10v10h10V10H80zM35 15h10v10H35V15zM35 35h10v10H35V35zM55 35h10v10H55V35zM15 35h10v10H15V35zM35 55h10v10H35V55zM55 55h10v10H55V55zM15 55h10v10H15V55zM55 15h10v10H55V15zM75 35h10v10H75V35zM35 75h10v10H35V75zM75 75h10v10H75V75zM55 75h10v10H55V75z" fill="#0f172a"/>
+                                        <rect x="42" y="42" width="16" height="16" rx="2" fill="#10b981"/>
+                                        <circle cx="50" cy="50" r="3" fill="white"/>
+                                    </svg>
+                                    <div class="text-[0.6rem] text-slate-500 font-bold uppercase tracking-wider mt-2">NNR Booking QR</div>
+                                </div>
+                                <div class="flex-1 text-center md:text-left">
+                                    <h3 class="text-lg font-bold text-white mb-2">Scan &amp; Pay</h3>
+                                    <p class="text-sm text-muted mb-4">Scan this secure QR code using any UPI app (PhonePe, GPay, Paytm, BHIM) to complete checkout.</p>
+                                    <div class="text-xs text-muted mb-2 uppercase font-semibold">UPI Session Expires in</div>
+                                    <div class="text-xl font-mono font-bold text-emerald" id="upi-timer">05:00</div>
+                                </div>
+                            </div>
+
+                            <div class="text-center my-6 text-sm text-muted">OR enter UPI ID</div>
+
+                            <form id="upi-form" class="flex flex-col gap-4" onsubmit="processPayment(event)">
+                                <div class="form-group mb-0">
+                                    <label class="form-label" for="upi-id">UPI Virtual Address (VPA)</label>
+                                    <input type="text" id="upi-id" class="form-input" placeholder="username@okaxis" required>
+                                </div>
+                                <button type="submit" class="btn btn-primary btn-block btn-lg mt-4" id="btn-pay-upi">Verify &amp; Pay ₹82,320</button>
+                            </form>
+                        </div>
+
+                        <!-- Net Banking details -->
+                        <div id="method-net" class="card card-glass p-6 md:p-8 hidden">
+                            <h2 class="text-xl font-bold mb-6 flex items-center gap-2 text-white">
+                                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 21h18M3 10h18M5 6l7-3 7 3M4 10v11M20 10v11M8 14v3M12 14v3M16 14v3"/></svg>
+                                Net Banking
+                            </h2>
+                            <form id="net-form" class="flex flex-col gap-6" onsubmit="processPayment(event)">
+                                <div class="form-group mb-0">
+                                    <label class="form-label" for="bank-select">Select Your Bank</label>
+                                    <select class="form-select" id="bank-select" required>
+                                        <option value="" disabled selected>Choose popular bank...</option>
+                                        <option value="hdfc">HDFC Bank</option>
+                                        <option value="icici">ICICI Bank</option>
+                                        <option value="sbi">State Bank of India</option>
+                                        <option value="axis">Axis Bank</option>
+                                        <option value="kotak">Kotak Mahindra Bank</option>
+                                    </select>
+                                </div>
+                                <button type="submit" class="btn btn-primary btn-block btn-lg" id="btn-pay-net">Proceed to Bank ₹82,320</button>
+                            </form>
+                        </div>
+
+                    </div>
+
+                    <!-- Right: Booking Summary -->
+                    <div class="lg:col-span-1 reveal-right">
+                        <div class="card card-glass sticky" style="top: calc(var(--nav-height) + 2rem);">
+                            <div class="card-body">
+                                <h2 class="text-xl font-bold mb-6 border-b border-glass pb-4 text-white">Booking Summary</h2>
+                                
+                                <div class="flex flex-col gap-4 mb-6">
+                                    <div class="flex justify-between items-start">
+                                        <div>
+                                            <h3 class="font-bold text-white mb-1">Azure Ocean Water Villas</h3>
+                                            <span class="text-xs text-emerald">Male Atoll, Maldives</span>
+                                        </div>
+                                        <span class="badge badge-emerald">Premium</span>
+                                    </div>
+                                    <div class="bg-primary bg-opacity-20 p-4 rounded-lg flex flex-col gap-2 text-sm text-muted border border-glass">
+                                        <div class="flex justify-between">
+                                            <span>Nights:</span>
+                                            <span class="text-white font-semibold">3 Nights</span>
+                                        </div>
+                                        <div class="flex justify-between">
+                                            <span>Guests:</span>
+                                            <span class="text-white font-semibold">2 Adults</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="bg-primary rounded-lg p-4 mb-6 text-sm">
+                                    <div class="flex justify-between mb-2 text-muted">
+                                        <span>3 Nights stay</span>
+                                        <span>₹73,500</span>
+                                    </div>
+                                    <div class="flex justify-between mb-2 text-muted">
+                                        <span>Taxes &amp; GST</span>
+                                        <span>₹8,820</span>
+                                    </div>
+                                    <hr class="my-2 border-glass">
+                                    <div class="flex justify-between font-bold text-white text-base">
+                                        <span>Total</span>
+                                        <span class="text-emerald">₹82,320</span>
+                                    </div>
+                                </div>
+
+                                <div class="flex items-center gap-3 text-xs text-muted">
+                                    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" class="text-emerald flex-shrink-0"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                                    <span>256-bit SSL encrypted connection. Your data is 100% secure.</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Success Modal Overlay -->
+    <div class="success-overlay" id="pay-overlay">
+        <div class="text-center p-8 bg-surface rounded-2xl border border-glass shadow-2xl max-w-sm w-full mx-4 flex flex-col items-center gap-6">
+            <div id="loader-part">
+                <div class="pay-loader mx-auto mb-4"></div>
+                <h3 class="text-lg font-bold text-white">Verifying Transaction...</h3>
+                <p class="text-sm text-muted mt-2">Connecting securely with payment gateway.</p>
+            </div>
+            <div id="success-part" class="hidden flex flex-col items-center gap-4">
+                <div class="w-16 h-16 bg-emerald-900 bg-opacity-40 rounded-full flex items-center justify-center text-emerald shadow-glow-emerald animate-bounce">
+                    <svg viewBox="0 0 24 24" width="36" height="36" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                </div>
+                <h3 class="text-2xl font-bold text-white">Payment Successful!</h3>
+                <p class="text-sm text-muted">Booking Reference: <span class="font-mono text-white font-semibold">NNR-83924L</span></p>
+                <p class="text-xs text-slate-400 mt-2">Redirecting to your dashboard shortly...</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== FOOTER ===== -->
+    <div id="main-footer"></div>
+
+    <!-- Scripts -->
+    <script src="../js/main.js"></script>
+    <script src="../js/animations.js"></script>
+
+    <script>
+        // Switched tab logic
+        function switchMethod(method) {
+            document.querySelectorAll('.pay-tab').forEach(tab => tab.classList.remove('active'));
+            event.currentTarget.classList.add('active');
+            
+            document.getElementById('method-card').classList.add('hidden');
+            document.getElementById('method-upi').classList.add('hidden');
+            document.getElementById('method-net').classList.add('hidden');
+
+            document.getElementById('method-' + method).classList.remove('hidden');
+        }
+
+        // Card flip logic
+        function flipCard(shouldFlip) {
+            const cardWrap = document.getElementById('card-wrap');
+            if (shouldFlip) {
+                cardWrap.classList.add('flipped');
+            } else {
+                cardWrap.classList.remove('flipped');
+            }
+        }
+
+        // Live preview updates
+        function updateCardPreview() {
+            const name = document.getElementById('card-holder').value.trim();
+            const num = document.getElementById('card-num').value.trim();
+            const expiry = document.getElementById('card-expiry').value.trim();
+            const cvv = document.getElementById('card-cvv').value.trim();
+
+            document.getElementById('prev-name').innerText = name ? name : 'Your Name';
+            document.getElementById('prev-number').innerText = num ? num : '•••• •••• •••• ••••';
+            document.getElementById('prev-expiry').innerText = expiry ? expiry : 'MM/YY';
+            document.getElementById('prev-cvv').innerText = cvv ? cvv : '•••';
+        }
+
+        // Auto space formatting for Card Numbers
+        function formatCardNumber(el) {
+            let val = el.value.replace(/\s+/g, '').replace(/[^0-8]/gi, '');
+            // Limit to numeric characters and add spaces every 4 digits
+            let formatted = val.match(/.{1,4}/g);
+            el.value = formatted ? formatted.join(' ') : '';
+        }
+
+        // Auto slash formatting for Expiry Date
+        function formatExpiry(el) {
+            let val = el.value.replace(/\D/g, '');
+            if (val.length >= 2) {
+                el.value = val.slice(0, 2) + '/' + val.slice(2, 4);
+            } else {
+                el.value = val;
+            }
+        }
+
+        // UPI Timer countdown
+        let totalSeconds = 300;
+        const timerDisplay = document.getElementById('upi-timer');
+        if (timerDisplay) {
+            const interval = setInterval(() => {
+                totalSeconds--;
+                if (totalSeconds <= 0) {
+                    clearInterval(interval);
+                    timerDisplay.innerText = 'EXPIRED';
+                    timerDisplay.style.color = '#ef4444';
+                    return;
+                }
+                const m = Math.floor(totalSeconds / 60);
+                const s = totalSeconds % 60;
+                timerDisplay.innerText = m.toString().padStart(2, '0') + ':' + s.toString().padStart(2, '0');
+            }, 1000);
+        }
+
+        // Simulated secure processing
+        function processPayment(e) {
+            e.preventDefault();
+
+            const overlay = document.getElementById('pay-overlay');
+            const loaderPart = document.getElementById('loader-part');
+            const successPart = document.getElementById('success-part');
+
+            // Show secure loading modal
+            overlay.classList.add('active');
+            loaderPart.classList.remove('hidden');
+            successPart.classList.add('hidden');
+
+            setTimeout(() => {
+                // Change to success state
+                loaderPart.classList.add('hidden');
+                successPart.classList.remove('hidden');
+
+                // Save confirmed booking in dashboard storage
+                const booking = {
+                    id: "BK" + Date.now(),
+                    resort: "Azure Ocean Water Villas",
+                    checkIn: new Date().toISOString().split("T")[0],
+                    checkOut: new Date(Date.now() + 259200000).toISOString().split("T")[0], // 3 days later
+                    guests: "2 Adults",
+                    status: "Confirmed",
+                    createdAt: new Date().toISOString()
+                };
+                const existing = JSON.parse(localStorage.getItem("bookings") || "[]");
+                existing.unshift(booking);
+                localStorage.setItem("bookings", JSON.stringify(existing));
+
+                setTimeout(() => {
+                    // Redirect to user dashboard bookings list
+                    window.location.href = 'user-dashboard.html';
+                }, 2500);
+
+            }, 2000);
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Azure Ocean Water Villas — Nova Nest Retreats</title>
+    
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/animations.css">
+    <link rel="stylesheet" href="../css/responsive.css">
+    
+    <style>
+        /* Specific page styles can go here or in style.css */
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            grid-template-rows: 250px 250px;
+            gap: 1rem;
+            border-radius: var(--radius-xl);
+            overflow: hidden;
+        }
+        
+        @media (max-width: 768px) {
+            .gallery-grid {
+                grid-template-columns: 1fr;
+                grid-template-rows: 300px 150px 150px;
+            }
+        }
+        
+        .gallery-main {
+            grid-row: span 2;
+        }
+        
+        .gallery-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.4s ease;
+        }
+        
+        .gallery-item {
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .gallery-item:hover .gallery-img {
+            transform: scale(1.05);
+        }
+
+        .amenity-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1rem;
+            background: rgba(255,255,255,0.03);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius-md);
+            transition: all var(--transition-fast);
+        }
+        
+        .amenity-item:hover {
+            border-color: var(--emerald-500);
+            background: rgba(16, 185, 129, 0.05);
+            transform: translateY(-2px);
+        }
+
+        .booking-card {
+            position: sticky;
+            top: calc(var(--nav-height) + 2rem);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ===== HEADER ===== -->
+    <header id="main-header"></header>
+
+    <!-- ===== MAIN CONTENT ===== -->
+    <main id="main-content" class="page-content bg-deep">
+        
+        <!-- Breadcrumbs & Title -->
+        <section class="pt-8 pb-4">
+            <div class="container reveal">
+                <nav class="text-sm text-muted mb-6 flex items-center gap-2">
+                    <a href="../index.html" class="hover:text-emerald">Home</a>
+                    <span>/</span>
+                    <a href="resorts.html" class="hover:text-emerald">Resorts</a>
+                    <span>/</span>
+                    <span class="text-white">Azure Ocean Water Villas</span>
+                </nav>
+                
+                <div class="flex flex-col md:flex-row justify-between items-start md:items-end gap-4 mb-8">
+                    <div>
+                        <div class="flex items-center gap-3 mb-2">
+                            <span class="badge badge-emerald">Premium</span>
+                            <div class="flex items-center text-warning text-sm">
+                                <span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
+                                <span class="text-muted ml-2">(124 Reviews)</span>
+                            </div>
+                        </div>
+                        <h1 class="text-4xl md:text-5xl font-display font-bold mb-2">Azure Ocean Water Villas</h1>
+                        <p class="text-emerald font-medium flex items-center gap-2">
+                            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                            Male Atoll, Maldives
+                        </p>
+                    </div>
+                    <div class="flex gap-3">
+                        <button class="btn btn-outline btn-icon" aria-label="Share">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line></svg>
+                        </button>
+                        <button class="btn btn-outline btn-icon" aria-label="Save to Wishlist">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Image Gallery -->
+        <section class="pb-12">
+            <div class="container reveal-scale">
+                <div class="gallery-grid">
+                    <div class="gallery-item gallery-main">
+                        <img src="https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&w=1200&q=80" alt="Resort Main View" class="gallery-img">
+                    </div>
+                    <div class="gallery-item">
+                        <img src="https://images.unsplash.com/photo-1540541338287-41700207dee6?auto=format&fit=crop&w=800&q=80" alt="Resort Bedroom" class="gallery-img">
+                    </div>
+                    <div class="gallery-item relative">
+                        <img src="https://images.unsplash.com/photo-1573047330191-fb342b1be381?auto=format&fit=crop&w=800&q=80" alt="Resort Pool" class="gallery-img">
+                        <div class="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center cursor-pointer hover:bg-opacity-30 transition-all">
+                            <span class="text-white font-semibold text-lg border-2 border-white rounded-full px-6 py-2 backdrop-blur-sm">+12 Photos</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Content Split -->
+        <section class="pb-24">
+            <div class="container">
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-12">
+                    
+                    <!-- LEFT COLUMN: Details -->
+                    <div class="lg:col-span-2 flex flex-col gap-12">
+                        
+                        <!-- Description -->
+                        <div class="reveal-left">
+                            <h2 class="text-2xl font-display font-bold mb-4">About this resort</h2>
+                            <p class="text-muted leading-relaxed mb-4">
+                                Experience the ultimate tropical escape at Azure Ocean Water Villas. Suspended above the crystal-clear waters of the Indian Ocean, our premium villas offer unmatched luxury, privacy, and panoramic views.
+                            </p>
+                            <p class="text-muted leading-relaxed">
+                                Each villa features a private infinity pool, glass-floor viewing panels, and direct lagoon access. Indulge in world-class dining at our underwater restaurant, rejuvenate at the holistic spa, or embark on a snorkeling adventure right from your deck.
+                            </p>
+                        </div>
+
+                        <hr class="m-0">
+
+                        <!-- Amenities -->
+                        <div class="reveal-left">
+                            <h2 class="text-2xl font-display font-bold mb-6">Premium Amenities</h2>
+                            <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+                                <div class="amenity-item">
+                                    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-emerald"><path d="M2 4v16M2 8h20M2 17h20M22 4v16M7 8v4h10V8"/></svg>
+                                    <span class="text-sm font-medium">King Size Bed</span>
+                                </div>
+                                <div class="amenity-item">
+                                    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-emerald"><path d="M2 6c.6 0 1.2-.2 1.6-.6.8-.8 2.4-.8 3.2 0 .8.8 2.4.8 3.2 0 .8-.8 2.4-.8 3.2 0 .8.8 2.4.8 3.2 0 .4.4 1 .6 1.6.6M2 12c.6 0 1.2-.2 1.6-.6.8-.8 2.4-.8 3.2 0 .8.8 2.4.8 3.2 0 .8-.8 2.4-.8 3.2 0 .8.8 2.4.8 3.2 0 .4.4 1 .6 1.6.6M2 18c.6 0 1.2-.2 1.6-.6.8-.8 2.4-.8 3.2 0 .8.8 2.4.8 3.2 0 .8-.8 2.4-.8 3.2 0 .8.8 2.4.8 3.2 0 .4.4 1 .6 1.6.6"/></svg>
+                                    <span class="text-sm font-medium">Private Pool</span>
+                                </div>
+                                <div class="amenity-item">
+                                    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-emerald"><path d="M5 12.55a11 11 0 0 1 14.08 0M1.42 9a16 16 0 0 1 21.16 0M8.53 16.11a6 6 0 0 1 6.95 0M12 20h.01"/></svg>
+                                    <span class="text-sm font-medium">High-speed WiFi</span>
+                                </div>
+                                <div class="amenity-item">
+                                    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-emerald"><path d="M12 2v3M5 10a7 7 0 0 1 14 0v2H5v-2zM2 17h20v2H2v-2z"/></svg>
+                                    <span class="text-sm font-medium">Room Service</span>
+                                </div>
+                                <div class="amenity-item">
+                                    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-emerald"><path d="M18 22H6M12 11v11M12 2a5 5 0 0 1 5 5v4H7V7a5 5 0 0 1 5-5z"/></svg>
+                                    <span class="text-sm font-medium">Mini Bar</span>
+                                </div>
+                                <div class="amenity-item">
+                                    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-emerald"><path d="M12 10a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM2 22a10 10 0 0 1 20 0H2z"/></svg>
+                                    <span class="text-sm font-medium">Spa Access</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <hr class="m-0">
+
+                        <!-- Nearby Attractions -->
+                        <div class="reveal-left">
+                            <h2 class="text-2xl font-display font-bold mb-6">Nearby Attractions</h2>
+                            <ul class="flex flex-col gap-4">
+                                <li class="flex items-center justify-between p-4 bg-primary rounded-lg border border-glass">
+                                    <div>
+                                        <div class="font-bold text-white mb-1">Coral Garden Reef</div>
+                                        <div class="text-xs text-muted">Snorkeling & Diving Spot</div>
+                                    </div>
+                                    <div class="text-sm text-emerald bg-emerald-900 bg-opacity-30 px-3 py-1 rounded-full">1.2 km away</div>
+                                </li>
+                                <li class="flex items-center justify-between p-4 bg-primary rounded-lg border border-glass">
+                                    <div>
+                                        <div class="font-bold text-white mb-1">Male City Tour</div>
+                                        <div class="text-xs text-muted">Cultural Experience</div>
+                                    </div>
+                                    <div class="text-sm text-ocean bg-ocean-900 bg-opacity-30 px-3 py-1 rounded-full">45 min speedboat</div>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <hr class="m-0">
+
+                        <!-- Reviews -->
+                        <div class="reveal-left">
+                            <div class="flex justify-between items-center mb-6">
+                                <h2 class="text-2xl font-display font-bold">Guest Reviews</h2>
+                                <div class="text-xl font-bold flex items-center gap-2">
+                                    4.9 <span class="text-warning text-lg">★</span>
+                                </div>
+                            </div>
+                            
+                            <div class="flex flex-col gap-6">
+                                <!-- Review 1 -->
+                                <div class="bg-surface p-6 rounded-xl border border-glass">
+                                    <div class="flex justify-between mb-4">
+                                        <div class="flex items-center gap-3">
+                                            <div class="w-10 h-10 bg-emerald-900 rounded-full flex items-center justify-center text-emerald font-bold">JD</div>
+                                            <div>
+                                                <div class="font-bold text-sm text-white">John Doe</div>
+                                                <div class="text-xs text-muted">Oct 2025</div>
+                                            </div>
+                                        </div>
+                                        <div class="text-warning text-sm">★★★★★</div>
+                                    </div>
+                                    <p class="text-sm text-muted">Absolutely breathtaking! The water villa was immaculate and the direct access to the ocean was a dream come true. Highly recommend for a honeymoon.</p>
+                                </div>
+                                
+                                <!-- Review 2 -->
+                                <div class="bg-surface p-6 rounded-xl border border-glass">
+                                    <div class="flex justify-between mb-4">
+                                        <div class="flex items-center gap-3">
+                                            <div class="w-10 h-10 bg-ocean-900 rounded-full flex items-center justify-center text-ocean font-bold">SM</div>
+                                            <div>
+                                                <div class="font-bold text-sm text-white">Sarah Miller</div>
+                                                <div class="text-xs text-muted">Aug 2025</div>
+                                            </div>
+                                        </div>
+                                        <div class="text-warning text-sm">★★★★<span class="text-muted">★</span></div>
+                                    </div>
+                                    <p class="text-sm text-muted">Great food and stunning views. The only slight issue was the WiFi was occasionally spotty, but who needs internet in paradise anyway?</p>
+                                </div>
+                            </div>
+                            <button class="btn btn-outline btn-block mt-6">Load More Reviews</button>
+                        </div>
+                    </div>
+
+                    <!-- RIGHT COLUMN: Booking Form (Sticky) -->
+                    <div class="lg:col-span-1">
+                        <div class="card booking-card reveal-right border-t-4 border-t-emerald-500 shadow-xl">
+                            <div class="card-body">
+                                <div class="flex items-baseline gap-2 mb-6 border-b border-glass pb-6">
+                                    <span class="text-3xl font-display font-bold">₹24,500</span>
+                                    <span class="text-muted text-sm">/ night</span>
+                                </div>
+                                
+                                <form id="resort-booking-form">
+                                    <div class="grid grid-cols-2 gap-4 mb-4">
+                                        <div class="form-group mb-0">
+                                            <label class="form-label text-xs uppercase tracking-wider" for="check-in">Check-in</label>
+                                            <input type="date" id="check-in" class="form-input" required>
+                                        </div>
+                                        <div class="form-group mb-0">
+                                            <label class="form-label text-xs uppercase tracking-wider" for="check-out">Check-out</label>
+                                            <input type="date" id="check-out" class="form-input" required>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="form-group mb-6">
+                                        <label class="form-label text-xs uppercase tracking-wider">Guests</label>
+                                        <select class="form-select" required>
+                                            <option value="1">1 Adult</option>
+                                            <option value="2" selected>2 Adults</option>
+                                            <option value="3">2 Adults, 1 Child</option>
+                                            <option value="4">2 Adults, 2 Children</option>
+                                        </select>
+                                    </div>
+
+                                    <!-- Price Breakdown (Simulated) -->
+                                    <div class="bg-primary rounded-lg p-4 mb-6 text-sm">
+                                        <div class="flex justify-between mb-2 text-muted">
+                                            <span>₹24,500 x 3 nights</span>
+                                            <span>₹73,500</span>
+                                        </div>
+                                        <div class="flex justify-between mb-2 text-muted">
+                                            <span>Taxes & Fees</span>
+                                            <span>₹8,820</span>
+                                        </div>
+                                        <hr class="my-2 border-glass">
+                                        <div class="flex justify-between font-bold text-white text-base">
+                                            <span>Total</span>
+                                            <span class="text-emerald">₹82,320</span>
+                                        </div>
+                                    </div>
+                                    
+                                    <button type="button" class="btn btn-primary btn-block btn-lg" id="btn-reserve">Reserve Now</button>
+                                    <p class="text-center text-xs text-muted mt-4">You won't be charged yet.</p>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION: Similar Resorts -->
+        <section class="py-20 bg-primary border-t border-glass relative">
+            <div class="container">
+                <div class="text-left mb-10 reveal">
+                    <h2 class="text-2xl font-display font-bold">Similar Resorts You Might Like</h2>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <!-- Similar 1 -->
+                    <div class="card-resort reveal stagger-1">
+                        <div class="card-resort-img h-48">
+                            <img src="https://images.unsplash.com/photo-1544365558-35aa4afcf11f?auto=format&fit=crop&w=800&q=80" alt="Island Pearl">
+                        </div>
+                        <div class="card-resort-body p-4">
+                            <h3 class="font-display font-bold text-lg mb-1">Island Pearl Resort</h3>
+                            <div class="text-xs text-muted mb-3">Bora Bora</div>
+                            <div class="flex justify-between items-center">
+                                <div class="font-bold text-emerald">₹28,000<span class="text-xs font-normal text-muted">/n</span></div>
+                                <a href="#" class="text-xs text-white underline">View</a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Similar 2 -->
+                    <div class="card-resort reveal stagger-2">
+                        <div class="card-resort-img h-48">
+                            <img src="https://images.unsplash.com/photo-1571896349842-33c89424de2d?auto=format&fit=crop&w=800&q=80" alt="Jungle Retreat">
+                        </div>
+                        <div class="card-resort-body p-4">
+                            <h3 class="font-display font-bold text-lg mb-1">Emerald Jungle Retreat</h3>
+                            <div class="text-xs text-muted mb-3">Bali, Indonesia</div>
+                            <div class="flex justify-between items-center">
+                                <div class="font-bold text-emerald">₹12,800<span class="text-xs font-normal text-muted">/n</span></div>
+                                <a href="#" class="text-xs text-white underline">View</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Similar 3 -->
+                    <div class="card-resort reveal stagger-3">
+                        <div class="card-resort-img h-48">
+                            <img src="https://images.unsplash.com/photo-1522798514-97ceb8c4f1c8?auto=format&fit=crop&w=800&q=80" alt="Cityscape Luxury">
+                        </div>
+                        <div class="card-resort-body p-4">
+                            <h3 class="font-display font-bold text-lg mb-1">Marina Bay Sands</h3>
+                            <div class="text-xs text-muted mb-3">Singapore</div>
+                            <div class="flex justify-between items-center">
+                                <div class="font-bold text-emerald">₹35,000<span class="text-xs font-normal text-muted">/n</span></div>
+                                <a href="#" class="text-xs text-white underline">View</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- ===== FOOTER ===== -->
+    <div id="main-footer"></div>
+
+    <!-- Scripts -->
+    <script src="../js/main.js"></script>
+    <script src="../js/animations.js"></script>
+    <script src="../js/booking.js"></script>
+    <script>
+        // Simple reservation alert for demo
+        document.getElementById('btn-reserve')?.addEventListener('click', () => {
+            alert('Reservation process started! You will be redirected to payment.');
+            window.location.href = 'payment.html';
+        });
+    </script>
+</body>
+</html>
