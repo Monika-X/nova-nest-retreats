@@ -368,6 +368,115 @@
         }
         .toast-msg.show { opacity: 1; transform: translateY(0); pointer-events: auto; }
         .toast-msg svg { color: #34d399; flex-shrink: 0; width: 17px; height: 17px; stroke: currentColor; fill: none; stroke-width: 2.5; }
+
+        /* ================ MOBILE OPTIMIZATIONS ================ */
+        @media (max-width: 480px) {
+            .right-side {
+                padding: 2.5rem 1.25rem !important;
+                align-items: center !important;
+                text-align: center !important;
+            }
+
+            .brand {
+                justify-content: center !important;
+                margin-bottom: 2rem !important;
+            }
+
+            .status-pill {
+                margin-inline: auto !important;
+            }
+
+            h1 {
+                font-size: 1.85rem !important;
+                text-align: center !important;
+            }
+
+            p.desc {
+                font-size: 0.88rem !important;
+                line-height: 1.6 !important;
+                margin-inline: auto !important;
+                text-align: center !important;
+                margin-bottom: 2rem !important;
+            }
+
+            .progress-label {
+                font-size: 0.75rem !important;
+            }
+
+            .countdown-label {
+                text-align: center !important;
+                margin-bottom: 0.75rem !important;
+            }
+
+            .countdown-grid {
+                gap: 0.5rem !important;
+                margin-bottom: 2rem !important;
+                width: 100% !important;
+            }
+
+            .countdown-box {
+                padding: 0.85rem 0.25rem !important;
+                border-radius: 10px !important;
+            }
+
+            .cd-num {
+                font-size: 1.5rem !important;
+            }
+
+            .cd-lbl {
+                font-size: 0.55rem !important;
+                letter-spacing: 0.05em !important;
+            }
+
+            .notify-card {
+                padding: 1.25rem !important;
+                width: 100% !important;
+                text-align: center !important;
+            }
+
+            .notify-form {
+                flex-direction: column !important;
+                gap: 0.75rem !important;
+                width: 100% !important;
+            }
+
+            .notify-input {
+                width: 100% !important;
+                text-align: center !important;
+            }
+
+            .notify-btn {
+                width: 100% !important;
+                justify-content: center !important;
+            }
+
+            .bottom-row {
+                flex-direction: column !important;
+                align-items: center !important;
+                justify-content: center !important;
+                gap: 1.25rem !important;
+                width: 100% !important;
+            }
+
+            .socials {
+                justify-content: center !important;
+            }
+
+            .home-btn {
+                width: 100% !important;
+                justify-content: center !important;
+            }
+        }
+
+        @media (max-width: 375px) {
+            h1 {
+                font-size: 1.65rem !important;
+            }
+
+            .cd-num {
+                font-size: 1.35rem !important;
+            }
+        }
     </style>
 </head>
 <body>

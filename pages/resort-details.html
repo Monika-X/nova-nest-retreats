@@ -11,7 +11,7 @@
     <link rel="stylesheet" href="../css/responsive.css">
     
     <style>
-        /* Specific page styles can go here or in style.css */
+        /* ── Gallery Grid ───────────────────────────────── */
         .gallery-grid {
             display: grid;
             grid-template-columns: 2fr 1fr;
@@ -20,54 +20,156 @@
             border-radius: var(--radius-xl);
             overflow: hidden;
         }
-        
-        @media (max-width: 768px) {
-            .gallery-grid {
-                grid-template-columns: 1fr;
-                grid-template-rows: 300px 150px 150px;
-            }
-        }
-        
-        .gallery-main {
-            grid-row: span 2;
-        }
-        
-        .gallery-img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transition: transform 0.4s ease;
-        }
-        
-        .gallery-item {
-            overflow: hidden;
-            position: relative;
-        }
-        
-        .gallery-item:hover .gallery-img {
-            transform: scale(1.05);
-        }
+        .gallery-main { grid-row: span 2; }
+        .gallery-img  { width:100%; height:100%; object-fit:cover; transition:transform .4s ease; }
+        .gallery-item { overflow:hidden; position:relative; }
+        .gallery-item:hover .gallery-img { transform:scale(1.05); }
 
+        /* ── Amenity Item ───────────────────────────────── */
         .amenity-item {
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            padding: 1rem;
-            background: rgba(255,255,255,0.03);
-            border: 1px solid var(--glass-border);
-            border-radius: var(--radius-md);
-            transition: all var(--transition-fast);
+            display:flex; align-items:center; gap:.75rem;
+            padding:1rem;
+            background:rgba(255,255,255,.03);
+            border:1px solid var(--glass-border);
+            border-radius:var(--radius-md);
+            transition:all var(--transition-fast);
+            min-width:0; /* prevent overflow in grid cell */
         }
-        
         .amenity-item:hover {
-            border-color: var(--emerald-500);
-            background: rgba(16, 185, 129, 0.05);
-            transform: translateY(-2px);
+            border-color:var(--emerald-500);
+            background:rgba(16,185,129,.05);
+            transform:translateY(-2px);
         }
+        .amenity-item span { white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
 
+        /* ── Booking Card ───────────────────────────────── */
         .booking-card {
             position: sticky;
             top: calc(var(--nav-height) + 2rem);
+        }
+
+        /* ════════════════════════════════════════════════
+           RESPONSIVE OVERRIDES — resort-details page
+           768 px → 320 px
+           ════════════════════════════════════════════════ */
+
+        /* ── Tablet (≤ 768 px) ─────────────────────────── */
+        @media (max-width: 768px) {
+
+            /* Kill sticky so the booking card scrolls naturally below content */
+            .booking-card {
+                position: static !important;
+                max-width: 100% !important;
+                width: 100% !important;
+            }
+
+            /* Gallery collapses to single column */
+            .gallery-grid {
+                grid-template-columns: 1fr !important;
+                grid-template-rows: 280px 140px 140px !important;
+            }
+            .gallery-main { grid-row: span 1 !important; }
+
+            /* Title section */
+            h1.text-4xl { font-size: clamp(1.6rem, 5.5vw, 2.2rem) !important; }
+
+            /* Amenities: reduce padding/font */
+            .amenity-item { padding: .55rem .75rem !important; gap: .4rem !important; }
+            .amenity-item span { font-size: .75rem !important; }
+            .amenity-item svg { width:16px !important; height:16px !important; flex-shrink:0 !important; }
+
+            /* Attraction items: stack vertically */
+            .attraction-item {
+                flex-direction: column !important;
+                align-items: flex-start !important;
+                gap: .6rem !important;
+            }
+
+            /* Review cards */
+            .review-card { padding: 1rem !important; }
+            .review-header {
+                flex-direction: column !important;
+                align-items: flex-start !important;
+                gap: .4rem !important;
+            }
+
+            /* Check-in / check-out date row: single column */
+            #resort-booking-form .grid-cols-2 {
+                grid-template-columns: 1fr !important;
+                gap: .75rem !important;
+            }
+
+            /* Price breakdown rows don't overflow */
+            .bg-primary .flex.justify-between span { font-size: .8rem !important; }
+
+            /* Section gaps */
+            .lg\:col-span-2 { gap: 2rem !important; }
+        }
+
+        /* ── Mobile L (≤ 425 px) ───────────────────────── */
+        @media (max-width: 425px) {
+
+            /* Gallery */
+            .gallery-grid {
+                grid-template-rows: 220px 110px 110px !important;
+                gap: .5rem !important;
+            }
+
+            /* Title hero section */
+            h1.text-4xl { font-size: clamp(1.4rem, 6vw, 1.9rem) !important; }
+
+            /* Amenities: further squeeze */
+            .amenity-item { padding: .4rem .55rem !important; gap: .3rem !important; }
+            .amenity-item span { font-size: .68rem !important; }
+            .amenity-item svg { width:13px !important; height:13px !important; }
+
+            /* Attractions: already stacked, reduce padding */
+            .attraction-item { padding: .75rem !important; gap: .5rem !important; }
+
+            /* Distance badges wrap cleanly */
+            .attraction-item .rounded-full {
+                font-size: .72rem !important;
+                padding: .2rem .65rem !important;
+                white-space: nowrap !important;
+            }
+
+            /* Review card: tighten up */
+            .review-card { padding: .85rem !important; }
+
+            /* Booking card: full width, no excess padding */
+            .booking-card .card-body { padding: 1rem !important; }
+            .booking-card .text-3xl { font-size: 1.5rem !important; }
+
+            /* Price breakdown: ensure no wrap */
+            .bg-primary .flex.justify-between { flex-wrap: nowrap !important; }
+            .bg-primary .flex.justify-between span { font-size: .75rem !important; white-space: nowrap !important; }
+        }
+
+        /* ── Mobile M (≤ 375 px) ───────────────────────── */
+        @media (max-width: 375px) {
+            .gallery-grid { grid-template-rows: 190px 95px 95px !important; }
+            h1.text-4xl { font-size: 1.3rem !important; }
+            .amenity-item { padding: .35rem .5rem !important; }
+            .amenity-item span { font-size: .65rem !important; }
+            .amenity-item svg { width:12px !important; height:12px !important; }
+            .booking-card .card-body { padding: .85rem !important; }
+        }
+
+        /* ── Mobile S (≤ 320 px) ───────────────────────── */
+        @media (max-width: 320px) {
+            .gallery-grid { grid-template-rows: 160px 80px 80px !important; }
+            h1.text-4xl { font-size: 1.15rem !important; }
+            .amenities-grid { gap: .35rem !important; }
+            .amenity-item { padding: .3rem .45rem !important; gap: .25rem !important; }
+            .amenity-item span { font-size: .6rem !important; }
+            .amenity-item svg { width:11px !important; height:11px !important; }
+
+            /* Nearby attractions: stack to single column on 320px */
+            .attractions-grid { grid-template-columns: 1fr !important; }
+
+            .review-card { padding: .75rem !important; }
+            .booking-card .card-body { padding: .75rem !important; }
+            .booking-card .text-3xl { font-size: 1.25rem !important; }
         }
     </style>
 </head>
@@ -82,7 +184,7 @@
         <!-- Breadcrumbs & Title -->
         <section class="pt-8 pb-4">
             <div class="container reveal">
-                <nav class="text-sm text-muted mb-6 flex items-center gap-2">
+                <nav class="text-sm text-muted mb-6 flex flex-wrap items-center gap-2">
                     <a href="../index.html" class="hover:text-emerald">Home</a>
                     <span>/</span>
                     <a href="resorts.html" class="hover:text-emerald">Resorts</a>
@@ -138,20 +240,20 @@
         </section>
 
         <!-- Content Split -->
-        <section class="pb-24">
+        <section class="pb-12">
             <div class="container">
-                <div class="grid grid-cols-1 lg:grid-cols-3 gap-12">
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
                     
                     <!-- LEFT COLUMN: Details -->
-                    <div class="lg:col-span-2 flex flex-col gap-12">
+                    <div class="lg:col-span-2 flex flex-col gap-8">
                         
                         <!-- Description -->
                         <div class="reveal-left">
                             <h2 class="text-2xl font-display font-bold mb-4">About this resort</h2>
-                            <p class="text-muted leading-relaxed mb-4">
+                            <p class="text-white-90 leading-relaxed mb-4" style="max-width: 600px;">
                                 Experience the ultimate tropical escape at Azure Ocean Water Villas. Suspended above the crystal-clear waters of the Indian Ocean, our premium villas offer unmatched luxury, privacy, and panoramic views.
                             </p>
-                            <p class="text-muted leading-relaxed">
+                            <p class="text-white-90 leading-relaxed" style="max-width: 600px;">
                                 Each villa features a private infinity pool, glass-floor viewing panels, and direct lagoon access. Indulge in world-class dining at our underwater restaurant, rejuvenate at the holistic spa, or embark on a snorkeling adventure right from your deck.
                             </p>
                         </div>
@@ -161,7 +263,7 @@
                         <!-- Amenities -->
                         <div class="reveal-left">
                             <h2 class="text-2xl font-display font-bold mb-6">Premium Amenities</h2>
-                            <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+                            <div class="amenities-grid grid grid-cols-2 md:grid-cols-3 gap-4">
                                 <div class="amenity-item">
                                     <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-emerald"><path d="M2 4v16M2 8h20M2 17h20M22 4v16M7 8v4h10V8"/></svg>
                                     <span class="text-sm font-medium">King Size Bed</span>
@@ -194,22 +296,22 @@
                         <!-- Nearby Attractions -->
                         <div class="reveal-left">
                             <h2 class="text-2xl font-display font-bold mb-6">Nearby Attractions</h2>
-                            <ul class="flex flex-col gap-4">
-                                <li class="flex items-center justify-between p-4 bg-primary rounded-lg border border-glass">
+                            <div class="grid grid-cols-2 gap-4 attractions-grid">
+                                <div class="flex items-center justify-between p-4 bg-primary rounded-lg border border-glass attraction-item">
                                     <div>
                                         <div class="font-bold text-white mb-1">Coral Garden Reef</div>
                                         <div class="text-xs text-muted">Snorkeling & Diving Spot</div>
                                     </div>
                                     <div class="text-sm text-emerald bg-emerald-900 bg-opacity-30 px-3 py-1 rounded-full">1.2 km away</div>
-                                </li>
-                                <li class="flex items-center justify-between p-4 bg-primary rounded-lg border border-glass">
+                                </div>
+                                <div class="flex items-center justify-between p-4 bg-primary rounded-lg border border-glass attraction-item">
                                     <div>
                                         <div class="font-bold text-white mb-1">Male City Tour</div>
                                         <div class="text-xs text-muted">Cultural Experience</div>
                                     </div>
                                     <div class="text-sm text-ocean bg-ocean-900 bg-opacity-30 px-3 py-1 rounded-full">45 min speedboat</div>
-                                </li>
-                            </ul>
+                                </div>
+                            </div>
                         </div>
 
                         <hr class="m-0">
@@ -225,8 +327,8 @@
                             
                             <div class="flex flex-col gap-6">
                                 <!-- Review 1 -->
-                                <div class="bg-surface p-6 rounded-xl border border-glass">
-                                    <div class="flex justify-between mb-4">
+                                <div class="bg-surface p-6 rounded-xl border border-glass review-card">
+                                    <div class="flex justify-between mb-4 review-header">
                                         <div class="flex items-center gap-3">
                                             <div class="w-10 h-10 bg-emerald-900 rounded-full flex items-center justify-center text-emerald font-bold">JD</div>
                                             <div>
@@ -236,12 +338,12 @@
                                         </div>
                                         <div class="text-warning text-sm">★★★★★</div>
                                     </div>
-                                    <p class="text-sm text-muted">Absolutely breathtaking! The water villa was immaculate and the direct access to the ocean was a dream come true. Highly recommend for a honeymoon.</p>
+                                    <p class="text-sm text-white-90">Absolutely breathtaking! The water villa was immaculate and the direct access to the ocean was a dream come true. Highly recommend for a honeymoon.</p>
                                 </div>
                                 
                                 <!-- Review 2 -->
-                                <div class="bg-surface p-6 rounded-xl border border-glass">
-                                    <div class="flex justify-between mb-4">
+                                <div class="bg-surface p-6 rounded-xl border border-glass review-card">
+                                    <div class="flex justify-between mb-4 review-header">
                                         <div class="flex items-center gap-3">
                                             <div class="w-10 h-10 bg-ocean-900 rounded-full flex items-center justify-center text-ocean font-bold">SM</div>
                                             <div>
@@ -251,10 +353,166 @@
                                         </div>
                                         <div class="text-warning text-sm">★★★★<span class="text-muted">★</span></div>
                                     </div>
-                                    <p class="text-sm text-muted">Great food and stunning views. The only slight issue was the WiFi was occasionally spotty, but who needs internet in paradise anyway?</p>
+                                    <p class="text-sm text-white-90">Great food and stunning views. The only slight issue was the WiFi was occasionally spotty, but who needs internet in paradise anyway?</p>
                                 </div>
                             </div>
-                            <button class="btn btn-outline btn-block mt-6">Load More Reviews</button>
+
+                            <!-- Hidden Extra Reviews (revealed by Load More) -->
+                            <div id="extra-reviews" style="display:none" class="flex flex-col gap-6 mt-6">
+
+                                <!-- Review 3 -->
+                                <div class="bg-surface p-6 rounded-xl border border-glass review-card">
+                                    <div class="flex justify-between mb-4 review-header">
+                                        <div class="flex items-center gap-3">
+                                            <div class="w-10 h-10 bg-emerald-900 rounded-full flex items-center justify-center text-emerald font-bold">RK</div>
+                                            <div>
+                                                <div class="font-bold text-sm text-white">Rahul Khanna</div>
+                                                <div class="text-xs text-muted">Jan 2026</div>
+                                            </div>
+                                        </div>
+                                        <div class="text-warning text-sm">★★★★★</div>
+                                    </div>
+                                    <p class="text-sm text-white-90">The overwater villa experience was unlike anything we've ever had. Waking up to the sound of the ocean and watching fish through the glass floor was magical. Worth every rupee!</p>
+                                </div>
+
+                                <!-- Review 4 -->
+                                <div class="bg-surface p-6 rounded-xl border border-glass review-card">
+                                    <div class="flex justify-between mb-4 review-header">
+                                        <div class="flex items-center gap-3">
+                                            <div class="w-10 h-10 bg-ocean-900 rounded-full flex items-center justify-center text-ocean font-bold">PV</div>
+                                            <div>
+                                                <div class="font-bold text-sm text-white">Priya Verma</div>
+                                                <div class="text-xs text-muted">Feb 2026</div>
+                                            </div>
+                                        </div>
+                                        <div class="text-warning text-sm">★★★★<span class="text-muted">★</span></div>
+                                    </div>
+                                    <p class="text-sm text-white-90">Stunning property and impeccable service! The private pool was divine and the spa was absolutely rejuvenating. Only wish the stay was longer. Will definitely be back!</p>
+                                </div>
+
+                                <!-- Review 5 -->
+                                <div class="bg-surface p-6 rounded-xl border border-glass review-card">
+                                    <div class="flex justify-between mb-4 review-header">
+                                        <div class="flex items-center gap-3">
+                                            <div class="w-10 h-10 bg-emerald-900 rounded-full flex items-center justify-center text-emerald font-bold">AJ</div>
+                                            <div>
+                                                <div class="font-bold text-sm text-white">Arjun Joshi</div>
+                                                <div class="text-xs text-muted">Mar 2026</div>
+                                            </div>
+                                        </div>
+                                        <div class="text-warning text-sm">★★★★★</div>
+                                    </div>
+                                    <p class="text-sm text-white-90">The underwater dining experience alone was worth the entire trip! The staff was incredibly attentive, remembered every preference, and made our anniversary unforgettable. Truly 5-star in every way.</p>
+                                </div>
+
+                                <!-- Review 6 -->
+                                <div class="bg-surface p-6 rounded-xl border border-glass review-card">
+                                    <div class="flex justify-between mb-4 review-header">
+                                        <div class="flex items-center gap-3">
+                                            <div class="w-10 h-10 bg-ocean-900 rounded-full flex items-center justify-center text-ocean font-bold">NS</div>
+                                            <div>
+                                                <div class="font-bold text-sm text-white">Nisha Sharma</div>
+                                                <div class="text-xs text-muted">Apr 2026</div>
+                                            </div>
+                                        </div>
+                                        <div class="text-warning text-sm">★★★★<span class="text-muted">★</span></div>
+                                    </div>
+                                    <p class="text-sm text-white-90">Booked for our family vacation and it was perfect. Kids loved the snorkeling from the deck and we loved the peace and privacy. The mini bar was well-stocked and room service was lightning fast.</p>
+                                </div>
+
+                                <!-- Review 7 -->
+                                <div class="bg-surface p-6 rounded-xl border border-glass review-card">
+                                    <div class="flex justify-between mb-4 review-header">
+                                        <div class="flex items-center gap-3">
+                                            <div class="w-10 h-10 bg-emerald-900 rounded-full flex items-center justify-center text-emerald font-bold">DM</div>
+                                            <div>
+                                                <div class="font-bold text-sm text-white">David Martinez</div>
+                                                <div class="text-xs text-muted">May 2026</div>
+                                            </div>
+                                        </div>
+                                        <div class="text-warning text-sm">★★★★★</div>
+                                    </div>
+                                    <p class="text-sm text-white-90">As a solo traveler I was initially hesitant about the price, but the experience was absolutely priceless. The serenity, the views, and the high-speed WiFi for my work calls — perfect in every dimension!</p>
+                                </div>
+
+                                <!-- Review 8 -->
+                                <div class="bg-surface p-6 rounded-xl border border-glass review-card">
+                                    <div class="flex justify-between mb-4 review-header">
+                                        <div class="flex items-center gap-3">
+                                            <div class="w-10 h-10 bg-ocean-900 rounded-full flex items-center justify-center text-ocean font-bold">ER</div>
+                                            <div>
+                                                <div class="font-bold text-sm text-white">Elena Rostova</div>
+                                                <div class="text-xs text-muted">Jun 2026</div>
+                                            </div>
+                                        </div>
+                                        <div class="text-warning text-sm">★★★★★</div>
+                                    </div>
+                                    <p class="text-sm text-white-90">A true paradise on earth! The views are unmatched, the deck is perfect for sunbathing, and the direct lagoon access is incredible. The service was top-notch.</p>
+                                </div>
+
+                                <!-- Review 9 -->
+                                <div class="bg-surface p-6 rounded-xl border border-glass review-card">
+                                    <div class="flex justify-between mb-4 review-header">
+                                        <div class="flex items-center gap-3">
+                                            <div class="w-10 h-10 bg-emerald-900 rounded-full flex items-center justify-center text-emerald font-bold">MV</div>
+                                            <div>
+                                                <div class="font-bold text-sm text-white">Marcus Vance</div>
+                                                <div class="text-xs text-muted">Jul 2026</div>
+                                            </div>
+                                        </div>
+                                        <div class="text-warning text-sm">★★★★<span class="text-muted">★</span></div>
+                                    </div>
+                                    <p class="text-sm text-white-90">Incredible service and food options at the underwater restaurant. Highly recommend booking a guided snorkeling excursion directly from the resort lobby.</p>
+                                </div>
+
+                                <!-- Review 10 -->
+                                <div class="bg-surface p-6 rounded-xl border border-glass review-card">
+                                    <div class="flex justify-between mb-4 review-header">
+                                        <div class="flex items-center gap-3">
+                                            <div class="w-10 h-10 bg-ocean-900 rounded-full flex items-center justify-center text-ocean font-bold">YT</div>
+                                            <div>
+                                                <div class="font-bold text-sm text-white">Yuki Tanaka</div>
+                                                <div class="text-xs text-muted">Aug 2026</div>
+                                            </div>
+                                        </div>
+                                        <div class="text-warning text-sm">★★★★★</div>
+                                    </div>
+                                    <p class="text-sm text-white-90">Outstanding design of the villas! Waking up to the panoramic view of the turquoise water was breathtaking. The attention to detail in service is truly admirable.</p>
+                                </div>
+
+                                <!-- Review 11 -->
+                                <div class="bg-surface p-6 rounded-xl border border-glass review-card">
+                                    <div class="flex justify-between mb-4 review-header">
+                                        <div class="flex items-center gap-3">
+                                            <div class="w-10 h-10 bg-emerald-900 rounded-full flex items-center justify-center text-emerald font-bold">CM</div>
+                                            <div>
+                                                <div class="font-bold text-sm text-white">Carlos Mendes</div>
+                                                <div class="text-xs text-muted">Sep 2026</div>
+                                            </div>
+                                        </div>
+                                        <div class="text-warning text-sm">★★★★★</div>
+                                    </div>
+                                    <p class="text-sm text-white-90">The private infinity pool at our villa was absolutely gorgeous. Watching the sunsets from the pool while enjoying a cocktail was the highlight of our trip.</p>
+                                </div>
+
+                                <!-- Review 12 -->
+                                <div class="bg-surface p-6 rounded-xl border border-glass review-card">
+                                    <div class="flex justify-between mb-4 review-header">
+                                        <div class="flex items-center gap-3">
+                                            <div class="w-10 h-10 bg-ocean-900 rounded-full flex items-center justify-center text-ocean font-bold">CD</div>
+                                            <div>
+                                                <div class="font-bold text-sm text-white">Chloe Dubois</div>
+                                                <div class="text-xs text-muted">Oct 2026</div>
+                                            </div>
+                                        </div>
+                                        <div class="text-warning text-sm">★★★★<span class="text-muted">★</span></div>
+                                    </div>
+                                    <p class="text-sm text-white-90">The holistic spa treatments were exceptional and so relaxing. The atmosphere is serene and perfect for decompressing. A premium experience in every aspect.</p>
+                                </div>
+
+                            </div>
+
+                            <button id="btn-load-reviews" class="btn btn-outline btn-block mt-6">Load More Reviews</button>
                         </div>
                     </div>
 
@@ -281,28 +539,32 @@
                                     
                                     <div class="form-group mb-6">
                                         <label class="form-label text-xs uppercase tracking-wider">Guests</label>
-                                        <select class="form-select" required>
-                                            <option value="1">1 Adult</option>
-                                            <option value="2" selected>2 Adults</option>
-                                            <option value="3">2 Adults, 1 Child</option>
-                                            <option value="4">2 Adults, 2 Children</option>
+                                        <select id="guests-select" class="form-select" required>
+                                            <option value="1" data-extra="0">1 Adult</option>
+                                            <option value="2" data-extra="0" selected>2 Adults</option>
+                                            <option value="3" data-extra="4000">2 Adults, 1 Child (+₹4,000/night)</option>
+                                            <option value="4" data-extra="8000">2 Adults, 2 Children (+₹8,000/night)</option>
                                         </select>
                                     </div>
 
-                                    <!-- Price Breakdown (Simulated) -->
-                                    <div class="bg-primary rounded-lg p-4 mb-6 text-sm">
+                                    <!-- Price Breakdown (Dynamic) -->
+                                    <div class="bg-primary rounded-lg p-4 mb-6 text-sm" id="price-breakdown">
                                         <div class="flex justify-between mb-2 text-muted">
-                                            <span>₹24,500 x 3 nights</span>
-                                            <span>₹73,500</span>
+                                            <span id="nights-label">₹24,500 × 0 nights</span>
+                                            <span id="nights-total">₹0</span>
+                                        </div>
+                                        <div class="flex justify-between mb-2 text-muted" id="extras-row" style="display:none !important">
+                                            <span id="extras-label">Extra guests</span>
+                                            <span id="extras-total">₹0</span>
                                         </div>
                                         <div class="flex justify-between mb-2 text-muted">
-                                            <span>Taxes & Fees</span>
-                                            <span>₹8,820</span>
+                                            <span>Taxes &amp; Fees (12%)</span>
+                                            <span id="taxes-total">₹0</span>
                                         </div>
                                         <hr class="my-2 border-glass">
                                         <div class="flex justify-between font-bold text-white text-base">
                                             <span>Total</span>
-                                            <span class="text-emerald">₹82,320</span>
+                                            <span class="text-emerald" id="grand-total">₹82,320</span>
                                         </div>
                                     </div>
                                     
@@ -381,13 +643,172 @@
     <!-- Scripts -->
     <script src="../js/main.js"></script>
     <script src="../js/animations.js"></script>
-    <script src="../js/booking.js"></script>
+    <!-- booking.js excluded: resort-details uses its own self-contained price calculator -->
     <script>
-        // Simple reservation alert for demo
-        document.getElementById('btn-reserve')?.addEventListener('click', () => {
-            alert('Reservation process started! You will be redirected to payment.');
-            window.location.href = 'payment.html';
+    (function () {
+        /* ═══════════════════════════════════════════════════
+           PRICE CALCULATOR — runs immediately (DOM is ready)
+           ═══════════════════════════════════════════════════ */
+        var BASE_RATE = 24500;   // ₹ per night base (up to 2 adults)
+        var TAX_RATE  = 0.12;    // 12% taxes & fees
+
+        /* Scope to the form so there are zero ID conflicts */
+        var form       = document.getElementById('resort-booking-form');
+        var checkInEl  = document.getElementById('check-in');
+        var checkOutEl = document.getElementById('check-out');
+        var guestsEl   = document.getElementById('guests-select');
+
+        var nightsLabel = document.getElementById('nights-label');
+        var nightsTotal = document.getElementById('nights-total');
+        var extrasRow   = document.getElementById('extras-row');
+        var extrasLabel = document.getElementById('extras-label');
+        var extrasTotal = document.getElementById('extras-total');
+        var taxesTotal  = document.getElementById('taxes-total');
+        var grandTotal  = document.getElementById('grand-total');
+
+        /* Guard: if critical elements are missing, bail */
+        if (!form || !checkInEl || !checkOutEl || !guestsEl || !grandTotal) {
+            console.warn('[BookingCalc] Required elements not found — skipping init');
+            return;
+        }
+
+        function fmt(n) {
+            return '\u20b9' + Math.round(n).toLocaleString('en-IN');
+        }
+
+        function getNights() {
+            var a = checkInEl.value, b = checkOutEl.value;
+            if (!a || !b) return 0;
+            return Math.max(0, Math.floor((new Date(b) - new Date(a)) / 86400000));
+        }
+
+        function updatePrice() {
+            var nights     = getNights();
+            var selOpt     = guestsEl.options[guestsEl.selectedIndex];
+            var extraNight = parseInt(selOpt.getAttribute('data-extra') || '0', 10);
+
+            var roomCost  = BASE_RATE * nights;
+            var extraCost = extraNight * nights;
+            var subtotal  = roomCost + extraCost;
+            var taxes     = Math.round(subtotal * TAX_RATE);
+            var total     = subtotal + taxes;
+
+            nightsLabel.textContent = fmt(BASE_RATE) + ' \u00d7 ' + nights + ' night' + (nights !== 1 ? 's' : '');
+            nightsTotal.textContent = fmt(roomCost);
+
+            if (extraCost > 0) {
+                extrasRow.setAttribute('style', 'display:flex;justify-content:space-between;');
+                extrasLabel.textContent = 'Extra guests';
+                extrasTotal.textContent = fmt(extraCost);
+            } else {
+                extrasRow.setAttribute('style', 'display:none;');
+            }
+
+            taxesTotal.textContent = fmt(taxes);
+            grandTotal.textContent = nights > 0 ? fmt(total) : '\u2014';
+        }
+
+        /* ── Local Date Helpers ── */
+        function toLocalISO(d) {
+            var y = d.getFullYear();
+            var m = String(d.getMonth() + 1).padStart(2, '0');
+            var r = String(d.getDate()).padStart(2, '0');
+            return y + '-' + m + '-' + r;
+        }
+
+        var today = new Date();
+        var out3  = new Date(today);
+        out3.setDate(out3.getDate() + 3);
+
+        checkInEl.value  = toLocalISO(today);
+        checkOutEl.value = toLocalISO(out3);
+        checkInEl.min    = toLocalISO(today);
+        checkOutEl.min   = toLocalISO(today);
+
+        function validateDates() {
+            var currentTodayStr = toLocalISO(new Date());
+            
+            // Check-in check: cannot be in the past
+            if (checkInEl.value && checkInEl.value < currentTodayStr) {
+                checkInEl.value = currentTodayStr;
+            }
+            
+            // Check-out check: cannot be in the past, and must be after check-in
+            var minCheckOut = checkInEl.value || currentTodayStr;
+            if (checkOutEl.value) {
+                if (checkOutEl.value <= minCheckOut) {
+                    var next = new Date(minCheckOut);
+                    next.setDate(next.getDate() + 1);
+                    checkOutEl.value = toLocalISO(next);
+                }
+            } else {
+                var next = new Date(minCheckOut);
+                next.setDate(next.getDate() + 1);
+                checkOutEl.value = toLocalISO(next);
+            }
+            
+            checkInEl.min = currentTodayStr;
+            checkOutEl.min = minCheckOut;
+        }
+
+        /* ── Event listeners ── */
+        checkInEl.addEventListener('input', function () {
+            validateDates();
+            updatePrice();
         });
+        checkInEl.addEventListener('change', function () {
+            validateDates();
+            updatePrice();
+        });
+        checkOutEl.addEventListener('input', function () {
+            validateDates();
+            updatePrice();
+        });
+        checkOutEl.addEventListener('change', function () {
+            validateDates();
+            updatePrice();
+        });
+        guestsEl.addEventListener('change', updatePrice);
+
+        /* Run once immediately to show correct initial price */
+        updatePrice();
+
+        /* ═══════════════════════════════════════════════════
+           RESERVE NOW BUTTON
+           ═══════════════════════════════════════════════════ */
+        var btnReserve = document.getElementById('btn-reserve');
+        if (btnReserve) {
+            btnReserve.addEventListener('click', function () {
+                alert('Reservation process started! You will be redirected to payment.');
+                window.location.href = 'payment.html';
+            });
+        }
+
+        /* ═══════════════════════════════════════════════════
+           LOAD MORE REVIEWS
+           ═══════════════════════════════════════════════════ */
+        var loadBtn   = document.getElementById('btn-load-reviews');
+        var extraRevs = document.getElementById('extra-reviews');
+
+        if (loadBtn && extraRevs) {
+            loadBtn.addEventListener('click', function () {
+                var hidden = extraRevs.style.display === 'none' || !extraRevs.style.display;
+                if (hidden) {
+                    extraRevs.setAttribute('style', 'display:flex;flex-direction:column;gap:1.5rem;margin-top:1.5rem;');
+                    loadBtn.textContent = 'Show Less';
+                    loadBtn.classList.remove('btn-outline');
+                    loadBtn.classList.add('btn-secondary');
+                    extraRevs.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                } else {
+                    extraRevs.setAttribute('style', 'display:none;');
+                    loadBtn.textContent = 'Load More Reviews';
+                    loadBtn.classList.remove('btn-secondary');
+                    loadBtn.classList.add('btn-outline');
+                }
+            });
+        }
+
+    })();
     </script>
 </body>
 </html>

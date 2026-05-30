@@ -29,7 +29,7 @@
                 </div>
             </div>
 
-            <div class="container relative z-base flex flex-col md:flex-row items-center gap-12">
+            <div class="container relative z-base flex flex-col lg:flex-row items-center gap-12">
                 <!-- Hero Text -->
                 <div class="hero-text flex-1 reveal-left text-left">
                     <span class="badge badge-emerald mb-4">Discover Your Paradise</span>
@@ -452,20 +452,38 @@
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             // Date picker constraints (prevent selecting past dates)
-            const todayStr = new Date().toISOString().split('T')[0];
+            function toLocalISO(d) {
+                var y = d.getFullYear();
+                var m = String(d.getMonth() + 1).padStart(2, '0');
+                var r = String(d.getDate()).padStart(2, '0');
+                return y + '-' + m + '-' + r;
+            }
+
             const checkInInput = document.getElementById('check-in');
             const checkOutInput = document.getElementById('check-out');
             
             if (checkInInput && checkOutInput) {
+                const todayStr = toLocalISO(new Date());
                 checkInInput.setAttribute('min', todayStr);
                 checkOutInput.setAttribute('min', todayStr);
                 
-                checkInInput.addEventListener('change', () => {
-                    checkOutInput.setAttribute('min', checkInInput.value);
-                    if (checkOutInput.value && checkOutInput.value < checkInInput.value) {
+                function validateHomeDates() {
+                    const currentTodayStr = toLocalISO(new Date());
+                    if (checkInInput.value && checkInInput.value < currentTodayStr) {
+                        checkInInput.value = currentTodayStr;
+                    }
+                    const minCheckOut = checkInInput.value || currentTodayStr;
+                    if (checkOutInput.value && checkOutInput.value < minCheckOut) {
                         checkOutInput.value = '';
                     }
-                });
+                    checkInInput.min = currentTodayStr;
+                    checkOutInput.min = minCheckOut;
+                }
+
+                checkInInput.addEventListener('input', validateHomeDates);
+                checkInInput.addEventListener('change', validateHomeDates);
+                checkOutInput.addEventListener('input', validateHomeDates);
+                checkOutInput.addEventListener('change', validateHomeDates);
             }
 
             // Form submission redirect to resorts page with query parameters

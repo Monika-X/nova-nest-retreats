@@ -3,6 +3,10 @@
     display: none;
 }
 
+input[type="date"] {
+    color-scheme: dark !important;
+}
+
 
 /* ---- Large Desktop (1280px+) ---- */
 /* Default styles in style.css handle this */
@@ -41,9 +45,24 @@
         --nav-height: 70px;
     }
 
+    /* Ensure home hero subheading is visible on tablet/mobile screens */
+    .hero-text p {
+        display: block !important;
+        color: var(--white-90) !important;
+        opacity: 1 !important;
+        visibility: visible !important;
+    }
+
+    /* Elevate navbar stacking context when menu drawer is active to render above overlay */
+    body.menu-open .navbar {
+        z-index: 305 !important;
+    }
+
     /* Show hamburger */
     .hamburger {
         display: flex;
+        position: relative;
+        z-index: 310 !important;
     }
 
     /* Mobile slide-in menu */
@@ -55,46 +74,79 @@
         max-width: 85vw;
         height: 100vh;
         height: 100dvh;
-        background: var(--clr-bg-surface);
+        background: linear-gradient(135deg, rgba(10, 20, 40, 0.97) 0%, rgba(5, 10, 25, 0.99) 100%);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
         flex-direction: column;
         justify-content: flex-start;
-        padding: calc(var(--nav-height) + var(--space-xl)) var(--space-xl) var(--space-xl);
+        padding: calc(var(--nav-height) + var(--space-lg)) var(--space-lg) var(--space-lg);
         transform: translateX(100%);
         transition: transform var(--transition-base);
-        z-index: calc(var(--z-sticky) - 1);
+        z-index: 295 !important;
         overflow-y: auto;
         border-left: 1px solid var(--glass-border);
-        box-shadow: -10px 0 40px rgba(0, 0, 0, 0.4);
+        box-shadow: -10px 0 50px rgba(0, 0, 0, 0.5);
     }
 
     .nav-menu.active {
         transform: translateX(0);
     }
 
+    .nav-overlay {
+        z-index: 290 !important;
+    }
+
+    /* Fade out logo on mobile when menu is active to prevent overlapping */
+    .nav-logo {
+        transition: opacity var(--transition-base), transform var(--transition-base);
+    }
+
+    body.menu-open .nav-logo {
+        opacity: 0 !important;
+        pointer-events: none !important;
+        transform: translateX(-10px);
+    }
+
     .nav-list {
         flex-direction: column;
-        align-items: center !important;
+        align-items: flex-start !important;
         gap: var(--space-xs) !important;
         width: 100%;
+        margin-top: var(--space-lg);
     }
 
     .nav-item {
         width: 100%;
-        text-align: center;
+        text-align: left;
         border-bottom: 1px solid rgba(255, 255, 255, 0.04);
     }
 
     .nav-link {
-        padding: 0.9rem 0.5rem;
-        font-size: var(--fs-base);
+        padding: 1.1rem 0.5rem;
+        font-family: var(--font-display);
+        font-weight: var(--fw-semibold);
+        font-size: var(--fs-lg) !important;
         width: 100%;
-        justify-content: center !important;
-        text-align: center !important;
+        justify-content: flex-start !important;
+        text-align: left !important;
+        color: var(--white-90) !important;
+        transition: all var(--transition-fast);
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
     }
 
-    /* Hide exit symbol from top when menu is active */
+    .nav-link:hover,
+    .nav-link.active {
+        color: var(--emerald-400) !important;
+        padding-left: 0.75rem;
+    }
+
+    /* Keep hamburger active close button visible on top of mobile menu drawer */
     .hamburger.active {
-        display: none !important;
+        display: flex !important;
+        position: relative;
+        z-index: 300 !important;
     }
 
     /* Hide profile dropdown when menu drawer is open */
@@ -153,12 +205,7 @@
 
     /* Mobile Close Button Style */
     .mobile-close-container {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        width: 100%;
-        margin-top: var(--space-xl);
-        padding-top: var(--space-md);
+        display: none !important;
     }
 
     .mobile-close-btn {
@@ -459,14 +506,19 @@
     }
 
     /* Testimonial slider: ensure full-width slides */
-    #testimonial-track > div {
+    #testimonial-track>div {
         min-width: 100% !important;
         width: 100% !important;
     }
 
     /* Section padding */
-    .py-20 { padding-block: 3.5rem !important; }
-    .py-24 { padding-block: 4rem !important; }
+    .py-20 {
+        padding-block: 3.5rem !important;
+    }
+
+    .py-24 {
+        padding-block: 4rem !important;
+    }
 }
 
 
@@ -547,7 +599,8 @@
 
     /* Pricing cards — shrink font so ₹15,000 doesn't break at 480px */
     .card-pricing-price {
-        font-size: 2rem !important;   /* 32px instead of 40px */
+        font-size: 2rem !important;
+        /* 32px instead of 40px */
     }
 
     /* Reduce card horizontal padding to give price more room */
@@ -557,9 +610,73 @@
     }
 
     /* Testimonial slider: ensure full-width slides on small phones */
-    #testimonial-track > div {
+    #testimonial-track>div {
         min-width: 100% !important;
         width: 100% !important;
+    }
+
+    /* Flash Sale Countdown Mobile Polish */
+    .flash-sale-banner .glass-strong {
+        padding: 1.25rem 1rem !important;
+    }
+
+    #flash-countdown {
+        gap: 0.5rem !important;
+    }
+
+    /* Flash Sale Banner Responsive Tuning (Mobile L/M) */
+    .flash-sale-banner {
+        width: 100% !important;
+        max-width: 100% !important;
+        box-sizing: border-box !important;
+        overflow: hidden !important;
+    }
+
+    .flash-sale-banner > div {
+        padding: 2rem 1.25rem !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        box-sizing: border-box !important;
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        gap: 1.5rem !important;
+    }
+
+    .flash-sale-banner .flex-1 {
+        width: 100% !important;
+        max-width: 100% !important;
+        box-sizing: border-box !important;
+    }
+
+    .flash-sale-banner h2 {
+        font-size: clamp(1.4rem, 6vw, 1.85rem) !important;
+        line-height: 1.3 !important;
+        margin-bottom: 0.75rem !important;
+        text-align: center !important;
+        word-wrap: break-word !important;
+        overflow-wrap: break-word !important;
+    }
+
+    .flash-sale-banner p {
+        font-size: 0.9rem !important;
+        line-height: 1.55 !important;
+        margin: 0 auto 2.5rem auto !important;
+        max-width: 100% !important;
+        text-align: center !important;
+        word-wrap: break-word !important;
+        overflow-wrap: break-word !important;
+    }
+
+    .flash-sale-banner .btn {
+        margin-top: 1.5rem !important;
+        padding: 0.7rem 1.5rem !important;
+        font-size: 0.85rem !important;
+        display: inline-flex !important;
+        justify-content: center !important;
+        align-items: center !important;
+        margin-inline: auto !important;
+        width: auto !important;
     }
 }
 
@@ -648,6 +765,10 @@
 
     .sm\:items-center {
         align-items: center !important;
+    }
+
+    .sm\:grid-cols-2 {
+        grid-template-columns: repeat(2, 1fr) !important;
     }
 
     .sm\:grid-cols-3 {
@@ -863,6 +984,18 @@
     .lg\:translate-x-1\/2 {
         transform: translateX(50%) !important;
     }
+
+    .lg\:justify-end {
+        justify-content: flex-end !important;
+    }
+
+    .lg\:border-t-0 {
+        border-top: 0 !important;
+    }
+
+    .lg\:border-l {
+        border-left: 1px solid var(--glass-border) !important;
+    }
 }
 
 /* ---- Dashboard Sidebar Drawer Utilities ---- */
@@ -898,7 +1031,7 @@
         background: rgba(2, 6, 23, 0.7);
         backdrop-filter: blur(4px);
         -webkit-backdrop-filter: blur(4px);
-        z-index: 9998;
+        z-index: 1100 !important;
         opacity: 0;
         visibility: hidden;
         transition: all var(--transition-base);
@@ -1230,7 +1363,8 @@
 
     /* Pricing cards — shrink large price font so ₹15,000 fits on one line */
     .card-pricing-price {
-        font-size: 1.5rem !important;   /* 24px — safe at 320px with reduced padding */
+        font-size: 1.5rem !important;
+        /* 24px — safe at 320px with reduced padding */
         white-space: nowrap !important;
         flex-wrap: nowrap !important;
     }
@@ -1275,5 +1409,784 @@
     .rc-price {
         white-space: nowrap !important;
         font-size: 0.875rem !important;
+    }
+}
+
+/* ============================================================
+   SYSTEM BREAKPOINTS ENHANCEMENTS
+   Breakpoints: 320px, 375px, 425px, 768px, 1024px, 1280px, 1440px, 1920px
+   ============================================================ */
+
+/* ---- 320px (Mobile S) ---- */
+@media (max-width: 320px) {
+    .container {
+        width: 95% !important;
+        padding-inline: 0.5rem !important;
+    }
+
+    /* Enforce rigid nowrap on pricing columns and details */
+    .price-row {
+        flex-wrap: nowrap !important;
+        justify-content: space-between !important;
+        gap: 0.25rem !important;
+    }
+
+    .card-resort-price,
+    .price-wrapper,
+    .card-pricing-price {
+        font-size: 0.8rem !important;
+        white-space: nowrap !important;
+        flex-shrink: 0 !important;
+    }
+
+    .card-resort-price span,
+    .card-pricing-price span {
+        font-size: 0.6rem !important;
+        white-space: nowrap !important;
+    }
+
+    .btn-sm,
+    .view-details-btn {
+        padding: 0.35rem 0.55rem !important;
+        font-size: 0.65rem !important;
+        flex-shrink: 0 !important;
+        white-space: nowrap !important;
+    }
+
+    /* Prevent clipping on header/logo */
+    .logo-primary {
+        font-size: 0.95rem !important;
+    }
+
+    .logo-icon svg {
+        width: 26px !important;
+        height: 26px !important;
+    }
+}
+
+/* ---- 375px (Mobile M) ---- */
+@media (max-width: 375px) {
+    .container {
+        width: 92% !important;
+    }
+
+    .logo-primary {
+        font-size: 1.05rem !important;
+    }
+
+    .card-resort-footer {
+        flex-direction: column !important;
+        align-items: stretch !important;
+        gap: 0.75rem !important;
+    }
+
+    .card-resort-footer .btn {
+        width: 100% !important;
+        justify-content: center !important;
+    }
+
+    .card-resort-price {
+        justify-content: center !important;
+        margin: 0 auto !important;
+    }
+}
+
+/* ---- 425px (Mobile L) ---- */
+@media (max-width: 425px) {
+    .container {
+        width: 90% !important;
+    }
+
+    /* Enforce form elements to be 100% width */
+    .form-group,
+    .form-input,
+    .form-select,
+    .form-textarea {
+        width: 100% !important;
+    }
+
+    .newsletter-form {
+        flex-direction: column !important;
+        gap: 0.75rem !important;
+    }
+
+    .newsletter-input,
+    .newsletter-btn {
+        width: 100% !important;
+        border-radius: var(--radius-full) !important;
+    }
+    /* Resort details: form and gallery handled by page-level inline styles */
+}
+
+/* ---- 768px (Tablet) ---- */
+@media (max-width: 768px) {
+    /* Resort details: booking-card, amenity, attraction, review styles
+       are handled by page-level inline styles in resort-details.html */
+    .hero-content {
+        flex-direction: column !important;
+        text-align: center !important;
+    }
+
+    .footer-grid {
+        grid-template-columns: 1fr !important;
+        gap: 2rem !important;
+    }
+
+    .footer-col {
+        text-align: center !important;
+        align-items: center !important;
+    }
+
+    .footer-heading::after {
+        left: 50% !important;
+        transform: translateX(-50%) !important;
+    }
+
+    /* Fluid typography overrides for hardcoded sizes */
+    .text-4xl {
+        font-size: clamp(1.8rem, 6vw, 2.5rem) !important;
+    }
+
+    .text-5xl {
+        font-size: clamp(2rem, 7vw, 3rem) !important;
+    }
+
+    /* Accessibility touch targets */
+    .btn,
+    .btn-sm,
+    .btn-lg,
+    .nav-link,
+    .social-link,
+    .profile-btn,
+    .hamburger,
+    .mobile-close-btn,
+    .form-input,
+    .form-select,
+    .form-textarea {
+        min-height: 44px;
+        min-width: 44px;
+    }
+}
+
+/* ---- 1024px (Tablet Landscape) ---- */
+@media (max-width: 1024px) {
+    .nav-menu {
+        display: flex !important;
+        /* Slide drawer requires flex */
+    }
+
+    /* Hide desktop profile link inside header if needed */
+    .desktop-only {
+        display: none !important;
+    }
+
+    .hero-text {
+        text-align: center !important;
+    }
+
+    .hero-text .flex.gap-4 {
+        justify-content: center !important;
+    }
+}
+
+/* ---- 1280px (Laptop L) ---- */
+@media (max-width: 1280px) {
+    .container {
+        max-width: 1140px;
+    }
+}
+
+/* ---- 1440px (Desktop L) ---- */
+@media (max-width: 1440px) {
+    .container {
+        max-width: 1280px;
+    }
+}
+
+/* ---- 1920px (Ultra-wide Screens) ---- */
+@media (min-width: 1920px) {
+    .container {
+        max-width: 1600px !important;
+    }
+
+    html {
+        font-size: 18px !important;
+        /* Scale up slightly on ultra-wides */
+    }
+}
+
+/* ============================================================
+   INDEX PAGE MOBILE OPTIMIZATIONS
+   ============================================================ */
+@media (max-width: 768px) {
+    .hero-text {
+        text-align: center !important;
+    }
+
+    .hero-text .flex.gap-4 {
+        justify-content: center !important;
+    }
+
+    /* ── Plan Your Retreat box at 768px ── */
+    .hero-booking {
+        width: 100% !important;
+        max-width: 100% !important;
+        flex: none !important;
+    }
+
+    .hero-booking .card-glass {
+        padding: 1.5rem !important;
+        width: 100% !important;
+        box-sizing: border-box !important;
+    }
+
+    /* Stack check-in / check-out date fields vertically */
+    .hero-booking .flex.gap-4 {
+        flex-direction: column !important;
+        gap: 0.75rem !important;
+    }
+
+    .hero-booking .form-group {
+        width: 100% !important;
+    }
+
+    .hero-booking .form-select,
+    .hero-booking .form-input {
+        width: 100% !important;
+        box-sizing: border-box !important;
+    }
+
+    .hero-booking h3 {
+        font-size: 1.25rem !important;
+    }
+
+    .p-8 {
+        padding: 1.5rem !important;
+    }
+
+    .p-10 {
+        padding: 1.75rem !important;
+    }
+
+    .p-12 {
+        padding: 2rem !important;
+    }
+
+    .p-16 {
+        padding: 2.5rem !important;
+    }
+}
+
+@media (max-width: 480px) {
+
+    /* Savings & Split Estimator on Mobile */
+    .card .bg-primary.flex {
+        flex-direction: column !important;
+        align-items: center !important;
+        text-align: center !important;
+        gap: 1rem !important;
+        padding: 1.25rem !important;
+    }
+
+    #split-display-per {
+        font-size: 2.25rem !important;
+    }
+
+    .card .flex.justify-between.items-center {
+        flex-direction: column !important;
+        align-items: center !important;
+        gap: 0.5rem !important;
+    }
+
+    #calc-display-final {
+        font-size: 2.25rem !important;
+    }
+
+    .card-resort-body {
+        padding: 1rem !important;
+    }
+}
+
+@media (max-width: 375px) {
+    .hero-text .flex.gap-4 {
+        flex-direction: column !important;
+        align-items: stretch !important;
+    }
+
+    .hero-text .btn {
+        width: 100% !important;
+        text-align: center !important;
+    }
+
+    /* Flash Sale Banner Mobile M tuning */
+    .flash-sale-banner h2 {
+        font-size: 1.5rem !important;
+    }
+    
+    .flash-sale-banner p {
+        font-size: 0.9rem !important;
+    }
+}
+
+@media (max-width: 320px) {
+    .flash-sale-banner .glass-strong {
+        padding: 1rem 0.75rem !important;
+    }
+
+    #flash-countdown {
+        gap: 0.25rem !important;
+    }
+}
+
+/* ============================================================
+   16. BOOKINGS PAGE RESPONSIVE POLISH
+   ============================================================ */
+@media (max-width: 768px) {
+    /* Adjust page margins for dashboard pages on mobile */
+    .dash-layout > div {
+        padding: 1.25rem 1rem !important;
+    }
+
+    .booking-card {
+        border-radius: var(--radius-md) !important;
+    }
+
+    .booking-card .flex-1.p-6 {
+        padding: 1.25rem !important;
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 1.25rem !important;
+    }
+
+    /* Stack details and buttons vertically and left-aligned */
+    .booking-card .flex-1.p-6 > div:first-child {
+        width: 100% !important;
+    }
+
+    /* Change grid columns of check-in/out details so they don't squash */
+    .booking-card .grid-cols-3 {
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 1rem !important;
+    }
+
+    .booking-card .grid-cols-3 > div:nth-child(3) {
+        grid-column: span 2 !important;
+        margin-top: 0.25rem !important;
+    }
+
+    /* Align price and action buttons beautifully to the left on mobile */
+    .booking-card .flex-col.items-end {
+        align-items: flex-start !important;
+        text-align: left !important;
+        width: 100% !important;
+        min-width: 0 !important;
+        margin-top: 0.5rem !important;
+        gap: 1rem !important;
+    }
+
+    .booking-card .flex-col.items-end .text-right {
+        text-align: left !important;
+        width: 100% !important;
+    }
+
+    .booking-card .flex-col.items-end .flex.gap-2 {
+        width: 100% !important;
+        justify-content: flex-start !important;
+    }
+
+    .booking-card .flex-col.items-end .btn {
+        flex: 1 !important;
+        text-align: center !important;
+        justify-content: center !important;
+    }
+}
+
+/* ============================================================
+   17. DASHBOARD PAGES RESPONSIVE REFINEMENTS
+   ============================================================ */
+@media (max-width: 1024px) {
+    .dash-main {
+        padding: 1.25rem 1rem !important;
+        gap: 1.25rem !important;
+    }
+}
+
+@media (max-width: 768px) {
+    /* Main Content Area */
+    .dash-main {
+        padding: 1rem 0.75rem !important;
+        gap: 1.25rem !important;
+    }
+
+    /* Stats Grid */
+    .stats-grid, .stats-row {
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 1rem !important;
+    }
+
+    /* Stats Cards Values */
+    .stat-value, .sc-val {
+        font-size: 1.45rem !important;
+    }
+
+    /* Dashboard Headers Stacking */
+    .dash-header-wrap, .dash-header {
+        flex-direction: column !important;
+        align-items: stretch !important;
+        gap: 1rem !important;
+    }
+
+    /* Align buttons full width side-by-side or stacked on very small screens */
+    .dash-header-wrap > *:last-child, 
+    .dash-header > *:last-child {
+        width: 100% !important;
+        display: flex !important;
+        gap: 0.75rem !important;
+        margin-top: 0.25rem !important;
+    }
+
+    .dash-header-wrap .btn, 
+    .dash-header-wrap .btn-export,
+    .dash-header-wrap .btn-outline,
+    .dash-header .btn,
+    .dash-header .btn-export,
+    .dash-header .btn-outline {
+        width: 100% !important;
+        flex: 1 1 auto !important;
+        justify-content: center !important;
+        text-align: center !important;
+    }
+
+    /* Toolbars & Filter tabs wrapping/stacking */
+    .table-toolbar, .toolbar {
+        flex-direction: column !important;
+        align-items: stretch !important;
+        gap: 1rem !important;
+    }
+
+    .table-toolbar > div, .toolbar > div {
+        flex-direction: column !important;
+        align-items: stretch !important;
+        gap: 0.85rem !important;
+        width: 100% !important;
+    }
+
+    /* Search wrapper absolute alignment & search icon positioning */
+    .search-input-wrap, .search-wrap {
+        position: relative !important;
+        max-width: none !important;
+        width: 100% !important;
+        flex: 1 1 100% !important;
+    }
+
+    .search-input-wrap svg, .search-wrap svg {
+        position: absolute !important;
+        left: 0.85rem !important;
+        top: 50% !important;
+        transform: translateY(-50%) !important;
+        z-index: 2 !important;
+        pointer-events: none !important;
+        width: 16px !important;
+        height: 16px !important;
+    }
+
+    input.search-input, input.search-inp {
+        width: 100% !important;
+        padding-left: 2.5rem !important;
+        box-sizing: border-box !important;
+    }
+
+    select.search-inp, select.sel-inp {
+        width: 100% !important;
+        max-width: none !important;
+        box-sizing: border-box !important;
+    }
+
+    .filter-tabs, .role-tabs {
+        width: 100% !important;
+        display: flex !important;
+        flex-wrap: wrap !important;
+        gap: 0.4rem !important;
+    }
+
+    .ftab, .rtab {
+        flex: 1 1 auto !important;
+        text-align: center !important;
+        padding: 0.45rem 0.75rem !important;
+        font-size: 0.75rem !important;
+    }
+
+    /* Pagination controls */
+    .pagination {
+        flex-direction: column !important;
+        gap: 1rem !important;
+        align-items: center !important;
+        text-align: center !important;
+        padding: 1rem !important;
+    }
+
+    .pagination-btns, .pg-btns {
+        justify-content: center !important;
+        width: 100% !important;
+        flex-wrap: wrap !important;
+        gap: 0.35rem !important;
+    }
+
+    .pg-btn {
+        padding: 0.3rem 0.55rem !important;
+        font-size: 0.75rem !important;
+    }
+}
+
+@media (max-width: 576px) {
+    /* Stats Grid Collapse */
+    .stats-grid, .stats-row {
+        grid-template-columns: 1fr !important;
+        gap: 0.85rem !important;
+    }
+}
+
+/* =====================================================
+   ADMIN TOOLBAR – GLOBAL MOBILE FIXES
+   Applied last so nothing overrides these
+   ===================================================== */
+
+/* --- Sidebar drawer & layout on mobile --- */
+@media (max-width: 1024px) {
+    .dash-layout {
+        grid-template-columns: 1fr !important;
+        display: block !important;
+    }
+    .dash-sidebar {
+        position: fixed !important;
+        top: 0 !important;
+        left: 0 !important;
+        width: 270px !important;
+        max-width: 80vw !important;
+        height: 100vh !important;
+        z-index: 1200 !important;
+        transform: translateX(-100%) !important;
+        transition: transform 0.3s ease !important;
+        overflow-y: auto !important;
+    }
+    .dash-sidebar.active {
+        transform: translateX(0) !important;
+    }
+    .dash-main {
+        width: 100% !important;
+        min-width: 0 !important;
+    }
+    .dash-mobile-bar {
+        display: flex !important;
+    }
+    .dash-overlay {
+        display: block !important;
+    }
+    
+    /* High contrast text styling for dashboard sidebar link items in mobile drawer */
+    .dash-sidebar .sidebar-link {
+        color: var(--white-90) !important;
+    }
+    
+    .dash-sidebar .sidebar-link:hover,
+    .dash-sidebar .sidebar-link.active {
+        color: var(--emerald-400) !important;
+    }
+    
+    .dash-sidebar .sidebar-label {
+        color: rgba(255, 255, 255, 0.45) !important;
+    }
+}
+
+/* --- Toolbar column stacking at 768px --- */
+@media (max-width: 768px) {
+    .table-toolbar,
+    .toolbar {
+        flex-direction: column !important;
+        align-items: stretch !important;
+        gap: 0.85rem !important;
+        width: 100% !important;
+    }
+
+    /* Inner wrapper (admin-bookings uses .toolbar-inner) */
+    .toolbar-inner,
+    .table-toolbar > div,
+    .toolbar > div {
+        flex-direction: column !important;
+        align-items: stretch !important;
+        gap: 0.85rem !important;
+        width: 100% !important;
+        flex: unset !important;
+    }
+
+    /* Search wrappers */
+    .search-input-wrap,
+    .search-wrap {
+        position: relative !important;
+        width: 100% !important;
+        max-width: none !important;
+        flex: unset !important;
+        min-width: 0 !important;
+    }
+
+    /* Icon inside search box */
+    .search-input-wrap svg,
+    .search-wrap svg {
+        position: absolute !important;
+        left: 0.85rem !important;
+        top: 50% !important;
+        transform: translateY(-50%) !important;
+        z-index: 2 !important;
+        pointer-events: none !important;
+        width: 15px !important;
+        height: 15px !important;
+    }
+
+    /* Text inputs */
+    input.search-input,
+    input.search-inp {
+        width: 100% !important;
+        padding-left: 2.5rem !important;
+        box-sizing: border-box !important;
+        font-size: 16px !important;    /* prevents iOS zoom */
+    }
+
+    /* Select dropdowns */
+    select.search-inp,
+    select.sel-inp {
+        width: 100% !important;
+        max-width: none !important;
+        box-sizing: border-box !important;
+        font-size: 16px !important;
+    }
+
+    /* Filter tab rows */
+    .filter-tabs,
+    .role-tabs {
+        width: 100% !important;
+        display: flex !important;
+        flex-wrap: wrap !important;
+        gap: 0.4rem !important;
+    }
+
+    .ftab,
+    .rtab {
+        flex: 1 1 auto !important;
+        text-align: center !important;
+        padding: 0.45rem 0.5rem !important;
+        font-size: 0.73rem !important;
+    }
+
+    /* Count labels */
+    #user-count,
+    #resort-count {
+        margin-left: 0 !important;
+        text-align: center !important;
+        width: 100% !important;
+    }
+}
+
+/* --- 425px (Mobile L) --- */
+@media (max-width: 425px) {
+    .ftab, .rtab {
+        padding: 0.4rem 0.35rem !important;
+        font-size: 0.7rem !important;
+    }
+    .filter-tabs, .role-tabs { gap: 0.35rem !important; }
+}
+
+/* --- 375px (Mobile M) --- */
+@media (max-width: 375px) {
+    .ftab, .rtab { font-size: 0.65rem !important; }
+    input.search-input,
+    input.search-inp { font-size: 14px !important; }
+    select.search-inp,
+    select.sel-inp { font-size: 14px !important; }
+}
+
+/* --- 320px (Mobile S) --- */
+@media (max-width: 320px) {
+    .ftab, .rtab {
+        font-size: 0.6rem !important;
+        padding: 0.35rem 0.25rem !important;
+    }
+    .filter-tabs, .role-tabs { gap: 0.25rem !important; }
+    input.search-input,
+    input.search-inp { font-size: 13px !important; }
+    select.search-inp,
+    select.sel-inp { font-size: 13px !important; }
+    .dash-main { padding: 0.75rem !important; }
+}
+
+/* ============================================================
+   17. OFFERS PAGE RESPONSIVE POLISH
+   ============================================================ */
+
+/* Flash sale description spacing on desktop vs mobile */
+.flash-sale-desc {
+    font-size: 1rem;
+    line-height: 1.6;
+    color: var(--white-90);
+    margin-bottom: 2rem;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    white-space: normal;
+    display: block;
+    max-width: 600px;
+    text-align: left;
+    margin-inline: 0;
+}
+
+@media (max-width: 1024px) {
+    .flash-sale-desc {
+        text-align: center !important;
+        margin-inline: auto !important;
+        margin-bottom: 2.5rem !important;
+    }
+}
+
+@media (max-width: 768px) {
+    /* Coupon cards container and padding on mobile */
+    .coupon-card {
+        padding: 1.5rem !important;
+    }
+
+    /* Referral section adjustments for tablet/mobile */
+    .referral-col-info,
+    .referral-col-action {
+        padding: 2.5rem 1.5rem !important;
+    }
+}
+
+@media (max-width: 480px) {
+    .coupon-card {
+        padding: 1.25rem !important;
+    }
+
+    .coupon-code {
+        font-size: 0.95rem !important;
+        padding: 0.4rem 0.75rem !important;
+    }
+
+    /* Stacking referral status items vertically on small screens */
+    #referrals-list .flex.justify-between.items-center {
+        flex-direction: column !important;
+        align-items: flex-start !important;
+        gap: 0.5rem !important;
+        padding: 0.85rem !important;
+    }
+
+    #referrals-list .text-right {
+        text-align: left !important;
+        width: 100% !important;
+        display: flex !important;
+        justify-content: space-between !important;
+        align-items: center !important;
+    }
+
+    /* Referral section padding for mobile */
+    .referral-col-info,
+    .referral-col-action {
+        padding: 2rem 1rem !important;
     }
 }

@@ -10,7 +10,6 @@
     <link rel="stylesheet" href="../css/responsive.css">
     <style>
         .dash-layout { display: grid; grid-template-columns: 260px 1fr; min-height: 100vh; }
-        @media(max-width:1024px){ .dash-layout { grid-template-columns: 1fr; } .dash-sidebar { display: none; } }
         .dash-sidebar { position: sticky; top: var(--nav-height); height: calc(100vh - var(--nav-height)); background: rgba(5,10,22,0.98); border-right: 1px solid var(--glass-border); overflow-y: auto; padding: 1.5rem 1rem; display: flex; flex-direction: column; gap: 0.2rem; }
         .sidebar-label { font-size: 0.65rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.14em; color: var(--clr-text-muted); padding: 0.5rem 0.75rem; margin-top: 1.25rem; }
         .sidebar-link { display: flex; align-items: center; gap: 0.75rem; padding: 0.65rem 0.9rem; border-radius: 10px; font-size: 0.85rem; font-weight: 500; color: var(--clr-text-secondary); transition: all 0.2s; text-decoration: none; }
@@ -110,6 +109,63 @@
         .form-ctrl::placeholder { color: var(--clr-text-muted); }
         .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
         .modal-actions { display: flex; gap: 0.75rem; justify-content: flex-end; margin-top: 1.5rem; }
+
+        /* ---- Mobile Responsive Polish ---- */
+        @media (max-width: 768px) {
+            .toolbar {
+                flex-direction: column !important;
+                align-items: stretch !important;
+                gap: 0.85rem !important;
+                width: 100% !important;
+            }
+            .search-wrap {
+                position: relative !important;
+                max-width: none !important;
+                width: 100% !important;
+                flex: unset !important;
+            }
+            .search-wrap svg {
+                position: absolute !important;
+                left: 0.85rem !important;
+                top: 50% !important;
+                transform: translateY(-50%) !important;
+                z-index: 2 !important;
+                display: block !important;
+                width: 15px !important;
+                height: 15px !important;
+                pointer-events: none !important;
+            }
+            input.search-inp {
+                width: 100% !important;
+                padding-left: 2.5rem !important;
+                box-sizing: border-box !important;
+                font-size: 16px !important;
+            }
+            select.search-inp {
+                width: 100% !important;
+                max-width: none !important;
+                box-sizing: border-box !important;
+                font-size: 16px !important;
+            }
+            .view-toggle {
+                width: 100% !important;
+                justify-content: center !important;
+            }
+            #resort-count {
+                margin-left: 0 !important;
+                text-align: center !important;
+                width: 100% !important;
+            }
+        }
+        @media (max-width: 425px) {
+            .view-toggle { display: none !important; }
+        }
+        @media (max-width: 375px) {
+            input.search-inp, select.search-inp { font-size: 14px !important; }
+        }
+        @media (max-width: 320px) {
+            input.search-inp, select.search-inp { font-size: 13px !important; }
+        }
     </style>
 </head>
 <body>
@@ -152,7 +208,7 @@
             <!-- MAIN -->
             <div class="dash-main">
                 <!-- Header -->
-                <div class="reveal" style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:1rem;">
+                <div class="reveal dash-header" style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:1rem;">
                     <div>
                         <h1 style="font-size:1.75rem;font-weight:800;color:white;font-family:var(--font-display);">Manage Resorts</h1>
                         <p style="color:var(--clr-text-muted);font-size:0.85rem;margin-top:0.3rem;">Add, edit and manage all resort listings, pricing and availability.</p>
@@ -188,21 +244,21 @@
                 <div class="toolbar reveal">
                     <div class="search-wrap">
                         <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-                        <input class="search-inp" type="text" placeholder="Search resorts…" oninput="searchResorts(this.value)">
+                        <input class="search-inp" type="text" id="search-input" placeholder="Search resorts…" oninput="applyFilters()">
                     </div>
-                    <select class="search-inp" style="max-width:180px;" onchange="filterByStatus(this.value)">
+                    <select class="search-inp" id="status-filter" onchange="applyFilters()">
                         <option value="all">All Status</option>
                         <option value="active">Active</option>
                         <option value="maintenance">Maintenance</option>
                         <option value="inactive">Inactive</option>
                     </select>
-                    <select class="search-inp" style="max-width:180px;">
-                        <option>All Locations</option>
-                        <option>Maldives</option>
-                        <option>Bali</option>
-                        <option>Goa</option>
-                        <option>Phuket</option>
-                        <option>Greece</option>
+                    <select class="search-inp" id="location-filter" onchange="applyFilters()">
+                        <option value="all">All Locations</option>
+                        <option value="maldives">Maldives</option>
+                        <option value="bali">Bali</option>
+                        <option value="goa">Goa</option>
+                        <option value="phuket">Phuket</option>
+                        <option value="greece">Greece</option>
                     </select>
                     <div class="view-toggle">
                         <button class="view-btn active" id="grid-view-btn" onclick="setView('grid')" title="Grid view">
@@ -225,7 +281,7 @@
                             <div class="resort-card-status"><span class="badge-active">● Active</span></div>
                             <div class="resort-card-actions">
                                 <button class="card-act-btn" title="Edit" onclick="openModal()"><svg viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button>
-                                <button class="card-act-btn del" title="Delete"><svg viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/></svg></button>
+                                <button class="card-act-btn del" title="Delete"><svg viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4h6v2"/></svg></button>
                             </div>
                         </div>
                         <div class="resort-card-body">
@@ -250,7 +306,7 @@
                             <div class="resort-card-status"><span class="badge-active">● Active</span></div>
                             <div class="resort-card-actions">
                                 <button class="card-act-btn" onclick="openModal()"><svg viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button>
-                                <button class="card-act-btn del"><svg viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/></svg></button>
+                                <button class="card-act-btn del"><svg viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4h6v2"/></svg></button>
                             </div>
                         </div>
                         <div class="resort-card-body">
@@ -275,7 +331,7 @@
                             <div class="resort-card-status"><span class="badge-active">● Active</span></div>
                             <div class="resort-card-actions">
                                 <button class="card-act-btn" onclick="openModal()"><svg viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button>
-                                <button class="card-act-btn del"><svg viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/></svg></button>
+                                <button class="card-act-btn del"><svg viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4h6v2"/></svg></button>
                             </div>
                         </div>
                         <div class="resort-card-body">
@@ -300,7 +356,7 @@
                             <div class="resort-card-status"><span class="badge-maintenance">⚙ Maintenance</span></div>
                             <div class="resort-card-actions">
                                 <button class="card-act-btn" onclick="openModal()"><svg viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button>
-                                <button class="card-act-btn del"><svg viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/></svg></button>
+                                <button class="card-act-btn del"><svg viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4h6v2"/></svg></button>
                             </div>
                         </div>
                         <div class="resort-card-body">
@@ -325,7 +381,7 @@
                             <div class="resort-card-status"><span class="badge-active">● Active</span></div>
                             <div class="resort-card-actions">
                                 <button class="card-act-btn" onclick="openModal()"><svg viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button>
-                                <button class="card-act-btn del"><svg viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/></svg></button>
+                                <button class="card-act-btn del"><svg viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4h6v2"/></svg></button>
                             </div>
                         </div>
                         <div class="resort-card-body">
@@ -350,7 +406,7 @@
                             <div class="resort-card-status"><span class="badge-active">● Active</span></div>
                             <div class="resort-card-actions">
                                 <button class="card-act-btn" onclick="openModal()"><svg viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button>
-                                <button class="card-act-btn del"><svg viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/></svg></button>
+                                <button class="card-act-btn del"><svg viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4h6v2"/></svg></button>
                             </div>
                         </div>
                         <div class="resort-card-body">
@@ -371,8 +427,8 @@
                 </div><!-- /resorts-grid -->
 
                 <!-- Load More -->
-                <div style="display:flex;justify-content:center;padding-bottom:1rem;" class="reveal">
-                    <button class="btn btn-outline" style="font-size:0.85rem;">Load More Resorts (36 remaining)</button>
+                <div id="load-more-container" style="display:flex;justify-content:center;padding-bottom:1rem;" class="reveal">
+                    <button id="load-more-btn" class="btn btn-outline" style="font-size:0.85rem;" onclick="loadMoreResorts()">Load More Resorts (36 remaining)</button>
                 </div>
 
             </div><!-- /dash-main -->
@@ -485,7 +541,7 @@
                     <div class="resort-card-status">${statusHtml}</div>
                     <div class="resort-card-actions">
                         <button class="card-act-btn" title="Edit" onclick="openModal()"><svg viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button>
-                        <button class="card-act-btn del" title="Delete"><svg viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/></svg></button>
+                        <button class="card-act-btn del" title="Delete"><svg viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4h6v2"/></svg></button>
                     </div>
                 </div>
                 <div class="resort-card-body">
@@ -531,6 +587,7 @@
                 }
             }
 
+            populateLocationFilter();
             updateCount();
             e.target.reset();
         }
@@ -547,54 +604,84 @@
         // Global Event Delegation for Delete Buttons
         document.getElementById('resorts-grid')?.addEventListener('click', function(e) {
             const delBtn = e.target.closest('.card-act-btn.del');
-            if (delBtn) {
-                const card = delBtn.closest('.resort-admin-card');
-                if (card) {
-                    const status = card.dataset.status;
-                    card.remove();
+            if (!delBtn) return;
 
-                    // Decrement Dashboard Stats
-                    const totalResortsStat = document.querySelector('.stats-grid .stat-card:nth-child(1) .stat-value');
-                    if (totalResortsStat) {
-                        let currentTotal = parseInt(totalResortsStat.getAttribute('data-count')) || 0;
-                        currentTotal = Math.max(0, currentTotal - 1);
-                        totalResortsStat.setAttribute('data-count', currentTotal);
-                        totalResortsStat.innerText = currentTotal;
-                    }
-                    if (status === 'active') {
-                        const activeStat = document.querySelector('.stats-grid .stat-card:nth-child(2) .stat-value');
-                        if (activeStat) {
-                            let currentActive = parseInt(activeStat.getAttribute('data-count')) || 0;
-                            currentActive = Math.max(0, currentActive - 1);
-                            activeStat.setAttribute('data-count', currentActive);
-                            activeStat.innerText = currentActive;
-                        }
-                    } else if (status === 'maintenance') {
-                        const maintStat = document.querySelector('.stats-grid .stat-card:nth-child(3) .stat-value');
-                        if (maintStat) {
-                            let currentMaint = parseInt(maintStat.getAttribute('data-count')) || 0;
-                            currentMaint = Math.max(0, currentMaint - 1);
-                            maintStat.setAttribute('data-count', currentMaint);
-                            maintStat.innerText = currentMaint;
-                        }
-                    }
+            const card = delBtn.closest('.resort-admin-card');
+            if (!card) return;
 
-                    updateCount();
+            // Smooth fade-out + scale animation
+            card.style.transition = 'opacity 0.25s ease, transform 0.25s ease';
+            card.style.opacity   = '0';
+            card.style.transform = 'scale(0.93)';
+
+            setTimeout(() => {
+                const status = card.dataset.status;
+                card.remove();
+
+                // Decrement Dashboard Stats
+                const totalResortsStat = document.querySelector('.stats-grid .stat-card:nth-child(1) .stat-value');
+                if (totalResortsStat) {
+                    let currentTotal = parseInt(totalResortsStat.getAttribute('data-count')) || parseInt(totalResortsStat.innerText) || 1;
+                    currentTotal = Math.max(0, currentTotal - 1);
+                    totalResortsStat.setAttribute('data-count', currentTotal);
+                    totalResortsStat.innerText = currentTotal;
                 }
-            }
+                if (status === 'active') {
+                    const activeStat = document.querySelector('.stats-grid .stat-card:nth-child(2) .stat-value');
+                    if (activeStat) {
+                        let v = Math.max(0, (parseInt(activeStat.getAttribute('data-count')) || parseInt(activeStat.innerText) || 1) - 1);
+                        activeStat.setAttribute('data-count', v);
+                        activeStat.innerText = v;
+                    }
+                } else if (status === 'maintenance') {
+                    const maintStat = document.querySelector('.stats-grid .stat-card:nth-child(3) .stat-value');
+                    if (maintStat) {
+                        let v = Math.max(0, (parseInt(maintStat.getAttribute('data-count')) || parseInt(maintStat.innerText) || 1) - 1);
+                        maintStat.setAttribute('data-count', v);
+                        maintStat.innerText = v;
+                    }
+                }
+
+                populateLocationFilter();
+                updateCount();
+
+                // Toast confirmation
+                const toast = document.createElement('div');
+                toast.className = 'toast show';
+                toast.innerHTML = '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="#fb7185" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4h6v2"/></svg><span>Resort deleted successfully.</span>';
+                toast.style.borderColor = 'rgba(244,63,94,0.3)';
+                document.body.appendChild(toast);
+                setTimeout(() => toast.remove(), 3000);
+            }, 260);
         });
-        function searchResorts(q) {
-            q = q.toLowerCase();
+        function applyFilters() {
+            const query = (document.getElementById('search-input')?.value || '').trim().toLowerCase();
+            const status = document.getElementById('status-filter')?.value || 'all';
+            const location = (document.getElementById('location-filter')?.value || 'all').toLowerCase();
+
             document.querySelectorAll('#resorts-grid .resort-admin-card').forEach(card => {
-                const name = card.dataset.name || '';
-                const loc = card.dataset.loc || '';
-                card.style.display = (!q || name.includes(q) || loc.includes(q)) ? '' : 'none';
+                const name = (card.dataset.name || '').toLowerCase();
+                const loc = (card.dataset.loc || '').toLowerCase();
+                const cardStatus = card.dataset.status || '';
+
+                const matchesSearch = !query || name.includes(query) || loc.includes(query);
+                const matchesStatus = status === 'all' || cardStatus === status;
+                const matchesLocation = location === 'all' || loc.includes(location);
+
+                if (matchesSearch && matchesStatus && matchesLocation) {
+                    card.style.display = '';
+                } else {
+                    card.style.display = 'none';
+                }
             });
+
+            updateCount();
+        }
+        function searchResorts(q) {
+            applyFilters();
         }
         function filterByStatus(status) {
-            document.querySelectorAll('#resorts-grid .resort-admin-card').forEach(card => {
-                card.style.display = (status === 'all' || card.dataset.status === status) ? '' : 'none';
-            });
+            applyFilters();
         }
         function setView(v) {
             const grid = document.getElementById('resorts-grid');
@@ -602,6 +689,180 @@
             document.getElementById('list-view-btn').classList.toggle('active', v === 'list');
             grid.style.gridTemplateColumns = v === 'list' ? '1fr' : '';
         }
+        function loadMoreResorts() {
+            const grid = document.getElementById('resorts-grid');
+            if (!grid) return;
+
+            const svgs = {
+                1: `<svg viewBox="0 0 64 64"><path d="M32 10 C 20 10, 10 22, 10 32 C 10 44, 20 54, 32 54 C 44 54, 54 44, 54 32 C 54 22, 44 10, 32 10 Z" stroke="#fff" stroke-width="2" fill="none"/><path d="M10 32 C 20 28, 44 28, 54 32" stroke="#fff" stroke-width="2" fill="none"/></svg>`,
+                2: `<svg viewBox="0 0 64 64"><path d="M32 8 Q 25 20, 15 28 Q 22 26, 32 32 Q 42 26, 49 28 Q 39 20, 32 8 Z" stroke="#fff" stroke-width="2" fill="rgba(255,255,255,0.1)"/><line x1="32" y1="32" x2="32" y2="56" stroke="#fff" stroke-width="2"/></svg>`,
+                3: `<svg viewBox="0 0 64 64"><circle cx="32" cy="28" r="18" stroke="#fff" stroke-width="2" fill="none"/><line x1="14" y1="48" x2="50" y2="48" stroke="#fff" stroke-width="3"/></svg>`,
+                4: `<svg viewBox="0 0 64 64"><polygon points="32,8 56,54 8,54" stroke="#fff" stroke-width="2" fill="rgba(255,255,255,0.08)"/></svg>`,
+                5: `<svg viewBox="0 0 64 64"><path d="M10 44 Q 20 28, 32 32 Q 44 36, 54 20" stroke="#fff" stroke-width="3" fill="none"/><circle cx="32" cy="32" r="8" stroke="#fff" stroke-width="2" fill="rgba(255,255,255,0.1)"/></svg>`,
+                6: `<svg viewBox="0 0 64 64"><rect x="16" y="16" width="32" height="32" rx="8" stroke="#fff" stroke-width="2" fill="rgba(255,255,255,0.08)"/><circle cx="32" cy="32" r="8" stroke="#fff" stroke-width="2" fill="rgba(255,255,255,0.15)"/></svg>`
+            };
+
+            const REMAINING_RESORTS = [
+                { name: "Silversand Bay Resort", location: "Seychelles, Indian Ocean", price: 34500, rating: 4.8, reviews: 142, bookings: 28, occupancy: "85%", revenue: "₹9.6L", status: "active", imgIndex: 1 },
+                { name: "Tranquil Forest Lodge", location: "Kerala, India", price: 7800, rating: 4.7, reviews: 98, bookings: 45, occupancy: "90%", revenue: "₹3.5L", status: "active", imgIndex: 2 },
+                { name: "Alpine Zenith Chalet", location: "Swiss Alps", price: 42000, rating: 4.9, reviews: 76, bookings: 22, occupancy: "80%", revenue: "₹9.2L", status: "active", imgIndex: 3 },
+                { name: "Marina Bay Vista", location: "Singapore", price: 28500, rating: 4.8, reviews: 210, bookings: 68, occupancy: "95%", revenue: "₹19.3L", status: "active", imgIndex: 4 },
+                { name: "Bora Bora Haven", location: "Bora Bora, French Polynesia", price: 64000, rating: 5.0, reviews: 54, bookings: 18, occupancy: "88%", revenue: "₹11.5L", status: "active", imgIndex: 5 },
+                { name: "Mist Peak Sanctuary", location: "Coorg, Karnataka, India", price: 9200, rating: 4.6, reviews: 120, bookings: 39, occupancy: "78%", revenue: "₹3.6L", status: "active", imgIndex: 6 },
+                { name: "Snow Pine Lodge", location: "Manali, Himachal, India", price: 6500, rating: 4.5, reviews: 180, bookings: 55, occupancy: "72%", revenue: "₹3.5L", status: "active", imgIndex: 3 },
+                { name: "Tuscan Sun Estate", location: "Tuscany, Italy", price: 38000, rating: 4.9, reviews: 84, bookings: 29, occupancy: "82%", revenue: "₹11.0L", status: "active", imgIndex: 4 },
+                { name: "Langkawi Lagoons", location: "Langkawi, Malaysia", price: 11500, rating: 4.7, reviews: 115, bookings: 48, occupancy: "86%", revenue: "₹5.5L", status: "active", imgIndex: 1 },
+                { name: "Southern Alps Retreat", location: "Queenstown, New Zealand", price: 24000, rating: 4.8, reviews: 93, bookings: 34, occupancy: "84%", revenue: "₹8.1L", status: "active", imgIndex: 3 },
+                { name: "Amber Desert Oasis", location: "Dubai, UAE", price: 29000, rating: 4.8, reviews: 104, bookings: 41, occupancy: "80%", revenue: "₹11.8L", status: "active", imgIndex: 4 },
+                { name: "Coral Reef Villas", location: "Maldives, Indian Ocean", price: 36000, rating: 4.9, reviews: 87, bookings: 25, occupancy: "92%", revenue: "₹9.0L", status: "active", imgIndex: 5 },
+                { name: "Topaz Jungle Lodge", location: "Ubud, Bali, Indonesia", price: 14500, rating: 4.6, reviews: 73, bookings: 51, occupancy: "89%", revenue: "₹7.4L", status: "active", imgIndex: 2 },
+                { name: "Grand Horizon Palace", location: "Santorini, Greece", price: 49000, rating: 4.9, reviews: 112, bookings: 30, occupancy: "96%", revenue: "₹14.7L", status: "active", imgIndex: 3 },
+                { name: "Pearl Island Sanctuary", location: "Seychelles", price: 41000, rating: 5.0, reviews: 43, bookings: 15, occupancy: "85%", revenue: "₹6.1L", status: "active", imgIndex: 1 },
+                { name: "Citrine Coast Resort", location: "Phuket, Thailand", price: 18500, rating: 4.7, reviews: 125, bookings: 42, occupancy: "88%", revenue: "₹7.7L", status: "active", imgIndex: 5 },
+                { name: "Indigo Bay Retreat", location: "North Goa, India", price: 9800, rating: 4.5, reviews: 240, bookings: 75, occupancy: "83%", revenue: "₹7.3L", status: "active", imgIndex: 6 },
+                { name: "Wildwood Sanctuary", location: "Kerala, India", price: 8500, rating: 4.8, reviews: 67, bookings: 38, occupancy: "91%", revenue: "₹3.2L", status: "active", imgIndex: 2 },
+                { name: "Summit View Chalet", location: "Swiss Alps", price: 45000, rating: 4.9, reviews: 59, bookings: 19, occupancy: "75%", revenue: "₹8.5L", status: "active", imgIndex: 3 },
+                { name: "Urban Oasis Hotel", location: "Singapore", price: 26000, rating: 4.7, reviews: 156, bookings: 58, occupancy: "93%", revenue: "₹15.0L", status: "active", imgIndex: 4 },
+                { name: "Royal Bora Bora Resort", location: "Bora Bora", price: 72000, rating: 5.0, reviews: 38, bookings: 12, occupancy: "90%", revenue: "₹8.6L", status: "active", imgIndex: 5 },
+                { name: "Highland Valley Lodge", location: "Coorg, India", price: 8900, rating: 4.5, reviews: 89, bookings: 33, occupancy: "76%", revenue: "₹2.9L", status: "active", imgIndex: 6 },
+                { name: "Silver Summit Retreat", location: "Manali, India", price: 7200, rating: 4.6, reviews: 134, bookings: 49, occupancy: "70%", revenue: "₹3.5L", status: "active", imgIndex: 3 },
+                { name: "Tuscan Vineyards Estate", location: "Tuscany, Italy", price: 36000, rating: 4.8, reviews: 72, bookings: 27, occupancy: "81%", revenue: "₹9.7L", status: "active", imgIndex: 4 },
+                { name: "Langkawi Cliff Villas", location: "Langkawi, Malaysia", price: 13000, rating: 4.7, reviews: 95, bookings: 40, occupancy: "83%", revenue: "₹5.2L", status: "active", imgIndex: 1 },
+                { name: "Wakatipu Lake Sanctuary", location: "Queenstown, NZ", price: 28000, rating: 4.9, reviews: 81, bookings: 31, occupancy: "87%", revenue: "₹8.6L", status: "active", imgIndex: 3 },
+                { name: "Golden Mirage Dunes", location: "Dubai, UAE", price: 24000, rating: 4.6, reviews: 147, bookings: 52, occupancy: "78%", revenue: "₹12.4L", status: "maintenance", imgIndex: 4 },
+                { name: "Celestial Lagoon Villas", location: "Maldives", price: 39000, rating: 4.9, reviews: 102, bookings: 35, occupancy: "94%", revenue: "₹13.6L", status: "active", imgIndex: 5 },
+                { name: "Mystic Rainforest Haven", location: "Ubud, Bali, Indonesia", price: 11000, rating: 4.7, reviews: 145, bookings: 58, occupancy: "86%", revenue: "₹6.3L", status: "inactive", imgIndex: 2 },
+                { name: "Santorini Sunset Suites", location: "Santorini, Greece", price: 55000, rating: 5.0, reviews: 88, bookings: 28, occupancy: "98%", revenue: "₹15.4L", status: "active", imgIndex: 3 },
+                { name: "Seychelles Palm Lodge", location: "Seychelles", price: 37000, rating: 4.8, reviews: 65, bookings: 22, occupancy: "82%", revenue: "₹8.1L", status: "active", imgIndex: 1 },
+                { name: "Amber Sands Retreat", location: "Phuket, Thailand", price: 16000, rating: 4.6, reviews: 110, bookings: 37, occupancy: "85%", revenue: "₹5.9L", status: "active", imgIndex: 5 },
+                { name: "Sapphire Wave Beachfront", location: "North Goa, India", price: 9200, rating: 4.7, reviews: 198, bookings: 69, occupancy: "85%", revenue: "₹6.3L", status: "active", imgIndex: 6 },
+                { name: "Grand Palace Udaipur", location: "Rajasthan, India", price: 15000, rating: 4.8, reviews: 130, bookings: 44, occupancy: "80%", revenue: "₹6.6L", status: "active", imgIndex: 4 },
+                { name: "Backwater Serenity Retreat", location: "Kerala, India", price: 6800, rating: 4.6, reviews: 85, bookings: 41, occupancy: "88%", revenue: "₹2.7L", status: "active", imgIndex: 2 },
+                { name: "Ceylon Tea Sanctuary", location: "Sri Lanka", price: 10500, rating: 4.7, reviews: 92, bookings: 35, occupancy: "84%", revenue: "₹3.6L", status: "active", imgIndex: 2 }
+            ];
+
+            REMAINING_RESORTS.forEach((resort, idx) => {
+                const newCard = document.createElement('div');
+                newCard.className = 'resort-admin-card';
+                newCard.dataset.status = resort.status;
+                newCard.dataset.name = resort.name.toLowerCase();
+                newCard.dataset.loc = resort.location.toLowerCase();
+
+                const imgClass = 'rc-img-' + resort.imgIndex;
+                const svgIcon = svgs[resort.imgIndex] || svgs[1];
+
+                let statusHtml = '';
+                if (resort.status === 'active') statusHtml = '<span class="badge-active">● Active</span>';
+                else if (resort.status === 'maintenance') statusHtml = '<span class="badge-maintenance">⚙ Maintenance</span>';
+                else statusHtml = '<span class="badge-inactive">● Inactive</span>';
+
+                newCard.innerHTML = `
+                    <div class="resort-card-img ${imgClass}">
+                        ${svgIcon}
+                        <div class="resort-card-status">${statusHtml}</div>
+                        <div class="resort-card-actions">
+                            <button class="card-act-btn" title="Edit" onclick="openModal()"><svg viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button>
+                            <button class="card-act-btn del" title="Delete"><svg viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4h6v2"/></svg></button>
+                        </div>
+                    </div>
+                    <div class="resort-card-body">
+                        <div class="rc-name">${resort.name}</div>
+                        <div class="rc-loc flex items-center gap-1"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="inline-block"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg> ${resort.location}</div>
+                        <div class="rc-meta">
+                            <div class="rc-price">₹${resort.price.toLocaleString('en-IN')} <span>/ night</span></div>
+                            <div class="rc-rating">★ ${resort.rating.toFixed(1)} <span style="color:var(--clr-text-muted);font-weight:400;">(${resort.reviews})</span></div>
+                        </div>
+                    </div>
+                    <div class="rc-stats">
+                        <div class="rc-stat"><div class="rc-stat-val">${resort.bookings}</div><div class="rc-stat-lbl">Bookings</div></div>
+                        <div class="rc-stat"><div class="rc-stat-val">${resort.occupancy}</div><div class="rc-stat-lbl">Occupancy</div></div>
+                        <div class="rc-stat"><div class="rc-stat-val">${resort.revenue}</div><div class="rc-stat-lbl">Revenue</div></div>
+                    </div>
+                `;
+
+                newCard.style.opacity = '0';
+                newCard.style.transform = 'translateY(15px)';
+                newCard.style.transition = 'opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1), transform 0.4s cubic-bezier(0.16, 1, 0.3, 1)';
+
+                grid.appendChild(newCard);
+
+                setTimeout(() => {
+                    newCard.style.opacity = '1';
+                    newCard.style.transform = 'translateY(0)';
+                }, idx * 20);
+            });
+
+            populateLocationFilter();
+            updateCount();
+
+            const container = document.getElementById('load-more-container');
+            if (container) {
+                container.style.opacity = '0';
+                container.style.transform = 'scale(0.95)';
+                container.style.transition = 'all 0.3s ease';
+                setTimeout(() => {
+                    container.style.display = 'none';
+                }, 300);
+            }
+        }
+
+        function populateLocationFilter() {
+            const select = document.getElementById('location-filter');
+            if (!select) return;
+
+            const currentValue = select.value || 'all';
+
+            const locations = new Set();
+            document.querySelectorAll('#resorts-grid .resort-admin-card').forEach(card => {
+                const locTextEl = card.querySelector('.rc-loc');
+                if (locTextEl) {
+                    const text = locTextEl.textContent.trim();
+                    let displayLoc = text;
+                    if (text.includes('Maldives')) displayLoc = 'Maldives';
+                    else if (text.includes('Bali')) displayLoc = 'Bali';
+                    else if (text.includes('Goa')) displayLoc = 'Goa';
+                    else if (text.includes('Phuket')) displayLoc = 'Phuket';
+                    else if (text.includes('Greece') || text.includes('Santorini')) displayLoc = 'Greece';
+                    else if (text.includes('Dubai') || text.includes('UAE')) displayLoc = 'Dubai';
+                    else if (text.includes('Seychelles')) displayLoc = 'Seychelles';
+                    else if (text.includes('Kerala')) displayLoc = 'Kerala';
+                    else if (text.includes('Swiss') || text.includes('Alps')) displayLoc = 'Swiss Alps';
+                    else if (text.includes('Singapore')) displayLoc = 'Singapore';
+                    else if (text.includes('Bora Bora')) displayLoc = 'Bora Bora';
+                    else if (text.includes('Coorg')) displayLoc = 'Coorg';
+                    else if (text.includes('Manali')) displayLoc = 'Manali';
+                    else if (text.includes('Tuscany') || text.includes('Italy')) displayLoc = 'Tuscany';
+                    else if (text.includes('Langkawi')) displayLoc = 'Langkawi';
+                    else if (text.includes('Queenstown')) displayLoc = 'Queenstown';
+                    else if (text.includes('Rajasthan')) displayLoc = 'Rajasthan';
+                    else if (text.includes('Sri Lanka')) displayLoc = 'Sri Lanka';
+                    else {
+                        const parts = text.split(',');
+                        displayLoc = parts[parts.length - 1].trim();
+                    }
+                    locations.add(displayLoc);
+                }
+            });
+
+            select.innerHTML = '<option value="all">All Locations</option>';
+            Array.from(locations).sort().forEach(loc => {
+                const opt = document.createElement('option');
+                opt.value = loc.toLowerCase();
+                opt.textContent = loc;
+                select.appendChild(opt);
+            });
+
+            if (Array.from(locations).some(loc => loc.toLowerCase() === currentValue)) {
+                select.value = currentValue;
+            } else {
+                select.value = 'all';
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            populateLocationFilter();
+            updateCount();
+        });
     </script>
 </body>
 </html>

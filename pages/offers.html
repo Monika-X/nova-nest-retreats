@@ -66,7 +66,7 @@
         <!-- Page Header -->
         <section class="pt-8 pb-8 relative">
             <div class="container relative z-base reveal">
-                <nav class="text-sm text-muted mb-4 flex items-center gap-2">
+                <nav class="text-sm text-muted mb-4 flex flex-wrap items-center gap-2">
                     <a href="../index.html" class="hover:text-emerald">Home</a>
                     <span>/</span>
                     <span class="text-white">Offers</span>
@@ -79,35 +79,35 @@
         <!-- Flash Sale & Countdown -->
         <section class="pb-16 pt-8">
             <div class="container reveal-scale">
-                <div class="relative rounded-2xl overflow-hidden shadow-glow-ocean border border-ocean-500 border-opacity-30">
+                <div class="flash-sale-banner relative rounded-2xl overflow-hidden shadow-glow-ocean">
                     <!-- Banner Image -->
                     <div class="absolute inset-0 z-below">
                         <img src="https://images.unsplash.com/photo-1540541338287-41700207dee6?auto=format&fit=crop&w=1920&q=80" alt="Flash Sale Resort" class="w-full h-full object-cover opacity-40">
-                        <div class="absolute inset-0 bg-gradient-to-r from-navy-950 via-navy-900 to-transparent"></div>
+                        <div class="flash-sale-overlay absolute inset-0"></div>
                     </div>
 
-                    <div class="relative z-base p-8 md:p-12 flex flex-col md:flex-row items-center justify-between gap-8">
-                        <div class="flex-1">
+                    <div class="relative z-base p-4 sm:p-8 lg:p-12 flex flex-col lg:flex-row items-center justify-between gap-8" style="width: 100%; max-width: 100%; box-sizing: border-box; overflow: hidden;">
+                        <div class="flex-1 text-center lg:text-left" style="width: 100%; max-width: 100%; box-sizing: border-box; overflow: hidden;">
                             <div class="badge badge-warning animate-pulse mb-4">Live Now: Flash Sale</div>
-                            <h2 class="text-3xl md:text-4xl font-display font-bold mb-4 text-white">48-Hour Monsoon Escape</h2>
-                            <p class="text-white-80 text-lg mb-6 max-w-md">Get up to 40% off on all Premium Water Villas in the Maldives & Bali. Offer includes complimentary breakfast and airport transfers.</p>
-                            <a href="resorts.html" class="btn btn-primary btn-lg hover-scale shadow-glow-emerald">Shop the Sale</a>
+                            <h2 class="text-3xl md:text-4xl font-display font-bold mb-4 text-white" style="word-wrap: break-word; overflow-wrap: break-word;">48-Hour Monsoon Escape</h2>
+                            <p class="flash-sale-desc">Get up to 40% off on all Premium Water Villas in the Maldives & Bali. Offer includes complimentary breakfast and airport transfers.</p>
+                            <a href="resorts.html" class="btn btn-primary btn-lg hover-scale shadow-glow-emerald" style="margin-top: 1.5rem;">Shop the Sale</a>
                         </div>
                         
-                        <div class="flex-1 flex justify-center md:justify-end w-full">
-                            <div class="glass-strong p-6 rounded-xl border border-glass w-full max-w-md text-center">
+                        <div class="flex-1 flex justify-center lg:justify-end w-full">
+                            <div class="glass-strong p-4 sm:p-6 rounded-xl border border-glass w-full max-w-md text-center">
                                 <h3 class="text-sm uppercase tracking-wider text-muted mb-4">Offer Ends In</h3>
                                 <div class="flex justify-center gap-3 md:gap-4" id="flash-countdown">
                                     <div class="flex flex-col">
                                         <div class="text-3xl md:text-4xl font-display font-bold text-emerald" id="cd-hours">47</div>
                                         <div class="text-xs text-muted mt-1 uppercase tracking-wider">Hours</div>
                                     </div>
-                                    <div class="text-3xl font-bold text-emerald self-start">:</div>
+                                    <div class="text-3xl font-bold text-emerald self-center">:</div>
                                     <div class="flex flex-col">
                                         <div class="text-3xl md:text-4xl font-display font-bold text-emerald" id="cd-mins">59</div>
                                         <div class="text-xs text-muted mt-1 uppercase tracking-wider">Mins</div>
                                     </div>
-                                    <div class="text-3xl font-bold text-emerald self-start">:</div>
+                                    <div class="text-3xl font-bold text-emerald self-center">:</div>
                                     <div class="flex flex-col">
                                         <div class="text-3xl md:text-4xl font-display font-bold text-emerald" id="cd-secs">24</div>
                                         <div class="text-xs text-muted mt-1 uppercase tracking-wider">Secs</div>
@@ -187,7 +187,7 @@
             <div class="container relative z-base">
                 <div class="flex flex-col lg:flex-row items-center bg-card border border-glass rounded-2xl overflow-hidden shadow-xl reveal-scale">
                     
-                    <div class="lg:w-1/2 p-10 md:p-14 text-center lg:text-left">
+                    <div class="lg:w-1/2 p-10 md:p-14 text-center lg:text-left referral-col-info">
                         <span class="badge badge-emerald mb-4">Nova Nest Rewards</span>
                         <h2 class="text-3xl md:text-4xl font-display font-bold mb-4">Give ₹2,000. <br>Get ₹2,000.</h2>
                         <p class="text-muted text-lg mb-8">
@@ -200,13 +200,62 @@
                         </div>
                     </div>
                     
-                    <div class="lg:w-1/2 bg-deep p-10 md:p-14 flex items-center justify-center border-l border-glass">
-                        <div class="text-center">
+                    <div class="lg:w-1/2 bg-deep p-10 md:p-14 flex items-center justify-center border-t lg:border-t-0 lg:border-l border-glass referral-col-action">
+                        <div class="text-center w-full">
                             <div class="w-32 h-32 mx-auto bg-gradient-to-br from-emerald-400 to-cyan-500 rounded-full flex items-center justify-center shadow-glow-emerald mb-6 animate-float">
                                 <svg viewBox="0 0 24 24" width="60" height="60" fill="none" stroke="white" stroke-width="1.5"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle><path d="M16 11h6"></path><path d="M19 8v6"></path></svg>
                             </div>
                             <h3 class="text-2xl font-bold text-white mb-2">Unlimited Referrals</h3>
-                            <p class="text-sm text-muted">There is no cap on how much you can earn. Start inviting today!</p>
+                            <p class="text-sm text-muted mb-4">There is no cap on how much you can earn. Start inviting today!</p>
+                            <button id="btn-referrals-toggle" class="btn btn-outline btn-sm" style="border-color: var(--emerald-500); color: var(--emerald-400);">Track Referrals (4 Active)</button>
+                            
+                            <!-- Referral List -->
+                            <div id="referrals-list" style="display: none;" class="mt-6 text-left max-w-sm mx-auto flex flex-col gap-3">
+                                <!-- Referral 1 -->
+                                <div class="flex justify-between items-center p-3 bg-primary rounded-lg border border-glass">
+                                    <div>
+                                        <div class="font-bold text-sm text-white">Amit Sharma</div>
+                                        <div class="text-xs text-muted">Joined May 10, 2026</div>
+                                    </div>
+                                    <div class="text-right">
+                                        <div class="text-sm font-bold text-emerald">+₹2,000</div>
+                                        <div class="text-2xs text-emerald bg-emerald-950 bg-opacity-40 px-2 py-0.5 rounded-full border border-emerald-900 inline-block mt-0.5">Completed</div>
+                                    </div>
+                                </div>
+                                <!-- Referral 2 -->
+                                <div class="flex justify-between items-center p-3 bg-primary rounded-lg border border-glass">
+                                    <div>
+                                        <div class="font-bold text-sm text-white">Priya Patel</div>
+                                        <div class="text-xs text-muted">Joined May 18, 2026</div>
+                                    </div>
+                                    <div class="text-right">
+                                        <div class="text-sm font-bold text-ocean">+₹2,000</div>
+                                        <div class="text-2xs text-ocean bg-ocean-950 bg-opacity-40 px-2 py-0.5 rounded-full border border-ocean-900 inline-block mt-0.5">Pending Stay</div>
+                                    </div>
+                                </div>
+                                <!-- Referral 3 -->
+                                <div class="flex justify-between items-center p-3 bg-primary rounded-lg border border-glass">
+                                    <div>
+                                        <div class="font-bold text-sm text-white">John Smith</div>
+                                        <div class="text-xs text-muted">Joined May 22, 2026</div>
+                                    </div>
+                                    <div class="text-right">
+                                        <div class="text-sm font-bold text-emerald">+₹2,000</div>
+                                        <div class="text-2xs text-emerald bg-emerald-950 bg-opacity-40 px-2 py-0.5 rounded-full border border-emerald-900 inline-block mt-0.5">Completed</div>
+                                    </div>
+                                </div>
+                                <!-- Referral 4 -->
+                                <div class="flex justify-between items-center p-3 bg-primary rounded-lg border border-glass">
+                                    <div>
+                                        <div class="font-bold text-sm text-white">Sarah Jenkins</div>
+                                        <div class="text-xs text-muted">Joined May 28, 2026</div>
+                                    </div>
+                                    <div class="text-right">
+                                        <div class="text-sm font-bold text-ocean">+₹2,000</div>
+                                        <div class="text-2xs text-ocean bg-ocean-950 bg-opacity-40 px-2 py-0.5 rounded-full border border-ocean-900 inline-block mt-0.5">Pending Stay</div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
 
@@ -217,7 +266,7 @@
         <!-- Newsletter Sub-Banner -->
         <section class="py-12 bg-deep text-center reveal">
             <div class="container">
-                <p class="text-emerald font-medium mb-2">Want deals sent directly to you?</p>
+                <p class="text-emerald font-medium mb-2 mx-auto text-center">Want deals sent directly to you?</p>
                 <a href="#main-footer" class="text-white underline hover:text-ocean transition-fast">Subscribe to our newsletter below</a>
             </div>
         </section>
@@ -269,6 +318,32 @@
                 cdMins.textContent = m.toString().padStart(2, '0');
                 cdSecs.textContent = s.toString().padStart(2, '0');
             }, 1000);
+        }
+
+        // Referrals Toggle Logic
+        const refToggleBtn = document.getElementById('btn-referrals-toggle');
+        const refList = document.getElementById('referrals-list');
+        
+        if (refToggleBtn && refList) {
+            refToggleBtn.addEventListener('click', () => {
+                const isHidden = refList.style.display === 'none' || !refList.style.display;
+                if (isHidden) {
+                    refList.style.display = 'flex';
+                    refList.style.flexDirection = 'column';
+                    refList.style.gap = '0.75rem';
+                    refToggleBtn.textContent = 'Hide Referrals Status';
+                    refToggleBtn.classList.remove('btn-outline');
+                    refToggleBtn.classList.add('btn-secondary');
+                    refToggleBtn.removeAttribute('style');
+                    refList.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                } else {
+                    refList.style.display = 'none';
+                    refToggleBtn.textContent = 'Track Referrals (4 Active)';
+                    refToggleBtn.classList.remove('btn-secondary');
+                    refToggleBtn.classList.add('btn-outline');
+                    refToggleBtn.setAttribute('style', 'border-color: var(--emerald-500); color: var(--emerald-400);');
+                }
+            });
         }
     </script>
 </body>
