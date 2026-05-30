@@ -31,13 +31,7 @@
         width: 32px !important;
         height: 32px !important;
     }
-}
 
-@media (max-width: 1100px) {
-    .footer-grid {
-        grid-template-columns: 1.3fr 1fr 1fr 1.2fr;
-        gap: var(--space-xl);
-    }
 }
 
 
@@ -196,16 +190,116 @@
         transform: scale(0.95);
     }
 
-    /* Footer */
-    .footer-grid {
-        grid-template-columns: 1fr 1fr;
-        gap: var(--space-2xl);
-    }
-
     /* Booking card sticky override */
     .booking-card {
         position: relative !important;
         top: 0 !important;
+    }
+}
+
+
+/* ---- Footer: Tablet layout (769px – 1023px) ---- */
+@media (max-width: 1023px) and (min-width: 769px) {
+    .footer-grid {
+        grid-template-columns: repeat(2, minmax(0, 260px));
+        justify-content: center;
+        gap: 2.5rem 3rem;
+    }
+
+    .footer-col.footer-brand {
+        grid-column: span 2;
+        text-align: center;
+        align-items: center;
+    }
+
+    .footer-col.footer-brand .footer-logo {
+        margin-inline: auto;
+    }
+
+    .footer-col.footer-brand .footer-brand-text {
+        max-width: 520px;
+        text-align: center;
+    }
+
+    .footer-col.footer-brand .social-links {
+        justify-content: center;
+    }
+
+    .footer-grid .footer-col:nth-child(2),
+    .footer-grid .footer-col:nth-child(3) {
+        grid-column: span 1;
+    }
+
+    .footer-grid .footer-col:nth-child(4) {
+        grid-column: span 2;
+        text-align: center;
+        align-items: center;
+        max-width: 520px;
+        margin-inline: auto;
+        width: 100%;
+    }
+
+    .footer-grid .footer-col:nth-child(4) .footer-heading::after {
+        left: 50%;
+        transform: translateX(-50%);
+    }
+
+    .footer-grid .footer-col:nth-child(4) .newsletter-form {
+        flex-direction: column;
+        gap: 0.5rem;
+        max-width: 360px;
+        margin-inline: auto;
+        width: 100%;
+    }
+
+    .footer-grid .footer-col:nth-child(4) .newsletter-input {
+        border-right: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: var(--radius-full);
+    }
+
+    .footer-grid .footer-col:nth-child(4) .newsletter-btn {
+        border-radius: var(--radius-full);
+        width: 100%;
+    }
+}
+
+
+/* ---- Footer: Small laptop (1024px – 1280px) ---- */
+@media (min-width: 1024px) and (max-width: 1280px) {
+    .site-footer .container {
+        padding-inline: clamp(1.75rem, 3.5vw, 2.5rem);
+    }
+
+    .footer-grid {
+        grid-template-columns: 1.15fr 0.85fr 0.85fr 1.35fr;
+        gap: var(--space-8);
+    }
+
+    .footer-grid .footer-col:first-child {
+        padding-inline-start: var(--space-4);
+    }
+
+    .footer-grid .footer-col:last-child {
+        padding-inline-end: var(--space-4);
+    }
+
+    .footer-brand-text {
+        max-width: 100%;
+    }
+
+    .footer-grid .footer-col:nth-child(4) .newsletter-form {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+
+    .footer-grid .footer-col:nth-child(4) .newsletter-input {
+        border-right: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: var(--radius-full);
+    }
+
+    .footer-grid .footer-col:nth-child(4) .newsletter-btn {
+        border-radius: var(--radius-full);
+        width: 100%;
     }
 }
 
@@ -217,14 +311,63 @@
         --container-pad: 1.25rem;
     }
 
-    /* Footer */
+    /* Footer — single column; reset tablet grid overrides */
+    .site-footer .container {
+        padding-inline: 1.5rem;
+    }
+
     .footer-main {
-        padding: var(--space-3xl) 0 var(--space-xl);
+        padding: var(--space-16) 0 var(--space-8);
     }
 
     .footer-grid {
-        grid-template-columns: 1fr;
-        gap: var(--space-2xl);
+        grid-template-columns: 1fr !important;
+        gap: var(--space-10) !important;
+    }
+
+    .footer-col {
+        padding-inline-start: var(--space-3);
+    }
+
+    .footer-col.footer-brand {
+        grid-column: span 1 !important;
+        text-align: left !important;
+        align-items: flex-start !important;
+    }
+
+    .footer-col.footer-brand .footer-logo {
+        margin-inline: 0 !important;
+    }
+
+    .footer-col.footer-brand .footer-brand-text {
+        max-width: 100% !important;
+        text-align: left !important;
+    }
+
+    .footer-col.footer-brand .social-links {
+        justify-content: flex-start !important;
+    }
+
+    .footer-grid .footer-col:nth-child(2),
+    .footer-grid .footer-col:nth-child(3),
+    .footer-grid .footer-col:nth-child(4) {
+        grid-column: span 1 !important;
+        text-align: left !important;
+        align-items: flex-start !important;
+        max-width: none !important;
+        margin-inline: 0 !important;
+        width: 100% !important;
+    }
+
+    .footer-grid .footer-col:nth-child(4) .footer-heading::after {
+        left: 0 !important;
+        transform: none !important;
+    }
+
+    .footer-grid .footer-col:nth-child(4) .newsletter-form {
+        max-width: none !important;
+        margin-inline: 0 !important;
+        width: 100% !important;
     }
 
     .footer-brand-text {
@@ -233,7 +376,7 @@
 
     .footer-bottom {
         flex-direction: column;
-        gap: var(--space-md);
+        gap: var(--space-4);
         text-align: center;
     }
 
@@ -283,6 +426,50 @@
 }
 
 
+/* ---- Mid-Mobile: Samsung Galaxy S, large phones 640-768px ---- */
+/* At 725px (Samsung Galaxy S series) — between tablet and small mobile.
+   md:grid-cols-* only kicks in at 768px+, so at 725px the site still
+   shows single-column grids which is correct. We just need to ensure
+   card footers, hero form, and testimonials stay tidy. */
+@media (max-width: 768px) and (min-width: 481px) {
+
+    /* Resort cards: make sure price + button don't squeeze on wide mobiles */
+    .card-resort-footer {
+        flex-direction: row !important;
+        align-items: center !important;
+        gap: 0.5rem !important;
+    }
+
+    .card-resort-price {
+        font-size: 1rem !important;
+        white-space: nowrap !important;
+        flex-shrink: 0 !important;
+    }
+
+    /* "View Details" button stays compact */
+    .card-resort-footer .btn-sm {
+        padding: 0.4rem 0.75rem !important;
+        font-size: 0.75rem !important;
+        flex-shrink: 0 !important;
+    }
+
+    /* Hero booking form: keep date fields in a row until 576px */
+    .hero-booking .flex.gap-4 {
+        flex-direction: row !important;
+    }
+
+    /* Testimonial slider: ensure full-width slides */
+    #testimonial-track > div {
+        min-width: 100% !important;
+        width: 100% !important;
+    }
+
+    /* Section padding */
+    .py-20 { padding-block: 3.5rem !important; }
+    .py-24 { padding-block: 4rem !important; }
+}
+
+
 /* ---- Small Mobile (max-width: 480px) ---- */
 @media (max-width: 480px) {
     :root {
@@ -309,6 +496,15 @@
         padding-top: calc(var(--nav-height) + 3rem) !important;
     }
 
+    /* Footer — tighter screens, keep left inset */
+    .site-footer .container {
+        padding-inline: 1.25rem;
+    }
+
+    .footer-col {
+        padding-inline-start: var(--space-3);
+    }
+
     /* Hero */
     .hero {
         min-height: 85vh;
@@ -328,12 +524,42 @@
     }
 
     /* Footer */
-    .social-links {
-        justify-content: flex-start;
+    .footer-heading {
+        margin-bottom: var(--space-4);
     }
 
-    .footer-heading {
-        margin-bottom: var(--space-md);
+    /* Resort card footer: tighter font on small phones */
+    .card-resort-price {
+        font-size: 0.95rem !important;
+        white-space: nowrap !important;
+        flex-shrink: 0 !important;
+    }
+
+    .card-resort-footer .btn-sm {
+        padding: 0.35rem 0.65rem !important;
+        font-size: 0.7rem !important;
+        flex-shrink: 0 !important;
+    }
+
+    .card-resort-footer {
+        gap: 0.4rem !important;
+    }
+
+    /* Pricing cards — shrink font so ₹15,000 doesn't break at 480px */
+    .card-pricing-price {
+        font-size: 2rem !important;   /* 32px instead of 40px */
+    }
+
+    /* Reduce card horizontal padding to give price more room */
+    .card-pricing {
+        padding-left: 1.25rem !important;
+        padding-right: 1.25rem !important;
+    }
+
+    /* Testimonial slider: ensure full-width slides on small phones */
+    #testimonial-track > div {
+        min-width: 100% !important;
+        width: 100% !important;
     }
 }
 
@@ -840,6 +1066,27 @@
     }
 }
 
+/* ---- Footer edge inset — mobile M / S ---- */
+@media (max-width: 375px) {
+    .site-footer .container {
+        padding-inline: 1.125rem;
+    }
+
+    .footer-col {
+        padding-inline-start: 0.5rem;
+    }
+}
+
+@media (max-width: 320px) {
+    .site-footer .container {
+        padding-inline: 1rem;
+    }
+
+    .footer-col {
+        padding-inline-start: 0.375rem;
+    }
+}
+
 /* ---- Prevention of horizontal overflow on extreme viewports ---- */
 @media (max-width: 350px) {
     body {
@@ -974,4 +1221,59 @@
 [style*="overflow-x:auto"],
 .overflow-x-auto {
     -webkit-overflow-scrolling: touch;
+}
+
+
+/* ---- Tiny phones (max-width: 360px, e.g. Samsung Galaxy S S20 320px) ---- */
+/* Prevents currency values like ₹15,000 from breaking mid-digit                */
+@media (max-width: 360px) {
+
+    /* Pricing cards — shrink large price font so ₹15,000 fits on one line */
+    .card-pricing-price {
+        font-size: 1.5rem !important;   /* 24px — safe at 320px with reduced padding */
+        white-space: nowrap !important;
+        flex-wrap: nowrap !important;
+    }
+
+    .card-pricing-price span {
+        white-space: nowrap !important;
+        flex-shrink: 0 !important;
+    }
+
+    /* Further tighten card-pricing horizontal padding */
+    .card-pricing {
+        padding-left: 1rem !important;
+        padding-right: 1rem !important;
+    }
+
+    /* Resort card price — reduce size a touch more */
+    .card-resort-price {
+        font-size: 0.875rem !important;
+        white-space: nowrap !important;
+        flex-shrink: 0 !important;
+    }
+
+    /* Resort card "/ night" suffix */
+    .card-resort-price span {
+        white-space: nowrap !important;
+    }
+
+    /* Make the "View Details" button even more compact */
+    .card-resort-footer .btn-sm {
+        padding: 0.3rem 0.5rem !important;
+        font-size: 0.65rem !important;
+        flex-shrink: 0 !important;
+    }
+
+    /* Wishlist / resort-pick price */
+    .resort-pick-price {
+        white-space: nowrap !important;
+        font-size: 0.72rem !important;
+    }
+
+    /* Admin resort card price */
+    .rc-price {
+        white-space: nowrap !important;
+        font-size: 0.875rem !important;
+    }
 }

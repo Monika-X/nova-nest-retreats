@@ -347,9 +347,9 @@
         </section>
 
         <!-- SECTION 7: Testimonials Slider -->
-        <section class="py-24 bg-primary relative">
+        <section class="py-24 bg-primary relative" style="padding-block: clamp(3rem,8vw,6rem);">
             <div class="container">
-                <div class="text-center mb-16 reveal">
+                <div class="text-center mb-16 reveal" style="margin-bottom: clamp(2rem,6vw,4rem);">
                     <span class="section-label">Real Experiences</span>
                     <h2 class="section-title">What Our Guests Say</h2>
                 </div>
@@ -358,51 +358,59 @@
                     <!-- Slider Container -->
                     <div class="overflow-hidden relative rounded-2xl" id="testimonial-slider">
                         <!-- Slides Wrapper -->
-                        <div class="flex transition-transform duration-500 ease-in-out" id="testimonial-track">
+                        <div id="testimonial-track" style="display:flex; transition:transform 0.5s cubic-bezier(0.4,0,0.2,1);">
                             <!-- Slide 1 -->
-                            <div class="w-full flex-shrink-0 p-8 md:p-12 bg-card border border-glass text-center rounded-2xl">
-                                <div class="text-emerald text-4xl font-display mb-6">"</div>
-                                <p class="text-lg md:text-xl text-white-90 italic mb-8">
-                                    "The booking process was seamless, and the resort exceeded all our expectations. The split cost estimator made planning our group trip so much easier. Highly recommend Nova Nest!"
+                            <div class="testimonial-card-custom"
+                                 style="min-width:100%; width:100%; padding: clamp(1.5rem,5vw,3rem); flex-shrink:0; box-sizing:border-box;">
+                                <div class="text-emerald text-4xl font-display mb-6" style="font-size:3rem; margin-bottom:1.5rem; text-align:center;">&ldquo;</div>
+                                <p class="text-white-90 italic"
+                                   style="font-size:clamp(0.95rem,3vw,1.2rem); color:rgba(241,245,249,0.9); line-height:1.75; margin-bottom:2rem; font-style:italic; text-align:center; margin-inline:auto; max-width:65ch;">
+                                    &ldquo;The booking process was seamless, and the resort exceeded all our expectations. The split cost estimator made planning our group trip so much easier. Highly recommend Nova Nest!&rdquo;
                                 </p>
-                                <div class="flex items-center justify-center gap-4">
-                                    <div class="w-12 h-12 rounded-full bg-navy overflow-hidden">
-                                        <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?auto=format&fit=crop&w=100&q=80" alt="Sarah J." class="w-full h-full object-cover">
+                                <div class="testimonial-avatar-container">
+                                    <div class="testimonial-avatar-circle">
+                                        <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?auto=format&fit=crop&w=100&q=80"
+                                             alt="Sarah Jenkins"
+                                             style="width:100%; height:100%; object-fit:cover; display:block;">
                                     </div>
-                                    <div class="text-left">
-                                        <div class="font-bold text-white">Sarah Jenkins</div>
-                                        <div class="text-xs text-emerald">Stayed at Azure Ocean</div>
+                                    <div class="testimonial-info-block">
+                                        <div class="testimonial-author-name">Sarah Jenkins</div>
+                                        <div class="testimonial-author-role">Stayed at Azure Ocean</div>
                                     </div>
                                 </div>
                             </div>
-                            
+
                             <!-- Slide 2 -->
-                            <div class="w-full flex-shrink-0 p-8 md:p-12 bg-card border border-glass text-center rounded-2xl">
-                                <div class="text-ocean text-4xl font-display mb-6">"</div>
-                                <p class="text-lg md:text-xl text-white-90 italic mb-8">
-                                    "Found an amazing budget package under ₹10k for my solo trip to Kerala. The property was safe, beautiful, and exactly as pictured. Will definitely book again."
+                            <div class="testimonial-card-custom"
+                                 style="min-width:100%; width:100%; padding: clamp(1.5rem,5vw,3rem); flex-shrink:0; box-sizing:border-box;">
+                                <div class="text-ocean text-4xl font-display mb-6" style="font-size:3rem; margin-bottom:1.5rem; color:#38bdf8; text-align:center;">&ldquo;</div>
+                                <p class="text-white-90 italic"
+                                   style="font-size:clamp(0.95rem,3vw,1.2rem); color:rgba(241,245,249,0.9); line-height:1.75; margin-bottom:2rem; font-style:italic; text-align:center; margin-inline:auto; max-width:65ch;">
+                                    &ldquo;Found an amazing budget package under &#x20B9;10k for my solo trip to Kerala. The property was safe, beautiful, and exactly as pictured. Will definitely book again.&rdquo;
                                 </p>
-                                <div class="flex items-center justify-center gap-4">
-                                    <div class="w-12 h-12 rounded-full bg-navy overflow-hidden">
-                                        <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=100&q=80" alt="Rahul M." class="w-full h-full object-cover">
+                                <div class="testimonial-avatar-container">
+                                    <div class="testimonial-avatar-circle" style="border-color: rgba(14,165,233,0.3); box-shadow: 0 0 15px rgba(14,165,233,0.2);">
+                                        <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=100&q=80"
+                                             alt="Rahul Mehta"
+                                             style="width:100%; height:100%; object-fit:cover; display:block;">
                                     </div>
-                                    <div class="text-left">
-                                        <div class="font-bold text-white">Rahul Mehta</div>
-                                        <div class="text-xs text-ocean">Budget Traveler</div>
+                                    <div class="testimonial-info-block">
+                                        <div class="testimonial-author-name">Rahul Mehta</div>
+                                        <div class="testimonial-author-role" style="color:#38bdf8;">Budget Traveler</div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    
+
                     <!-- Controls -->
-                    <div class="flex justify-center gap-4 mt-8">
+                    <div class="flex justify-center gap-4 mt-8" style="margin-top:2rem;">
                         <button class="btn-icon bg-surface border border-glass hover-glow text-white" id="testi-prev" aria-label="Previous testimonial">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"></polyline></svg>
                         </button>
                         <div class="flex gap-2 items-center" id="testi-dots">
-                            <span class="w-2.5 h-2.5 rounded-full bg-emerald cursor-pointer dot-active"></span>
-                            <span class="w-2.5 h-2.5 rounded-full bg-navy-500 cursor-pointer"></span>
+                            <span class="dot-indicator dot-active" style="background:var(--emerald-400);"></span>
+                            <span class="dot-indicator" style="background:var(--navy-500);"></span>
                         </div>
                         <button class="btn-icon bg-surface border border-glass hover-glow text-white" id="testi-next" aria-label="Next testimonial">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
