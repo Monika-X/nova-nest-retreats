@@ -53,6 +53,38 @@
             border-radius: var(--radius-sm);
             user-select: all;
         }
+
+        /* Responsive Banner Overrides to fix corners and padding on mobile */
+        @media (max-width: 480px) {
+            /* Override the global responsive.css flex rule that breaks the absolute wrapper */
+            .flash-sale-banner > div.absolute {
+                display: block !important;
+                padding: 0 !important;
+                flex: none !important;
+                width: 100% !important;
+                height: 100% !important;
+            }
+
+            /* Ensure content relative div has proper responsive padding */
+            .flash-sale-banner > div.relative {
+                padding: 2.25rem 1.5rem !important;
+            }
+
+            /* Set countdown timer box padding on mobile to match tablet layout space */
+            .flash-sale-banner .glass-strong {
+                padding: 1.5rem !important;
+            }
+        }
+
+        @media (max-width: 320px) {
+            /* Narrow layout padding adjustments to prevent text squeeze */
+            .flash-sale-banner > div.relative {
+                padding: 1.75rem 1.25rem !important;
+            }
+            .flash-sale-banner .glass-strong {
+                padding: 1.25rem 1rem !important;
+            }
+        }
     </style>
 </head>
 <body>
@@ -81,9 +113,9 @@
             <div class="container reveal-scale">
                 <div class="flash-sale-banner relative rounded-2xl overflow-hidden shadow-glow-ocean">
                     <!-- Banner Image -->
-                    <div class="absolute inset-0 z-below">
-                        <img src="https://images.unsplash.com/photo-1540541338287-41700207dee6?auto=format&fit=crop&w=1920&q=80" alt="Flash Sale Resort" class="w-full h-full object-cover opacity-40">
-                        <div class="flash-sale-overlay absolute inset-0"></div>
+                    <div class="absolute inset-0 z-below overflow-hidden" style="border-radius: inherit;">
+                        <img src="https://images.unsplash.com/photo-1540541338287-41700207dee6?auto=format&fit=crop&w=1920&q=80" alt="Flash Sale Resort" class="w-full h-full object-cover opacity-40" style="border-radius: inherit;">
+                        <div class="flash-sale-overlay absolute inset-0" style="border-radius: inherit;"></div>
                     </div>
 
                     <div class="relative z-base p-4 sm:p-8 lg:p-12 flex flex-col lg:flex-row items-center justify-between gap-8" style="width: 100%; max-width: 100%; box-sizing: border-box; overflow: hidden;">

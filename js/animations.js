@@ -20,7 +20,7 @@ document.addEventListener("DOMContentLoaded", () => {
    ============================================================ */
 function initScrollReveal() {
     const targets = document.querySelectorAll(
-        ".reveal, .resort-card, .card-resort, .feature-card, .stat-card, .section-title, .testimonial-card"
+        ".reveal, .reveal-left, .reveal-right, .reveal-scale, .resort-card, .card-resort, .feature-card, .stat-card, .section-title, .testimonial-card"
     );
 
     if (!targets.length) return;
@@ -29,15 +29,22 @@ function initScrollReveal() {
         entries.forEach((entry, i) => {
             if (entry.isIntersecting) {
                 setTimeout(() => {
+                    entry.target.classList.add("visible");
                     entry.target.classList.add("revealed");
                 }, i * 80);
                 observer.unobserve(entry.target);
             }
         });
-    }, { threshold: 0.12 });
+    }, { threshold: 0.01 });
 
     targets.forEach(el => {
-        el.classList.add("reveal-init");
+        // Only add translate-based reveal-init if it's a standard reveal element
+        if (el.classList.contains("reveal") && 
+            !el.classList.contains("reveal-left") && 
+            !el.classList.contains("reveal-right") && 
+            !el.classList.contains("reveal-scale")) {
+            el.classList.add("reveal-init");
+        }
         observer.observe(el);
     });
 }
