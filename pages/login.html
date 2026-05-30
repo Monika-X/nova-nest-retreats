@@ -345,9 +345,20 @@
                 btn.innerHTML = '<span class="animate-pulse">Signing in...</span>';
                 btn.disabled = true;
 
-                // Extract username from email & store in localStorage
-                const username = email.split('@')[0];
-                localStorage.setItem("username", username);
+                // Store role and username in localStorage
+                localStorage.setItem('role', currentRole); // 'admin' or 'user'
+                if (currentRole === 'admin') {
+                    // Admin always shows as 'Admin'
+                    localStorage.setItem('username', 'Admin');
+                } else {
+                    // For regular users: extract name from email
+                    const users = JSON.parse(localStorage.getItem('users') || '[]');
+                    const foundUser = users.find(u => u.email.toLowerCase() === email.toLowerCase());
+                    const displayName = foundUser && foundUser.name
+                        ? foundUser.name
+                        : email.split('@')[0];
+                    localStorage.setItem('username', displayName);
+                }
 
                 setTimeout(() => {
                     window.location.href = dest;
@@ -358,7 +369,13 @@
         // Social login click handlers
         function handleSocialLogin(provider) {
             const dest = currentRole === 'admin' ? 'admin-dashboard.html' : 'user-dashboard.html';
-            localStorage.setItem("username", provider + " User");
+            // Store role and a friendly name (not 'Facebook User')
+            localStorage.setItem('role', currentRole);
+            if (currentRole === 'admin') {
+                localStorage.setItem('username', 'Admin');
+            } else {
+                localStorage.setItem('username', provider); // 'Google' or 'Facebook'
+            }
             
             // Show loading animation
             const btn = document.getElementById('login-btn');

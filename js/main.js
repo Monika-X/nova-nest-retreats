@@ -130,14 +130,19 @@
                             <span class="dropdown-arrow">▾</span>
                         </button>
                         <div class="dropdown-menu" id="dropdown-menu" role="menu">
-                            <a href="${PAGES}login.html" class="dropdown-item" role="menuitem">
-                                ${ICONS.userLogin}
-                                <span>User Login</span>
+                            <a href="${PAGES}admin-dashboard.html" class="dropdown-item" role="menuitem">
+                                ${ICONS.admin}
+                                <span>Admin Dashboard</span>
                             </a>
                             <div class="dropdown-divider"></div>
-                            <a href="${PAGES}login.html?role=admin" class="dropdown-item" role="menuitem">
-                                ${ICONS.admin}
-                                <span>Admin Login</span>
+                            <a href="${PAGES}user-dashboard.html" class="dropdown-item" role="menuitem">
+                                ${ICONS.user}
+                                <span>User Dashboard</span>
+                            </a>
+                            <div class="dropdown-divider"></div>
+                            <a href="${PAGES}login.html" class="dropdown-item" role="menuitem">
+                                ${ICONS.userLogin}
+                                <span>Login / Sign Up</span>
                             </a>
                         </div>
                     </div>

@@ -189,22 +189,25 @@
     <script src="../js/animations.js"></script>
     <script>
         document.addEventListener("DOMContentLoaded", () => {
-            const savedAdmin = localStorage.getItem("username") || "Super Admin";
-            
+            // If role is 'admin' use stored username, else always fall back to 'Admin'
+            const role = localStorage.getItem("role");
+            const storedName = localStorage.getItem("username");
+            const displayName = (role === "admin" && storedName) ? storedName : "Admin";
+
             // Welcome title
             const welcomeTitle = document.getElementById("admin-welcome-title");
-             if (welcomeTitle) {
-                 welcomeTitle.innerHTML = `Hello, ${savedAdmin} <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-warning animate-bounce inline-block" style="transform-origin: bottom right;"><path d="M18 11V6a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2v5"/><path d="M14 10V4a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2v6"/><path d="M10 10.5V6a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2v8"/><path d="M6 14v0a5 5 0 0 0 5 5h3a6 6 0 0 0 6-6V11a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2"/></svg>`;
-             }
+            if (welcomeTitle) {
+                welcomeTitle.innerHTML = `Hello, ${displayName}! <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-warning animate-bounce inline-block" style="transform-origin: bottom right;"><path d="M18 11V6a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2v5"/><path d="M14 10V4a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2v6"/><path d="M10 10.5V6a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2v8"/><path d="M6 14v0a5 5 0 0 0 5 5h3a6 6 0 0 0 6-6V11a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2"/></svg>`;
+            }
 
             // Sidebar admin name
             const sidebarAdminName = document.getElementById("sidebar-admin-name");
             if (sidebarAdminName) {
-                sidebarAdminName.innerText = savedAdmin;
+                sidebarAdminName.innerText = displayName;
             }
 
             // Initials avatar
-            const initials = savedAdmin.substring(0, 2).toUpperCase();
+            const initials = displayName.substring(0, 2).toUpperCase();
             document.querySelectorAll(".admin-initials").forEach(el => {
                 el.innerText = initials;
             });
@@ -212,3 +215,4 @@
     </script>
 </body>
 </html>
+

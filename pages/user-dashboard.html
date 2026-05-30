@@ -242,28 +242,31 @@
     <script src="../js/animations.js"></script>
     <script>
         document.addEventListener("DOMContentLoaded", () => {
-            const savedUser = localStorage.getItem("username") || "Monika";
-            
+            // If role is 'user' use stored username, else fall back to 'User'
+            const role = localStorage.getItem("role");
+            const storedName = localStorage.getItem("username");
+            const displayName = (role === "user" && storedName) ? storedName : "User";
+
             // Update greeting header
             const greetingEl = document.getElementById("user-greeting");
             if (greetingEl) {
-                greetingEl.innerHTML = `Hello, ${savedUser} <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-warning animate-bounce inline-block" style="transform-origin: bottom right;"><path d="M18 11V6a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2v5"/><path d="M14 10V4a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2v6"/><path d="M10 10.5V6a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2v8"/><path d="M6 14v0a5 5 0 0 0 5 5h3a6 6 0 0 0 6-6V11a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2"/></svg>`;
+                greetingEl.innerHTML = `Hello, ${displayName}! <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-warning animate-bounce inline-block" style="transform-origin: bottom right;"><path d="M18 11V6a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2v5"/><path d="M14 10V4a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2v6"/><path d="M10 10.5V6a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2v8"/><path d="M6 14v0a5 5 0 0 0 5 5h3a6 6 0 0 0 6-6V11a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2"/></svg>`;
             }
-            
+
             // Update sidebar user label
             const sidebarName = document.getElementById("sidebar-username");
             if (sidebarName) {
-                sidebarName.innerText = savedUser;
+                sidebarName.innerText = displayName;
             }
-            
+
             // Update Profile card name
             const profileName = document.getElementById("profile-card-name");
             if (profileName) {
-                profileName.innerText = savedUser;
+                profileName.innerText = displayName;
             }
-            
-            // Update visual profile initials icon (first 2 chars or 1st char)
-            const initials = savedUser.substring(0, 2).toUpperCase();
+
+            // Update visual profile initials icon (first 2 chars)
+            const initials = displayName.substring(0, 2).toUpperCase();
             document.querySelectorAll(".user-initials").forEach(el => {
                 el.innerText = initials;
             });
@@ -271,3 +274,4 @@
     </script>
 </body>
 </html>
+
