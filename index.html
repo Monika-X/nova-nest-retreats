@@ -428,7 +428,7 @@
                     <h2 class="text-3xl md:text-5xl font-display font-bold mb-4">Never Miss a Deal</h2>
                     <p class="text-lg text-white-80 mb-8 max-w-2xl mx-auto">Join 50,000+ travelers. Get weekly curated resort packages and exclusive promo codes straight to your inbox.</p>
                     
-                    <form class="flex flex-col sm:flex-row gap-4 justify-center max-w-xl mx-auto">
+                    <form id="newsletter-form" class="flex flex-col sm:flex-row gap-4 justify-center max-w-xl mx-auto">
                         <input type="email" placeholder="Enter your email address" class="form-input sm:w-2/3 h-14 text-base" required>
                         <button type="submit" class="btn btn-primary h-14 px-8 text-base shadow-lg">Subscribe Now</button>
                     </form>
@@ -571,6 +571,19 @@
                 splitTotal.addEventListener('input', updateSplit);
                 splitPersons.addEventListener('input', updateSplit);
                 updateSplit();
+            }
+
+            // Newsletter form subscription
+            const newsletterForm = document.getElementById('newsletter-form');
+            if (newsletterForm) {
+                newsletterForm.addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    const emailInput = newsletterForm.querySelector('input[type="email"]');
+                    if (emailInput) {
+                        showToast('Subscribed successfully!');
+                        emailInput.value = '';
+                    }
+                });
             }
         });
     </script>

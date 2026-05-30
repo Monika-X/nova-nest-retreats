@@ -226,18 +226,18 @@
                             <p class="newsletter-text">
                                 Subscribe to get exclusive deals, travel tips, and early access to new resort launches.
                             </p>
-                            <form class="newsletter-form" id="newsletter-form" novalidate>
+                            <form class="newsletter-form" id="footer-newsletter-form" novalidate>
                                 <input
                                     type="email"
                                     class="newsletter-input"
-                                    id="newsletter-email"
+                                    id="footer-newsletter-email"
                                     placeholder="Enter your email"
                                     aria-label="Email address for newsletter"
                                     required
                                 />
                                 <button type="submit" class="newsletter-btn">Subscribe</button>
                             </form>
-                            <div class="newsletter-success" id="newsletter-success">
+                            <div class="newsletter-success" id="footer-newsletter-success">
                                 <span>✓</span> Thanks for subscribing!
                             </div>
                         </div>
@@ -383,27 +383,18 @@
 
     /* ---- Newsletter Form ---- */
     function initNewsletter() {
-        const form    = document.getElementById('newsletter-form');
-        const success = document.getElementById('newsletter-success');
+        const form    = document.getElementById('footer-newsletter-form');
 
         if (!form) return;
 
         form.addEventListener('submit', (e) => {
             e.preventDefault();
-            const email = document.getElementById('newsletter-email');
+            const email = document.getElementById('footer-newsletter-email');
 
             if (email && email.value && email.value.includes('@')) {
-                // Simulate subscription
-                form.style.display = 'none';
-                if (success) success.classList.add('show');
-
-                // Reset after 4 seconds
-                setTimeout(() => {
-                    form.style.display = '';
-                    if (success) success.classList.remove('show');
-                    email.value = '';
-                }, 4000);
-            } else {
+                showToast('Subscribed successfully!');
+                email.value = '';
+            } else if (email) {
                 // Shake animation on invalid
                 email.style.outline = '2px solid #f43f5e';
                 email.style.outlineOffset = '0';
@@ -414,6 +405,22 @@
             }
         });
     }
+
+    // Expose showToast globally
+    function showToast(msg) {
+        let t = document.getElementById('toast-notification');
+        if (!t) {
+            t = document.createElement('div');
+            t.id = 'toast-notification';
+            t.className = 'toast';
+            t.innerHTML = `<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg><span id="toast-text"></span>`;
+            document.body.appendChild(t);
+        }
+        document.getElementById('toast-text').innerText = msg;
+        t.classList.add('show');
+        setTimeout(() => t.classList.remove('show'), 3500);
+    }
+    window.showToast = showToast;
 
 
     /* ---- Back to Top ---- */

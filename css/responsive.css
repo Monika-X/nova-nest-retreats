@@ -287,8 +287,8 @@ input[type="date"] {
     }
 
     .footer-grid .footer-col:nth-child(4) .footer-heading::after {
-        left: 50%;
-        transform: translateX(-50%);
+        left: 0 !important;
+        transform: none !important;
     }
 
     .footer-grid .footer-col:nth-child(4) .newsletter-form {
@@ -1538,8 +1538,8 @@ input[type="date"] {
     }
 
     .footer-heading::after {
-        left: 50% !important;
-        transform: translateX(-50%) !important;
+        left: 0 !important;
+        transform: none !important;
     }
 
     /* Fluid typography overrides for hardcoded sizes */
