@@ -643,13 +643,14 @@
     <!-- Scripts -->
     <script src="../js/main.js"></script>
     <script src="../js/animations.js"></script>
+    <script src="../js/resort-details.js"></script>
     <!-- booking.js excluded: resort-details uses its own self-contained price calculator -->
     <script>
     (function () {
         /* ═══════════════════════════════════════════════════
            PRICE CALCULATOR — runs immediately (DOM is ready)
            ═══════════════════════════════════════════════════ */
-        var BASE_RATE = 24500;   // ₹ per night base (up to 2 adults)
+        var BASE_RATE = window.NOVA_RESORT_PRICE || 24500;   // ₹ per night base (up to 2 adults)
         var TAX_RATE  = 0.12;    // 12% taxes & fees
 
         /* Scope to the form so there are zero ID conflicts */
