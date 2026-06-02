@@ -220,4 +220,60 @@
         if (price) price.innerHTML = `${fmt(item.price)}<span class="text-xs font-normal text-muted">/n</span>`;
         if (link) link.href = `resort-details.html?id=${item.id}`;
     });
+
+    // Wishlist & Share Functionality
+    const wishlistBtn = document.querySelector('[aria-label="Save to Wishlist"]');
+    const shareBtn = document.querySelector('[aria-label="Share"]');
+
+    if (wishlistBtn) {
+        const heartSvg = wishlistBtn.querySelector('svg');
+        const updateHeartVisuals = (saved) => {
+            if (saved) {
+                heartSvg.setAttribute('fill', '#ef4444');
+                heartSvg.setAttribute('stroke', '#ef4444');
+            } else {
+                heartSvg.setAttribute('fill', 'none');
+                heartSvg.setAttribute('stroke', 'currentColor');
+            }
+        };
+
+        let wishlist = JSON.parse(localStorage.getItem('novanest_wishlist')) || [];
+        let isSaved = wishlist.includes(resort.id);
+        updateHeartVisuals(isSaved);
+
+        wishlistBtn.addEventListener('click', () => {
+            wishlist = JSON.parse(localStorage.getItem('novanest_wishlist')) || [];
+            isSaved = wishlist.includes(resort.id);
+            if (isSaved) {
+                wishlist = wishlist.filter(id => id !== resort.id);
+                localStorage.setItem('novanest_wishlist', JSON.stringify(wishlist));
+                updateHeartVisuals(false);
+                if (window.showToast) window.showToast('Removed from Wishlist');
+            } else {
+                wishlist.push(resort.id);
+                localStorage.setItem('novanest_wishlist', JSON.stringify(wishlist));
+                updateHeartVisuals(true);
+                if (window.showToast) window.showToast('Added to Wishlist');
+            }
+        });
+    }
+
+    if (shareBtn) {
+        shareBtn.addEventListener('click', () => {
+            if (navigator.share) {
+                navigator.share({
+                    title: resort.name,
+                    text: `Check out ${resort.name} in ${resort.location} on Nova Nest Retreats!`,
+                    url: window.location.href
+                }).catch(err => console.log('Error sharing:', err));
+            } else {
+                navigator.clipboard.writeText(window.location.href).then(() => {
+                    if (window.showToast) window.showToast('Link copied to clipboard!');
+                }).catch(err => {
+                    console.error('Failed to copy link:', err);
+                    if (window.showToast) window.showToast('Could not copy link.');
+                });
+            }
+        });
+    }
 })();

@@ -530,10 +530,12 @@
                                         <div class="form-group mb-0">
                                             <label class="form-label text-xs uppercase tracking-wider" for="check-in">Check-in</label>
                                             <input type="date" id="check-in" class="form-input" required>
+                                            <span class="error-message text-xs text-rose-500 mt-1 hidden" id="error-check-in" style="font-size:11px;color:#f43f5e;display:block;"></span>
                                         </div>
                                         <div class="form-group mb-0">
                                             <label class="form-label text-xs uppercase tracking-wider" for="check-out">Check-out</label>
                                             <input type="date" id="check-out" class="form-input" required>
+                                            <span class="error-message text-xs text-rose-500 mt-1 hidden" id="error-check-out" style="font-size:11px;color:#f43f5e;display:block;"></span>
                                         </div>
                                     </div>
                                     
@@ -779,10 +781,72 @@
            ═══════════════════════════════════════════════════ */
         var btnReserve = document.getElementById('btn-reserve');
         if (btnReserve) {
-            btnReserve.addEventListener('click', function () {
-                alert('Reservation process started! You will be redirected to payment.');
-                window.location.href = 'payment.html';
+            btnReserve.addEventListener('click', function (e) {
+                e.preventDefault();
+                
+                var inDate = checkInEl.value;
+                var outDate = checkOutEl.value;
+                
+                var errIn = document.getElementById('error-check-in');
+                var errOut = document.getElementById('error-check-out');
+                
+                if (errIn) errIn.classList.add('hidden');
+                if (errOut) errOut.classList.add('hidden');
+                checkInEl.style.outline = '';
+                checkOutEl.style.outline = '';
+                
+                var isValid = true;
+                
+                if (!inDate) {
+                    showError(checkInEl, errIn, 'Select check-in.');
+                    isValid = false;
+                }
+                
+                if (!outDate) {
+                    showError(checkOutEl, errOut, 'Select check-out.');
+                    isValid = false;
+                }
+                
+                if (inDate && outDate) {
+                    var dIn = new Date(inDate);
+                    var dOut = new Date(outDate);
+                    var todayDate = new Date();
+                    todayDate.setHours(0,0,0,0);
+                    
+                    if (dIn < todayDate) {
+                        showError(checkInEl, errIn, 'Cannot be in past.');
+                        isValid = false;
+                    }
+                    if (dOut <= dIn) {
+                        showError(checkOutEl, errOut, 'Must be after check-in.');
+                        isValid = false;
+                    }
+                }
+                
+                if (!isValid) {
+                    if (window.showToast) {
+                        window.showToast('Please select valid check-in and check-out dates.', 'error');
+                    }
+                    return;
+                }
+                
+                if (window.showToast) {
+                    window.showToast('Reservation confirmed! Redirecting to payment...', 'success');
+                }
+                
+                setTimeout(function() {
+                    window.location.href = 'payment.html?checkin=' + inDate + '&checkout=' + outDate + '&guests=' + guestsEl.value;
+                }, 1500);
             });
+        }
+
+        function showError(el, errSpan, msg) {
+            el.style.outline = '2px solid #f43f5e';
+            el.style.outlineOffset = '0';
+            if (errSpan) {
+                errSpan.classList.remove('hidden');
+                errSpan.textContent = msg;
+            }
         }
 
         /* ═══════════════════════════════════════════════════

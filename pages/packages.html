@@ -17,886 +17,364 @@
 
     <!-- ===== MAIN CONTENT ===== -->
     <main id="main-content" class="page-content bg-deep min-h-screen">
-        
-        <!-- Page Header -->
-        <section class="pt-8 pb-12 relative overflow-hidden">
-            <div class="absolute top-0 right-0 w-1/2 h-full bg-gradient-to-l from-emerald-900 to-transparent opacity-20 blur-3xl pointer-events-none"></div>
+
+        <!-- SECTION 1: Hero -->
+        <section class="pt-12 pb-16 relative overflow-hidden text-center">
+            <div class="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-gradient-to-b from-emerald-900 to-transparent opacity-20 blur-3xl pointer-events-none"></div>
             <div class="container relative z-base reveal">
-                <nav class="text-sm text-muted mb-4 flex items-center gap-2">
+                <nav class="text-sm text-muted mb-6 flex flex-wrap items-center justify-center gap-2">
                     <a href="../index.html" class="hover:text-emerald">Home</a>
                     <span>/</span>
                     <span class="text-white">Packages</span>
                 </nav>
-                <h1 class="text-4xl md:text-5xl font-display font-bold mb-4">Curated Travel Packages</h1>
-                <p class="text-muted text-lg max-w-2xl">Tailored experiences designed for every type of traveler. Choose a package that fits your lifestyle, budget, and travel companions to unlock exclusive savings and perks.</p>
-            </div>
-        </section>
-
-        <!-- Packages Comparison Grid -->
-        <section class="pb-24">
-            <div class="container">
-                <div class="card-pricing-container reveal">
-                    
-                    <!-- 1. Student Package -->
-                    <div class="card-pricing hover-glow reveal stagger-1">
-                        <div class="card-pricing-badge badge-cyan">Budget Friendly</div>
-                        <h3 class="card-pricing-name">Student Package</h3>
-                        <div class="card-pricing-price">₹8,500<span>/person</span></div>
-                        <p class="text-sm text-muted mb-6">Perfect for groups of friends looking for adventure on a budget.</p>
-                        
-                        <ul class="card-pricing-features">
-                            <li>Group dorms or shared rooms</li>
-                            <li>Complimentary breakfast</li>
-                            <li>1 Adventure activity included</li>
-                            <li>Late checkout (up to 2 PM)</li>
-                            <li class="opacity-50 line-through">Spa access</li>
-                        </ul>
-                        
-                        <a href="resorts.html?package=student" class="btn btn-outline-ocean btn-block btn-lg mt-auto hover-scale">View Details</a>
-                    </div>
-
-                    <!-- 2. Couple Package -->
-                    <div class="card-pricing popular hover-glow reveal stagger-2">
-                        <div class="absolute top-4 right-4 animate-pulse">
-                            <span class="text-emerald text-xl">♥</span>
-                        </div>
-                        <div class="card-pricing-badge">Most Romantic</div>
-                        <h3 class="card-pricing-name text-white">Couple Package</h3>
-                        <div class="card-pricing-price text-emerald">₹25,000<span>/couple</span></div>
-                        <p class="text-sm text-white-80 mb-6">The ultimate romantic getaway for honeymoons and anniversaries.</p>
-                        
-                        <ul class="card-pricing-features border-white-20">
-                            <li class="text-white-90">Premium Ocean/Mountain view</li>
-                            <li class="text-white-90">Candlelight dinner for two</li>
-                            <li class="text-white-90">Couples massage (60 mins)</li>
-                            <li class="text-white-90">Complimentary wine on arrival</li>
-                            <li class="text-white-90">Private airport transfer</li>
-                        </ul>
-                        
-                        <a href="resorts.html?package=couple" class="btn btn-primary btn-block btn-lg mt-auto hover-scale">View Details</a>
-                    </div>
-
-                    <!-- 3. Family Package -->
-                    <div class="card-pricing hover-glow reveal stagger-3">
-                        <div class="card-pricing-badge badge-warning">Kid Friendly</div>
-                        <h3 class="card-pricing-name">Family Package</h3>
-                        <div class="card-pricing-price">₹35,000<span>/family</span></div>
-                        <p class="text-sm text-muted mb-6">Spacious stays designed for up to 2 adults and 2 children.</p>
-                        
-                        <ul class="card-pricing-features">
-                            <li>2 Bedroom interconnecting suite</li>
-                            <li>Kids stay & eat free (under 12)</li>
-                            <li>Access to Kids Club & activities</li>
-                            <li>Free babysitting (2 hours)</li>
-                            <li>Family photoshoot session</li>
-                        </ul>
-                        
-                        <a href="resorts.html?package=family" class="btn btn-outline btn-block btn-lg mt-auto hover-scale">View Details</a>
-                    </div>
-
-                    <!-- 4. Weekend Package -->
-                    <div class="card-pricing hover-glow reveal stagger-1">
-                        <div class="card-pricing-badge badge-emerald">Quick Escape</div>
-                        <h3 class="card-pricing-name">Weekend Package</h3>
-                        <div class="card-pricing-price">₹15,000<span>/person</span></div>
-                        <p class="text-sm text-muted mb-6">A rejuvenating 2-night stay to recharge from the work week.</p>
-                        
-                        <ul class="card-pricing-features">
-                            <li>2 Nights premium accommodation</li>
-                            <li>All meals included (Full Board)</li>
-                            <li>Early check-in (from 10 AM)</li>
-                            <li>Late check-out (until 4 PM)</li>
-                            <li>Welcome cocktails</li>
-                        </ul>
-                        
-                        <a href="resorts.html?package=weekend" class="btn btn-outline btn-block btn-lg mt-auto hover-scale">View Details</a>
-                    </div>
-
-                    <!-- 5. Seasonal Package -->
-                    <div class="card-pricing hover-glow reveal stagger-2">
-                        <div class="card-pricing-badge badge-ocean">Limited Time</div>
-                        <h3 class="card-pricing-name">Seasonal Package</h3>
-                        <div class="card-pricing-price">₹18,500<span>/person</span></div>
-                        <p class="text-sm text-muted mb-6">Special festive rates for the upcoming holiday season.</p>
-                        
-                        <ul class="card-pricing-features">
-                            <li>Festive gala dinner included</li>
-                            <li>Guided local holiday tour</li>
-                            <li>Welcome gift hamper</li>
-                            <li>Free room upgrade (subject to avail.)</li>
-                            <li>Live entertainment access</li>
-                        </ul>
-                        
-                        <a href="resorts.html?package=seasonal" class="btn btn-outline btn-block btn-lg mt-auto hover-scale">View Details</a>
-                    </div>
-
-                    <!-- 6. Wellness Package -->
-                    <div class="card-pricing hover-glow reveal stagger-3">
-                        <div class="card-pricing-badge badge-emerald">Wellness & Spa</div>
-                        <h3 class="card-pricing-name">Wellness Package</h3>
-                        <div class="card-pricing-price">₹12,500<span>/person</span></div>
-                        <p class="text-sm text-muted mb-6">Reconnect with yourself. Includes guided sessions and premium treatments.</p>
-                        
-                        <ul class="card-pricing-features">
-                            <li>Daily yoga & guided meditation</li>
-                            <li>2 Signature spa therapies (60m)</li>
-                            <li>Personalized nutrition consultation</li>
-                            <li>Organic meals & herbal infusions</li>
-                            <li>Mindful nature walks with guides</li>
-                        </ul>
-                        
-                        <a href="resorts.html?package=wellness" class="btn btn-outline btn-block btn-lg mt-auto hover-scale">View Details</a>
-                    </div>
-
-                    <!-- 7. Adventure Package -->
-                    <div class="card-pricing hover-glow reveal stagger-1">
-                        <div class="card-pricing-badge badge-danger">Thrill Seeker</div>
-                        <h3 class="card-pricing-name">Adventure Package</h3>
-                        <div class="card-pricing-price">₹22,000<span>/person</span></div>
-                        <p class="text-sm text-muted mb-6">Designed for explorers who want to experience wild terrains and thrills.</p>
-                        
-                        <ul class="card-pricing-features">
-                            <li>4x4 Offroad safari tour</li>
-                            <li>Scuba diving & water sports session</li>
-                            <li>Guided trekking with local experts</li>
-                            <li>Private outdoor bonfire & camp setup</li>
-                            <li>Professional action camera rental</li>
-                        </ul>
-                        
-                        <a href="resorts.html?package=adventure" class="btn btn-outline btn-block btn-lg mt-auto hover-scale">View Details</a>
-                    </div>
-
-                    <!-- 8. Workation Package -->
-                    <div class="card-pricing hover-glow reveal stagger-2">
-                        <div class="card-pricing-badge badge-ocean">Work & Play</div>
-                        <h3 class="card-pricing-name">Workation Package</h3>
-                        <div class="card-pricing-price">₹16,500<span>/person</span></div>
-                        <p class="text-sm text-muted mb-6">Ideal blend of productivity and resort relaxation for digital nomads.</p>
-                        
-                        <ul class="card-pricing-features">
-                            <li>Executive suite with ergonomic desk</li>
-                            <li>Dedicated ultra-fast Starlink WiFi</li>
-                            <li>Complimentary coworking space access</li>
-                            <li>Soundproof conference room (2 hrs)</li>
-                            <li>Unlimited premium coffee & tea</li>
-                        </ul>
-                        
-                        <a href="resorts.html?package=workation" class="btn btn-outline btn-block btn-lg mt-auto hover-scale">View Details</a>
-                    </div>
-
+                <h1 class="text-5xl md:text-6xl font-display font-bold mb-6">Curated <span class="text-gradient">Packages</span></h1>
+                <p class="text-muted text-lg max-w-2xl mx-auto leading-relaxed mb-8">Every package is designed around real traveler needs — whether it's a honeymoon, family vacation, student trip, or solo retreat.</p>
+                <div class="flex flex-wrap gap-3 justify-center">
+                    <a href="#budget" class="badge badge-emerald text-sm py-2 px-4">Budget</a>
+                    <a href="#experiences" class="badge badge-ocean text-sm py-2 px-4">Experiences</a>
+                    <a href="#group" class="badge badge-warning text-sm py-2 px-4">Group &amp; Family</a>
+                    <a href="#addons" class="badge text-sm py-2 px-4" style="background:var(--cyan-900);color:var(--cyan-400);">Add-ons</a>
                 </div>
             </div>
         </section>
 
-        <!-- SECTION 3: Package Finder -->
-        <section class="py-24 bg-primary relative">
-            <div class="container">
-                <div class="text-center mb-12 reveal">
-                    <span class="section-label">Start Here</span>
-                    <h2 class="section-title">Find The Right Package Faster</h2>
-                    <p class="section-subtitle mx-auto">Match your budget, group size, and travel mood before you compare every detail.</p>
-                </div>
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                    <div class="card p-8 reveal stagger-1">
-                        <div class="text-emerald font-display font-bold text-5xl mb-4">1</div>
-                        <h3 class="text-xl font-display font-bold mb-3">Pick Your People</h3>
-                        <p class="text-muted">Choose student, couple, family, group, solo, or corporate styles based on who is traveling.</p>
-                    </div>
-                    <div class="card p-8 reveal stagger-2">
-                        <div class="text-ocean font-display font-bold text-5xl mb-4">2</div>
-                        <h3 class="text-xl font-display font-bold mb-3">Set Your Pace</h3>
-                        <p class="text-muted">Decide between slow wellness days, adventure-heavy schedules, or relaxed resort time.</p>
-                    </div>
-                    <div class="card p-8 reveal stagger-3">
-                        <div class="font-display font-bold text-5xl mb-4" style="color: var(--clr-warning);">3</div>
-                        <h3 class="text-xl font-display font-bold mb-3">Compare Inclusions</h3>
-                        <p class="text-muted">Look beyond room price and check meals, transfers, activities, upgrades, and support.</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- SECTION 4: Value Inclusions -->
-        <section class="py-24 bg-deep relative">
+        <!-- SECTION 2: Featured Packages Grid -->
+        <section class="pb-24 bg-deep" id="featured">
             <div class="container">
                 <div class="flex flex-col md:flex-row justify-between items-end gap-6 mb-12 reveal">
                     <div>
-                        <span class="section-label">What You Get</span>
-                        <h2 class="section-title">Package Value Inclusions</h2>
-                        <p class="section-subtitle">Each package combines stay essentials with perks that make planning simpler.</p>
+                        <span class="section-label">Handpicked Deals</span>
+                        <h2 class="section-title">Featured Packages</h2>
                     </div>
-                    <a href="resorts.html" class="btn btn-outline">Browse Resorts</a>
+                    <a href="resorts.html" class="btn btn-outline">Browse All Resorts</a>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <!-- Package Card 1 -->
+                    <div class="card flex flex-col h-full overflow-hidden hover-lift reveal stagger-1">
+                        <div class="relative h-52 overflow-hidden">
+                            <img src="https://images.unsplash.com/photo-1506929562872-bb421503ef21?auto=format&fit=crop&w=800&q=80" alt="Maldives Escape" class="w-full h-full object-cover transition-transform duration-500 hover:scale-110">
+                            <div class="absolute top-4 left-4"><span class="badge badge-emerald">Weekend Escape</span></div>
+                            <div class="absolute bottom-4 right-4"><span class="badge" style="background:rgba(0,0,0,0.7);">From ₹18,999</span></div>
+                        </div>
+                        <div class="p-6 flex flex-col justify-between flex-1">
+                            <div>
+                                <h3 class="text-xl font-display font-bold mb-2">Maldives Island Bliss</h3>
+                                <p class="text-muted text-sm mb-4">3 nights, water villa, breakfast + dinner, transfers included.</p>
+                            </div>
+                            <a href="resorts.html" class="btn btn-primary w-full text-center mt-auto">View Package</a>
+                        </div>
+                    </div>
+                    <!-- Package Card 2 -->
+                    <div class="card flex flex-col h-full overflow-hidden hover-lift reveal stagger-2">
+                        <div class="relative h-52 overflow-hidden">
+                            <img src="https://images.unsplash.com/photo-1571896349842-33c89424de2d?auto=format&fit=crop&w=800&q=80" alt="Coorg Retreat" class="w-full h-full object-cover transition-transform duration-500 hover:scale-110">
+                            <div class="absolute top-4 left-4"><span class="badge badge-ocean">Nature Stay</span></div>
+                            <div class="absolute bottom-4 right-4"><span class="badge" style="background:rgba(0,0,0,0.7);">From ₹8,499</span></div>
+                        </div>
+                        <div class="p-6 flex flex-col justify-between flex-1">
+                            <div>
+                                <h3 class="text-xl font-display font-bold mb-2">Coorg Coffee Country</h3>
+                                <p class="text-muted text-sm mb-4">2 nights, forest cottage, all meals, estate walks, plantation tour.</p>
+                            </div>
+                            <a href="resorts.html" class="btn btn-primary w-full text-center mt-auto">View Package</a>
+                        </div>
+                    </div>
+                    <!-- Package Card 3 -->
+                    <div class="card flex flex-col h-full overflow-hidden hover-lift reveal stagger-3">
+                        <div class="relative h-52 overflow-hidden">
+                            <img src="https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=800&q=80" alt="Goa Celebration" class="w-full h-full object-cover transition-transform duration-500 hover:scale-110">
+                            <div class="absolute top-4 left-4"><span class="badge badge-warning">Celebration</span></div>
+                            <div class="absolute bottom-4 right-4"><span class="badge" style="background:rgba(0,0,0,0.7);">From ₹24,999</span></div>
+                        </div>
+                        <div class="p-6 flex flex-col justify-between flex-1">
+                            <div>
+                                <h3 class="text-xl font-display font-bold mb-2">Goa Villa Celebration</h3>
+                                <p class="text-muted text-sm mb-4">4 nights, pool villa, private beach, decorations, farewell dinner.</p>
+                            </div>
+                            <a href="resorts.html" class="btn btn-primary w-full text-center mt-auto">View Package</a>
+                        </div>
+                    </div>
+                    <!-- Package Card 4 -->
+                    <div class="card flex flex-col h-full overflow-hidden hover-lift reveal stagger-4">
+                        <div class="relative h-52 overflow-hidden">
+                            <img src="https://images.unsplash.com/photo-1614082242765-7c98ca0f3df3?auto=format&fit=crop&w=800&q=80" alt="Bali Retreat" class="w-full h-full object-cover transition-transform duration-500 hover:scale-110">
+                            <div class="absolute top-4 left-4"><span class="badge badge-emerald">Wellness</span></div>
+                            <div class="absolute bottom-4 right-4"><span class="badge" style="background:rgba(0,0,0,0.7);">From ₹32,999</span></div>
+                        </div>
+                        <div class="p-6 flex flex-col justify-between flex-1">
+                            <div>
+                                <h3 class="text-xl font-display font-bold mb-2">Bali Wellness Escape</h3>
+                                <p class="text-muted text-sm mb-4">5 nights, spa villa, daily treatments, yoga, healthy cuisine.</p>
+                            </div>
+                            <a href="resorts.html" class="btn btn-primary w-full text-center mt-auto">View Package</a>
+                        </div>
+                    </div>
+                    <!-- Package Card 5 -->
+                    <div class="card flex flex-col h-full overflow-hidden hover-lift reveal stagger-1">
+                        <div class="relative h-52 overflow-hidden">
+                            <img src="https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?auto=format&fit=crop&w=800&q=80" alt="Manali Adventure" class="w-full h-full object-cover transition-transform duration-500 hover:scale-110">
+                            <div class="absolute top-4 left-4"><span class="badge badge-ocean">Adventure</span></div>
+                            <div class="absolute bottom-4 right-4"><span class="badge" style="background:rgba(0,0,0,0.7);">From ₹12,999</span></div>
+                        </div>
+                        <div class="p-6 flex flex-col justify-between flex-1">
+                            <div>
+                                <h3 class="text-xl font-display font-bold mb-2">Manali Mountain Trek</h3>
+                                <p class="text-muted text-sm mb-4">3 nights, mountain lodge, guided treks, campfire, local cuisine.</p>
+                            </div>
+                            <a href="resorts.html" class="btn btn-primary w-full text-center mt-auto">View Package</a>
+                        </div>
+                    </div>
+                    <!-- Package Card 6 -->
+                    <div class="card flex flex-col h-full overflow-hidden hover-lift reveal stagger-2">
+                        <div class="relative h-52 overflow-hidden">
+                            <img src="https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=800&q=80" alt="Kerala Backwaters" class="w-full h-full object-cover transition-transform duration-500 hover:scale-110">
+                            <div class="absolute top-4 left-4"><span class="badge" style="background:var(--cyan-900);color:var(--cyan-400);">Family</span></div>
+                            <div class="absolute bottom-4 right-4"><span class="badge" style="background:rgba(0,0,0,0.7);">From ₹15,999</span></div>
+                        </div>
+                        <div class="p-6 flex flex-col justify-between flex-1">
+                            <div>
+                                <h3 class="text-xl font-display font-bold mb-2">Kerala Backwaters Family</h3>
+                                <p class="text-muted text-sm mb-4">4 nights, houseboat + resort, kids activities, Ayurveda, transfers.</p>
+                            </div>
+                            <a href="resorts.html" class="btn btn-primary w-full text-center mt-auto">View Package</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 3: Budget Categories -->
+        <section class="py-24 bg-primary relative" id="budget">
+            <div class="container">
+                <div class="text-center mb-12 reveal">
+                    <span class="section-label">Tailored For You</span>
+                    <h2 class="section-title">Choose By Budget</h2>
+                    <p class="section-subtitle mx-auto">Find the right package for your spend and get the most out of every rupee.</p>
                 </div>
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                    <div class="card-feature reveal stagger-1">
-                        <div class="card-feature-icon text-emerald"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 10h16"></path><path d="M5 10l1-5h12l1 5"></path><path d="M6 14h12v5H6z"></path></svg></div>
-                        <h3 class="card-feature-title">Meal Plans</h3>
-                        <p class="card-feature-text">Breakfast, full-board, festive dinners, and dietary request options.</p>
-                    </div>
-                    <div class="card-feature reveal stagger-2">
-                        <div class="card-feature-icon text-ocean"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14"></path><path d="M12 5l7 7-7 7"></path></svg></div>
-                        <h3 class="card-feature-title">Transfers</h3>
-                        <p class="card-feature-text">Airport pickups, private cabs, and local movement coordination.</p>
-                    </div>
-                    <div class="card-feature reveal stagger-3">
-                        <div class="card-feature-icon text-cyan"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3 3"></path></svg></div>
-                        <h3 class="card-feature-title">Flexible Timing</h3>
-                        <p class="card-feature-text">Early check-in and late checkout requests where available.</p>
-                    </div>
-                    <div class="card-feature reveal stagger-4">
-                        <div class="card-feature-icon" style="color: var(--clr-warning);"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21s7-4 7-10V5l-7-3-7 3v6c0 6 7 10 7 10z"></path></svg></div>
-                        <h3 class="card-feature-title">Travel Support</h3>
-                        <p class="card-feature-text">Pre-arrival reminders and help with add-ons before you travel.</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- SECTION 5: Traveler Types -->
-        <section class="py-24 bg-primary relative">
-            <div class="container">
-                <div class="text-center mb-12 reveal">
-                    <span class="section-label">Made For You</span>
-                    <h2 class="section-title">Packages By Traveler Type</h2>
-                    <p class="section-subtitle mx-auto">Use these quick paths when you already know who is coming along.</p>
-                </div>
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                    <a href="resorts.html?package=student" class="card p-8 hover-lift reveal stagger-1">
-                        <h3 class="text-xl font-display font-bold mb-3">Students</h3>
-                        <p class="text-muted">Group-friendly stays with shared rooms, activities, and budget-first planning.</p>
+                    <a href="resorts.html?budget=5000" class="card-feature hover-lift reveal stagger-1">
+                        <div class="card-feature-icon text-emerald"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg></div>
+                        <h3 class="card-feature-title">Under ₹5,000</h3>
+                        <p class="card-feature-text">Budget guesthouses, hostels, and clean comfortable stays.</p>
                     </a>
-                    <a href="resorts.html?package=couple" class="card p-8 hover-lift reveal stagger-2">
-                        <h3 class="text-xl font-display font-bold mb-3">Couples</h3>
-                        <p class="text-muted">Romantic extras, premium rooms, private dining, and celebration-ready details.</p>
+                    <a href="resorts.html?budget=10000" class="card-feature hover-lift reveal stagger-2">
+                        <div class="card-feature-icon text-ocean"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"></rect><line x1="2" y1="10" x2="22" y2="10"></line></svg></div>
+                        <h3 class="card-feature-title">Under ₹10,000</h3>
+                        <p class="card-feature-text">Premium rooms, boutique stays, and weekend resort packages.</p>
                     </a>
-                    <a href="resorts.html?package=family" class="card p-8 hover-lift reveal stagger-3">
-                        <h3 class="text-xl font-display font-bold mb-3">Families</h3>
-                        <p class="text-muted">Large rooms, kids club access, babysitting options, and easy meal plans.</p>
+                    <a href="resorts.html?budget=20000" class="card-feature hover-lift reveal stagger-3">
+                        <div class="card-feature-icon text-cyan"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg></div>
+                        <h3 class="card-feature-title">Under ₹20,000</h3>
+                        <p class="card-feature-text">Luxury villas, pool stays, and curated resort getaways.</p>
                     </a>
-                    <a href="contact.html" class="card p-8 hover-lift reveal stagger-4">
-                        <h3 class="text-xl font-display font-bold mb-3">Teams</h3>
-                        <p class="text-muted">Corporate retreats, offsites, meeting rooms, and customized group support.</p>
+                    <a href="resorts.html?budget=50000" class="card-feature hover-lift reveal stagger-4">
+                        <div class="card-feature-icon" style="color: var(--clr-warning);"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg></div>
+                        <h3 class="card-feature-title">Luxury (₹20K+)</h3>
+                        <p class="card-feature-text">Private islands, overwater villas, and bespoke VIP getaways.</p>
                     </a>
                 </div>
             </div>
         </section>
 
-        <!-- SECTION 6: Seasonal Package Calendar -->
-        <section class="py-24 bg-deep relative">
+        <!-- SECTION 4: Experience Themes -->
+        <section class="py-24 bg-deep relative" id="experiences">
             <div class="container">
                 <div class="text-center mb-12 reveal">
-                    <span class="section-label">When To Travel</span>
-                    <h2 class="section-title">Seasonal Package Calendar</h2>
-                    <p class="section-subtitle mx-auto">Different months reward different trip styles, locations, and budgets.</p>
+                    <span class="section-label">Travel Your Way</span>
+                    <h2 class="section-title">Browse By Experience</h2>
+                    <p class="section-subtitle mx-auto">Pick a travel style and find packages designed around how you like to unwind.</p>
                 </div>
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                     <div class="card card-glare p-8 reveal stagger-1">
-                        <span class="badge badge-emerald mb-4">June - September</span>
-                        <h3 class="text-2xl font-display font-bold mb-3">Monsoon Wellness</h3>
-                        <p class="text-muted">Spa therapies, nature views, slow itineraries, and lower crowd density.</p>
+                        <span class="badge badge-emerald mb-4">Wellness</span>
+                        <h3 class="text-2xl font-display font-bold mb-3">Spa &amp; Slow Living</h3>
+                        <p class="text-muted mb-6">Ayurveda, guided meditation, poolside reading corners, and nourishing menus.</p>
+                        <ul class="text-muted text-sm space-y-1 mb-6"><li>• Daily spa sessions</li><li>• Yoga and meditation</li><li>• Healthy cuisine plans</li></ul>
+                        <a href="resorts.html?theme=wellness" class="text-emerald font-medium">Explore wellness →</a>
                     </div>
                     <div class="card card-glare p-8 reveal stagger-2">
-                        <span class="badge badge-ocean mb-4">October - February</span>
-                        <h3 class="text-2xl font-display font-bold mb-3">Festive &amp; Beach Season</h3>
-                        <p class="text-muted">Gala dinners, coastal stays, family holidays, and destination celebrations.</p>
+                        <span class="badge badge-ocean mb-4">Adventure</span>
+                        <h3 class="text-2xl font-display font-bold mb-3">Trails &amp; Water Sports</h3>
+                        <p class="text-muted mb-6">Trekking, kayaking, diving, cycling routes, and expert-led outdoor days.</p>
+                        <ul class="text-muted text-sm space-y-1 mb-6"><li>• Guided trek itineraries</li><li>• Water sport sessions</li><li>• Camping and bonfires</li></ul>
+                        <a href="resorts.html?theme=adventure" class="text-ocean font-medium">Explore adventure →</a>
                     </div>
                     <div class="card card-glare p-8 reveal stagger-3">
-                        <span class="badge badge-warning mb-4">March - May</span>
-                        <h3 class="text-2xl font-display font-bold mb-3">Summer Hills</h3>
-                        <p class="text-muted">Cool mountain stays, pool villas, quick escapes, and school-break plans.</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- SECTION 7: Budget Guide -->
-        <section class="py-24 bg-primary relative">
-            <div class="container">
-                <div class="flex flex-col lg:flex-row items-center gap-12">
-                    <div class="flex-1 reveal-left">
-                        <span class="section-label">Spend Smarter</span>
-                        <h2 class="section-title">Package Budget Guide</h2>
-                        <p class="section-subtitle">Start with the total experience cost, then compare what is already included before upgrading.</p>
-                        <a href="resorts.html" class="btn btn-primary btn-lg mt-4">Filter By Budget</a>
-                    </div>
-                    <div class="flex-1 grid grid-cols-1 gap-5 w-full reveal-right">
-                        <div class="card p-6">
-                            <h3 class="text-xl font-display font-bold mb-2">Under &#8377;10,000</h3>
-                            <p class="text-muted">Best for student groups, shared rooms, short stays, and off-season dates.</p>
-                        </div>
-                        <div class="card p-6">
-                            <h3 class="text-xl font-display font-bold mb-2">&#8377;10,000 - &#8377;25,000</h3>
-                            <p class="text-muted">Ideal for wellness, weekend, workation, and premium couple escapes.</p>
-                        </div>
-                        <div class="card p-6">
-                            <h3 class="text-xl font-display font-bold mb-2">&#8377;25,000+</h3>
-                            <p class="text-muted">Choose family suites, villas, private transfers, and curated celebration extras.</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- SECTION 8: Sample Itineraries -->
-        <section class="py-24 bg-deep relative">
-            <div class="container">
-                <div class="text-center mb-12 reveal">
-                    <span class="section-label">Trip Flow</span>
-                    <h2 class="section-title">Sample Package Itineraries</h2>
-                    <p class="section-subtitle mx-auto">A quick look at how different packages can shape your days.</p>
-                </div>
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                    <div class="card p-8 reveal stagger-1">
-                        <h3 class="text-2xl font-display font-bold mb-3">Weekend Recharge</h3>
-                        <p class="text-muted mb-4">Two nights with early check-in, full-board meals, pool time, and late checkout.</p>
-                        <span class="badge badge-emerald">2 Nights</span>
-                    </div>
-                    <div class="card p-8 reveal stagger-2">
-                        <h3 class="text-2xl font-display font-bold mb-3">Wellness Reset</h3>
-                        <p class="text-muted mb-4">Yoga, nutrition consults, spa therapies, nature walks, and mindful meals.</p>
-                        <span class="badge badge-ocean">3 Nights</span>
-                    </div>
-                    <div class="card p-8 reveal stagger-3">
-                        <h3 class="text-2xl font-display font-bold mb-3">Family Holiday</h3>
-                        <p class="text-muted mb-4">Suite stays, kids club time, family photos, flexible meals, and easy transfers.</p>
-                        <span class="badge badge-warning">4 Nights</span>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- SECTION 9: Upgrade Menu -->
-        <section class="py-24 bg-primary relative">
-            <div class="container">
-                <div class="text-center mb-12 reveal">
-                    <span class="section-label">Add More</span>
-                    <h2 class="section-title">Popular Package Upgrades</h2>
-                    <p class="section-subtitle mx-auto">Personalize your package with extras that match the occasion.</p>
-                </div>
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                    <div class="card-feature reveal stagger-1">
-                        <div class="card-feature-icon text-emerald"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 12v10H4V12"></path><path d="M2 7h20v5H2z"></path><path d="M12 22V7"></path><path d="M12 7H7.5a2.5 2.5 0 1 1 0-5C11 2 12 7 12 7z"></path><path d="M12 7h4.5a2.5 2.5 0 1 0 0-5C13 2 12 7 12 7z"></path></svg></div>
-                        <h3 class="card-feature-title">Celebration Decor</h3>
-                        <p class="card-feature-text">Room styling, cakes, flowers, and private dinner setups.</p>
-                    </div>
-                    <div class="card-feature reveal stagger-2">
-                        <div class="card-feature-icon text-ocean"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12h20"></path><path d="M5 12c0-5 14-5 14 0"></path><path d="M4 17h16"></path></svg></div>
-                        <h3 class="card-feature-title">Pool Villa Upgrade</h3>
-                        <p class="card-feature-text">Add privacy, outdoor lounging, and a better celebration setting.</p>
-                    </div>
-                    <div class="card-feature reveal stagger-3">
-                        <div class="card-feature-icon text-cyan"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><path d="M8 15s1.5 2 4 2 4-2 4-2"></path><path d="M9 9h.01M15 9h.01"></path></svg></div>
-                        <h3 class="card-feature-title">Kids Activities</h3>
-                        <p class="card-feature-text">Supervised activities, games, craft sessions, and kids club access.</p>
-                    </div>
-                    <div class="card-feature reveal stagger-4">
-                        <div class="card-feature-icon" style="color: var(--clr-warning);"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 3h8l1 7H7z"></path><path d="M6 10h12v11H6z"></path><path d="M10 14h4"></path></svg></div>
-                        <h3 class="card-feature-title">Spa Extensions</h3>
-                        <p class="card-feature-text">Longer therapies, couple treatments, steam access, and wellness consults.</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- SECTION 10: Group Planning -->
-        <section class="py-24 bg-deep relative">
-            <div class="container">
-                <div class="flex flex-col md:flex-row justify-between items-end gap-6 mb-12 reveal">
-                    <div>
-                        <span class="section-label">For Groups</span>
-                        <h2 class="section-title">Group Package Planning</h2>
-                        <p class="section-subtitle">Simplify shared trips with room blocks, meal coordination, and clear per-person costs.</p>
-                    </div>
-                    <a href="contact.html" class="btn btn-outline">Plan A Group Trip</a>
-                </div>
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                    <div class="card card-glare p-8 reveal stagger-1">
-                        <h3 class="text-2xl font-display font-bold mb-3">Friends Getaways</h3>
-                        <p class="text-muted">Shared villas, bonfires, adventure add-ons, and flexible room combinations.</p>
-                    </div>
-                    <div class="card card-glare p-8 reveal stagger-2">
-                        <h3 class="text-2xl font-display font-bold mb-3">Family Reunions</h3>
-                        <p class="text-muted">Multi-room stays, group dining, elder-friendly access, and child-safe activities.</p>
-                    </div>
-                    <div class="card card-glare p-8 reveal stagger-3">
-                        <h3 class="text-2xl font-display font-bold mb-3">Corporate Offsites</h3>
-                        <p class="text-muted">Meeting spaces, team activities, workation amenities, and transport coordination.</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- SECTION 11: Wellness Details -->
-        <section class="py-24 bg-primary relative">
-            <div class="container">
-                <div class="flex flex-col lg:flex-row items-center gap-12">
-                    <div class="flex-1 reveal-left">
-                        <span class="section-label">Wellness Focus</span>
-                        <h2 class="section-title">Designed For Real Rest</h2>
-                        <p class="section-subtitle">Wellness packages combine room comfort, calming resort settings, and structured restoration.</p>
-                    </div>
-                    <div class="flex-1 grid grid-cols-1 sm:grid-cols-2 gap-5 w-full reveal-right">
-                        <div class="card p-6"><h3 class="text-xl font-display font-bold mb-2">Morning Yoga</h3><p class="text-muted">Guided sessions suited to beginners and regular practitioners.</p></div>
-                        <div class="card p-6"><h3 class="text-xl font-display font-bold mb-2">Spa Therapies</h3><p class="text-muted">Signature treatments, massages, and steam access where available.</p></div>
-                        <div class="card p-6"><h3 class="text-xl font-display font-bold mb-2">Nutrition Support</h3><p class="text-muted">Balanced menus, herbal infusions, and dietary preference notes.</p></div>
-                        <div class="card p-6"><h3 class="text-xl font-display font-bold mb-2">Quiet Time</h3><p class="text-muted">Slow check-ins, nature walks, and reduced-itinerary planning.</p></div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- SECTION 12: Adventure Details -->
-        <section class="py-24 bg-deep relative">
-            <div class="container">
-                <div class="text-center mb-12 reveal">
-                    <span class="section-label">Adventure Focus</span>
-                    <h2 class="section-title">Add Energy To Your Escape</h2>
-                    <p class="section-subtitle mx-auto">Adventure packages balance safe planning with memorable outdoor experiences.</p>
-                </div>
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                    <div class="card p-8 reveal stagger-1">
-                        <h3 class="text-2xl font-display font-bold mb-3">Water Activities</h3>
-                        <p class="text-muted">Scuba, kayaking, snorkeling, jet skiing, or guided coastal experiences.</p>
-                    </div>
-                    <div class="card p-8 reveal stagger-2">
-                        <h3 class="text-2xl font-display font-bold mb-3">Trail Days</h3>
-                        <p class="text-muted">Guided treks, forest walks, mountain viewpoints, and picnic stops.</p>
-                    </div>
-                    <div class="card p-8 reveal stagger-3">
-                        <h3 class="text-2xl font-display font-bold mb-3">Evening Setups</h3>
-                        <p class="text-muted">Bonfires, outdoor dining, camp-style lounging, and group photo moments.</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- SECTION 13: Workation Setup -->
-        <section class="py-24 bg-primary relative">
-            <div class="container">
-                <div class="text-center mb-12 reveal">
-                    <span class="section-label">Work &amp; Play</span>
-                    <h2 class="section-title">Workation Package Essentials</h2>
-                    <p class="section-subtitle mx-auto">Stay productive without giving up the resort parts of the trip.</p>
-                </div>
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                    <div class="card-feature reveal stagger-1">
-                        <div class="card-feature-icon text-emerald"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="14" rx="2"></rect><path d="M8 22h8"></path><path d="M12 18v4"></path></svg></div>
-                        <h3 class="card-feature-title">Desk Setup</h3>
-                        <p class="card-feature-text">Rooms with practical work surfaces and comfortable seating.</p>
-                    </div>
-                    <div class="card-feature reveal stagger-2">
-                        <div class="card-feature-icon text-ocean"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 13a10 10 0 0 1 14 0"></path><path d="M8.5 16.5a5 5 0 0 1 7 0"></path><path d="M12 20h.01"></path></svg></div>
-                        <h3 class="card-feature-title">Strong Wi-Fi</h3>
-                        <p class="card-feature-text">Connectivity checks for video calls and focused work blocks.</p>
-                    </div>
-                    <div class="card-feature reveal stagger-3">
-                        <div class="card-feature-icon text-cyan"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="14" rx="2"></rect><path d="M7 9h10M7 13h6"></path></svg></div>
-                        <h3 class="card-feature-title">Meeting Rooms</h3>
-                        <p class="card-feature-text">Conference rooms or quiet spaces for calls and team sessions.</p>
-                    </div>
-                    <div class="card-feature reveal stagger-4">
-                        <div class="card-feature-icon" style="color: var(--clr-warning);"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8h1a4 4 0 0 1 0 8h-1"></path><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4z"></path><line x1="6" y1="1" x2="6" y2="4"></line><line x1="10" y1="1" x2="10" y2="4"></line></svg></div>
-                        <h3 class="card-feature-title">Coffee Support</h3>
-                        <p class="card-feature-text">Cafe access, tea service, and work-friendly refreshment plans.</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- SECTION 14: Celebration Packages -->
-        <section class="py-24 bg-deep relative">
-            <div class="container">
-                <div class="flex flex-col md:flex-row justify-between items-end gap-6 mb-12 reveal">
-                    <div>
-                        <span class="section-label">Special Moments</span>
-                        <h2 class="section-title">Celebration Package Ideas</h2>
-                        <p class="section-subtitle">Turn a stay into an occasion with thoughtful resort-led arrangements.</p>
-                    </div>
-                    <a href="contact.html" class="btn btn-outline">Request Custom Decor</a>
-                </div>
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                    <div class="card card-glare p-8 reveal stagger-1"><h3 class="text-2xl font-display font-bold mb-3">Birthdays</h3><p class="text-muted">Cake, decor, dinner setup, music requests, and group room coordination.</p></div>
-                    <div class="card card-glare p-8 reveal stagger-2"><h3 class="text-2xl font-display font-bold mb-3">Anniversaries</h3><p class="text-muted">Couple spa, private dining, floral arrangements, and premium suite options.</p></div>
-                    <div class="card card-glare p-8 reveal stagger-3"><h3 class="text-2xl font-display font-bold mb-3">Reunions</h3><p class="text-muted">Shared villas, activity schedules, buffet planning, and photo sessions.</p></div>
-                </div>
-            </div>
-        </section>
-
-        <!-- SECTION 15: Package Comparison Tips -->
-        <section class="py-24 bg-primary relative">
-            <div class="container">
-                <div class="text-center mb-12 reveal">
-                    <span class="section-label">Compare Clearly</span>
-                    <h2 class="section-title">What To Check Before Booking</h2>
-                    <p class="section-subtitle mx-auto">Use these checks to avoid surprises and choose the package with the strongest fit.</p>
-                </div>
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                    <div class="card p-8 reveal stagger-1"><h3 class="text-xl font-display font-bold mb-3">Room Category</h3><p class="text-muted">Confirm view type, room size, occupancy, bedding, and upgrade availability.</p></div>
-                    <div class="card p-8 reveal stagger-2"><h3 class="text-xl font-display font-bold mb-3">Included Activities</h3><p class="text-muted">Check duration, schedule, weather dependency, and whether slots need advance booking.</p></div>
-                    <div class="card p-8 reveal stagger-3"><h3 class="text-xl font-display font-bold mb-3">Reschedule Terms</h3><p class="text-muted">Review cancellation windows, date-change flexibility, and seasonal price differences.</p></div>
-                </div>
-            </div>
-        </section>
-
-        <!-- SECTION 16: Member Savings -->
-        <section class="py-24 bg-deep relative">
-            <div class="container">
-                <div class="text-center mb-12 reveal">
-                    <span class="section-label">Save More</span>
-                    <h2 class="section-title">Member Savings On Packages</h2>
-                    <p class="section-subtitle mx-auto">Repeat travelers can unlock better pricing and extra stay benefits.</p>
-                </div>
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                    <div class="card p-8 reveal stagger-1" style="border-top: 2px solid var(--emerald-500);">
-                        <h3 class="text-2xl font-display font-bold mb-2">Silver</h3>
-                        <div class="text-3xl font-display font-bold text-emerald mb-4">5% off</div>
-                        <p class="text-muted">Member package pricing and early access to selected seasonal deals.</p>
-                    </div>
-                    <div class="card p-8 reveal stagger-2" style="border-top: 2px solid var(--ocean-500);">
-                        <h3 class="text-2xl font-display font-bold mb-2">Gold</h3>
-                        <div class="text-3xl font-display font-bold text-ocean mb-4">10% off</div>
-                        <p class="text-muted">Better savings, upgrade requests, and breakfast perks on eligible stays.</p>
-                    </div>
-                    <div class="card p-8 reveal stagger-3" style="border-top: 2px solid var(--clr-warning);">
-                        <h3 class="text-2xl font-display font-bold mb-2">Platinum</h3>
-                        <div class="text-3xl font-display font-bold mb-4" style="color: var(--clr-warning);">15% off</div>
-                        <p class="text-muted">Highest package savings, premium arrival amenities, and flexible assistance.</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- SECTION 17: Package FAQs -->
-        <section class="py-24 bg-primary relative">
-            <div class="container">
-                <div class="text-center mb-12 reveal">
-                    <span class="section-label">Good To Know</span>
-                    <h2 class="section-title">Package FAQs</h2>
-                    <p class="section-subtitle mx-auto">Quick answers before you choose a travel package.</p>
-                </div>
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mx-auto" style="max-width: 64rem;">
-                    <details class="card p-6 reveal stagger-1">
-                        <summary class="text-lg font-display font-bold cursor-pointer">Can I customize a listed package?</summary>
-                        <p class="text-muted mt-4">Yes. You can request upgrades, transfers, celebration extras, activity changes, or room category changes.</p>
-                    </details>
-                    <details class="card p-6 reveal stagger-2">
-                        <summary class="text-lg font-display font-bold cursor-pointer">Are package prices per person?</summary>
-                        <p class="text-muted mt-4">Some packages are per person, while couple and family packages are priced for the stated group type.</p>
-                    </details>
-                    <details class="card p-6 reveal stagger-3">
-                        <summary class="text-lg font-display font-bold cursor-pointer">Do packages include flights?</summary>
-                        <p class="text-muted mt-4">The listed packages focus on resort stays and inclusions. Flights can be handled separately if needed.</p>
-                    </details>
-                    <details class="card p-6 reveal stagger-4">
-                        <summary class="text-lg font-display font-bold cursor-pointer">How do I book a large group?</summary>
-                        <p class="text-muted mt-4">Use the custom package CTA to request room blocks, group meals, meeting spaces, and shared transport.</p>
-                    </details>
-                </div>
-            </div>
-        </section>
-
-        <!-- SECTION 18: Signature Collections -->
-        <section class="py-24 bg-deep relative">
-            <div class="container">
-                <div class="text-center mb-12 reveal">
-                    <span class="section-label">Curated Collections</span>
-                    <h2 class="section-title">Signature Package Collections</h2>
-                    <p class="section-subtitle mx-auto">Explore package collections shaped around the most common reasons people travel.</p>
-                </div>
-
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                    <div class="card p-8 hover-lift reveal stagger-1">
-                        <h3 class="text-xl font-display font-bold mb-3">The Reset Edit</h3>
-                        <p class="text-muted">Spa-forward stays, mindful meals, yoga decks, and slow itineraries.</p>
-                    </div>
-                    <div class="card p-8 hover-lift reveal stagger-2">
-                        <h3 class="text-xl font-display font-bold mb-3">The Celebration Edit</h3>
-                        <p class="text-muted">Decor, cakes, private dining, suite upgrades, and photo-ready settings.</p>
-                    </div>
-                    <div class="card p-8 hover-lift reveal stagger-3">
-                        <h3 class="text-xl font-display font-bold mb-3">The Family Edit</h3>
-                        <p class="text-muted">Large rooms, kids activities, flexible meals, safe pools, and transfers.</p>
-                    </div>
-                    <div class="card p-8 hover-lift reveal stagger-4">
-                        <h3 class="text-xl font-display font-bold mb-3">The Workation Edit</h3>
-                        <p class="text-muted">Desk setups, fast Wi-Fi, meeting space, coffee plans, and long-stay value.</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- SECTION 19: Package Builder Steps -->
-        <section class="py-24 bg-primary relative">
-            <div class="container">
-                <div class="flex flex-col md:flex-row justify-between items-end gap-6 mb-12 reveal">
-                    <div>
-                        <span class="section-label">Build Your Own</span>
-                        <h2 class="section-title">Custom Package Builder Flow</h2>
-                        <p class="section-subtitle">A simple way to turn a rough idea into a clear retreat plan.</p>
-                    </div>
-                    <a href="contact.html" class="btn btn-outline">Start A Custom Request</a>
-                </div>
-
-                <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
-                    <div class="card p-8 reveal stagger-1"><div class="text-emerald font-display font-bold text-4xl mb-3">01</div><h3 class="text-xl font-display font-bold mb-3">Tell Us The Mood</h3><p class="text-muted">Relaxed, romantic, adventurous, family-friendly, corporate, or festive.</p></div>
-                    <div class="card p-8 reveal stagger-2"><div class="text-ocean font-display font-bold text-4xl mb-3">02</div><h3 class="text-xl font-display font-bold mb-3">Share The Basics</h3><p class="text-muted">Dates, budget, guests, destination ideas, and non-negotiables.</p></div>
-                    <div class="card p-8 reveal stagger-3"><div class="text-cyan font-display font-bold text-4xl mb-3">03</div><h3 class="text-xl font-display font-bold mb-3">Review Options</h3><p class="text-muted">Compare stays, inclusions, upgrades, transfer options, and savings.</p></div>
-                    <div class="card p-8 reveal stagger-4"><div class="font-display font-bold text-4xl mb-3" style="color: var(--clr-warning);">04</div><h3 class="text-xl font-display font-bold mb-3">Confirm Details</h3><p class="text-muted">Lock dates, special requests, room categories, and arrival notes.</p></div>
-                </div>
-            </div>
-        </section>
-
-        <!-- SECTION 20: Destination Package Ideas -->
-        <section class="py-24 bg-deep relative">
-            <div class="container">
-                <div class="text-center mb-12 reveal">
-                    <span class="section-label">Where To Go</span>
-                    <h2 class="section-title">Destination Package Ideas</h2>
-                    <p class="section-subtitle mx-auto">Pick a place by the kind of experience you want from the package.</p>
-                </div>
-
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                    <a href="resorts.html?search=Goa" class="card-feature hover-lift reveal stagger-1">
-                        <div class="card-feature-icon text-ocean"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 20c2 0 2-1 4-1s2 1 4 1 2-1 4-1 2 1 4 1 2-1 4-1"></path><path d="M12 3v8"></path><path d="M8 7l4-4 4 4"></path></svg></div>
-                        <h3 class="card-feature-title">Goa Weekenders</h3>
-                        <p class="card-feature-text">Beach stays, sunset meals, pool access, and short-break pricing.</p>
-                    </a>
-                    <a href="resorts.html?search=Kerala" class="card-feature hover-lift reveal stagger-2">
-                        <div class="card-feature-icon text-emerald"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22V9"></path><path d="M6 18h12l-6-9z"></path><path d="M8 12h8l-4-7z"></path></svg></div>
-                        <h3 class="card-feature-title">Kerala Wellness</h3>
-                        <p class="card-feature-text">Ayurveda, backwaters, slow dining, and quiet resort time.</p>
-                    </a>
-                    <a href="resorts.html?search=Maldives" class="card-feature hover-lift reveal stagger-3">
-                        <div class="card-feature-icon text-cyan"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"></circle><path d="M2 12h20"></path><path d="M12 2a14.5 14.5 0 0 1 0 20"></path></svg></div>
-                        <h3 class="card-feature-title">Maldives Luxury</h3>
-                        <p class="card-feature-text">Water villas, transfers, reef access, and premium couple add-ons.</p>
-                    </a>
-                    <a href="resorts.html?search=Coorg" class="card-feature hover-lift reveal stagger-4">
-                        <div class="card-feature-icon" style="color: var(--clr-warning);"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 20h18L13 4l-4 8-2-4z"></path></svg></div>
-                        <h3 class="card-feature-title">Coorg Family Hills</h3>
-                        <p class="card-feature-text">Cool weather, larger rooms, nature walks, and family meal plans.</p>
-                    </a>
-                </div>
-            </div>
-        </section>
-
-        <!-- SECTION 21: Package Inclusions Matrix -->
-        <section class="py-24 bg-primary relative">
-            <div class="container">
-                <div class="text-center mb-12 reveal">
-                    <span class="section-label">Compare Inclusions</span>
-                    <h2 class="section-title">What Different Packages Usually Include</h2>
-                    <p class="section-subtitle mx-auto">Use this as a quick guide before you open individual resort options.</p>
-                </div>
-
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                    <div class="card p-8 reveal stagger-1">
-                        <h3 class="text-2xl font-display font-bold mb-4">Core Stay</h3>
-                        <p class="text-muted mb-4">Room, breakfast, taxes preview, check-in support, and basic resort amenities.</p>
-                        <span class="badge badge-emerald">Most packages</span>
-                    </div>
-                    <div class="card p-8 reveal stagger-2">
-                        <h3 class="text-2xl font-display font-bold mb-4">Enhanced Stay</h3>
-                        <p class="text-muted mb-4">Meals, transfers, late checkout, welcome drinks, and selected activity credits.</p>
-                        <span class="badge badge-ocean">Premium packages</span>
-                    </div>
-                    <div class="card p-8 reveal stagger-3">
-                        <h3 class="text-2xl font-display font-bold mb-4">Experience Stay</h3>
-                        <p class="text-muted mb-4">Spa, decor, guided tours, private dining, villa upgrades, and concierge planning.</p>
-                        <span class="badge badge-warning">Custom packages</span>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- SECTION 22: Traveller Scenario Cards -->
-        <section class="py-24 bg-deep relative">
-            <div class="container">
-                <div class="text-center mb-12 reveal">
-                    <span class="section-label">Real Trip Scenarios</span>
-                    <h2 class="section-title">Which Package Sounds Like You?</h2>
-                    <p class="section-subtitle mx-auto">A few familiar travel situations and the package direction that fits best.</p>
-                </div>
-
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                    <div class="card card-glare p-8 reveal stagger-1">
-                        <h3 class="text-2xl font-display font-bold mb-3">"We only have one weekend."</h3>
-                        <p class="text-muted mb-5">Choose a weekend package with early check-in, full-board meals, and nearby resorts.</p>
-                        <a href="resorts.html?package=weekend" class="text-emerald font-medium">Find weekend stays &rarr;</a>
-                    </div>
-                    <div class="card card-glare p-8 reveal stagger-2">
-                        <h3 class="text-2xl font-display font-bold mb-3">"We need something kid-friendly."</h3>
-                        <p class="text-muted mb-5">Choose a family package with larger suites, kids club access, and flexible food options.</p>
-                        <a href="resorts.html?package=family" class="text-ocean font-medium">Find family stays &rarr;</a>
-                    </div>
-                    <div class="card card-glare p-8 reveal stagger-3">
-                        <h3 class="text-2xl font-display font-bold mb-3">"This is a big celebration."</h3>
-                        <p class="text-muted mb-5">Choose a custom celebration package with decor, private dining, and upgrade requests.</p>
-                        <a href="contact.html" class="text-cyan font-medium">Plan celebration &rarr;</a>
+                        <span class="badge badge-warning mb-4">Romance</span>
+                        <h3 class="text-2xl font-display font-bold mb-3">Couple Celebrations</h3>
+                        <p class="text-muted mb-6">Private dinners, flower setups, premium suites, and quiet scenic corners.</p>
+                        <ul class="text-muted text-sm space-y-1 mb-6"><li>• Room décor setups</li><li>• Sunset dinner options</li><li>• Private pool access</li></ul>
+                        <a href="resorts.html?theme=romance" class="font-medium" style="color: var(--clr-warning);">Explore romance →</a>
                     </div>
                     <div class="card card-glare p-8 reveal stagger-4">
-                        <h3 class="text-2xl font-display font-bold mb-3">"We want quiet and wellness."</h3>
-                        <p class="text-muted mb-5">Choose wellness with spa therapies, yoga, lighter meals, and slower daily plans.</p>
-                        <a href="resorts.html?package=wellness" class="font-medium" style="color: var(--clr-warning);">Find wellness stays &rarr;</a>
+                        <span class="badge mb-4" style="background:var(--cyan-900);color:var(--cyan-400);">Workation</span>
+                        <h3 class="text-2xl font-display font-bold mb-3">Work from Paradise</h3>
+                        <p class="text-muted mb-6">High-speed Wi-Fi, dedicated desks, quiet resort wings, and extended stay discounts.</p>
+                        <ul class="text-muted text-sm space-y-1 mb-6"><li>• Reliable workspace setup</li><li>• Long-stay rates</li><li>• Meeting room access</li></ul>
+                        <a href="resorts.html?theme=workation" class="text-cyan font-medium">Explore workations →</a>
+                    </div>
+                    <div class="card card-glare p-8 reveal stagger-1">
+                        <span class="badge badge-emerald mb-4">Cultural</span>
+                        <h3 class="text-2xl font-display font-bold mb-3">Heritage &amp; Discovery</h3>
+                        <p class="text-muted mb-6">Palace hotels, folk art tours, local bazaars, and curated cultural guides.</p>
+                        <ul class="text-muted text-sm space-y-1 mb-6"><li>• Heritage walks</li><li>• Art and craft tours</li><li>• Local food experiences</li></ul>
+                        <a href="resorts.html?theme=culture" class="text-emerald font-medium">Explore culture →</a>
+                    </div>
+                    <div class="card card-glare p-8 reveal stagger-2">
+                        <span class="badge badge-ocean mb-4">Beach</span>
+                        <h3 class="text-2xl font-display font-bold mb-3">Coastal Escapes</h3>
+                        <p class="text-muted mb-6">Beachfront villas, water sports, sunset viewpoints, and fresh seafood retreats.</p>
+                        <ul class="text-muted text-sm space-y-1 mb-6"><li>• Beachfront locations</li><li>• Water activity packages</li><li>• Sunset dinner setups</li></ul>
+                        <a href="resorts.html?theme=beach" class="text-ocean font-medium">Explore beaches →</a>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- SECTION 23: Food And Dining Packages -->
-        <section class="py-24 bg-primary relative">
-            <div class="container">
-                <div class="flex flex-col lg:flex-row items-center gap-12">
-                    <div class="flex-1 reveal-left">
-                        <span class="section-label">Dining Matters</span>
-                        <h2 class="section-title">Food &amp; Dining Package Options</h2>
-                        <p class="section-subtitle">Meal inclusions can change the total value of a package more than travelers expect.</p>
-                        <a href="contact.html" class="btn btn-primary btn-lg mt-4">Ask About Meal Plans</a>
-                    </div>
-                    <div class="flex-1 grid grid-cols-1 gap-5 w-full reveal-right">
-                        <div class="card p-6"><h3 class="text-xl font-display font-bold mb-2">Breakfast Included</h3><p class="text-muted">Good for short stays where you want flexible lunch and dinner choices.</p></div>
-                        <div class="card p-6"><h3 class="text-xl font-display font-bold mb-2">Half Board</h3><p class="text-muted">Useful for beach, hill, and family trips where dinner at the resort is easier.</p></div>
-                        <div class="card p-6"><h3 class="text-xl font-display font-bold mb-2">Full Board</h3><p class="text-muted">Best for remote resorts, wellness retreats, and group trips with predictable costs.</p></div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- SECTION 24: Transfer And Arrival Packages -->
-        <section class="py-24 bg-deep relative">
+        <!-- SECTION 5: Group, Family & Student Packages -->
+        <section class="py-24 bg-primary relative" id="group">
             <div class="container">
                 <div class="text-center mb-12 reveal">
-                    <span class="section-label">Smooth Arrival</span>
-                    <h2 class="section-title">Transfer &amp; Arrival Add-ons</h2>
-                    <p class="section-subtitle mx-auto">Make the first and last hour of your trip easier to handle.</p>
+                    <span class="section-label">For Every Traveler</span>
+                    <h2 class="section-title">Group, Family &amp; Student Packages</h2>
+                    <p class="section-subtitle mx-auto">Designed for parties of two or twenty, with features built for different group dynamics.</p>
                 </div>
-
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                    <div class="card-feature reveal stagger-1"><div class="card-feature-icon text-emerald"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14"></path><path d="M12 5l7 7-7 7"></path></svg></div><h3 class="card-feature-title">Airport Pickup</h3><p class="card-feature-text">Private or shared transfers based on resort location.</p></div>
-                    <div class="card-feature reveal stagger-2"><div class="card-feature-icon text-ocean"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3 3"></path></svg></div><h3 class="card-feature-title">Early Check-in</h3><p class="card-feature-text">Request early arrival when rooms and policy allow.</p></div>
-                    <div class="card-feature reveal stagger-3"><div class="card-feature-icon text-cyan"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 7h18v13H3z"></path><path d="M16 3v4M8 3v4"></path></svg></div><h3 class="card-feature-title">Arrival Notes</h3><p class="card-feature-text">Share flight numbers, late arrivals, and guest details.</p></div>
-                    <div class="card-feature reveal stagger-4"><div class="card-feature-icon" style="color: var(--clr-warning);"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 17h2l-2 4-2-4h2V3h-2l2-4 2 4h-2z"></path><path d="M3 12h13"></path></svg></div><h3 class="card-feature-title">Return Transfer</h3><p class="card-feature-text">Plan checkout timing around flights and road travel.</p></div>
-                </div>
-            </div>
-        </section>
-
-        <!-- SECTION 25: Package Comparison Checklist -->
-        <section class="py-24 bg-primary relative">
-            <div class="container">
-                <div class="text-center mb-12 reveal">
-                    <span class="section-label">Final Check</span>
-                    <h2 class="section-title">Package Comparison Checklist</h2>
-                    <p class="section-subtitle mx-auto">Use this quick checklist before you choose the final option.</p>
-                </div>
-
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                    <div class="card p-8 reveal stagger-1"><h3 class="text-xl font-display font-bold mb-3">Room Type</h3><p class="text-muted">View, size, bed setup, occupancy, and upgrade terms.</p></div>
-                    <div class="card p-8 reveal stagger-2"><h3 class="text-xl font-display font-bold mb-3">Total Cost</h3><p class="text-muted">Taxes, meals, transfers, extras, and per-person split.</p></div>
-                    <div class="card p-8 reveal stagger-3"><h3 class="text-xl font-display font-bold mb-3">Dates</h3><p class="text-muted">Peak pricing, blackout dates, weather, and event periods.</p></div>
-                    <div class="card p-8 reveal stagger-4"><h3 class="text-xl font-display font-bold mb-3">Policies</h3><p class="text-muted">Cancellation, reschedule windows, guest rules, and check-in times.</p></div>
-                </div>
-            </div>
-        </section>
-
-        <!-- SECTION 26: Reviews Snapshot -->
-        <section class="py-24 bg-deep relative">
-            <div class="container">
-                <div class="text-center mb-12 reveal">
-                    <span class="section-label">Guest Notes</span>
-                    <h2 class="section-title">What Travelers Like About Packages</h2>
-                    <p class="section-subtitle mx-auto">The best package feedback usually comes down to clarity, savings, and fewer moving parts.</p>
-                </div>
-
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                    <div class="card p-8 reveal stagger-1">
-                        <div class="text-emerald mb-4">★★★★★</div>
-                        <p class="text-white-90 italic mb-6">"The family package made everything easier. Meals, transfers, and kids activities were already thought through."</p>
-                        <div class="text-sm text-muted">Family traveler</div>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 lg:gap-8 mb-12">
+                    <div class="card p-5 md:p-4 lg:p-8 reveal stagger-1 border-t-2 border-t-emerald-500 flex flex-col justify-between">
+                        <div>
+                            <h3 class="text-xl lg:text-2xl font-display font-bold mb-4">Family Packages</h3>
+                            <ul class="text-muted text-sm space-y-3 mb-6">
+                                <li class="flex items-start gap-2"><span class="text-emerald mt-1">✓</span> Spacious family villas and suites</li>
+                                <li class="flex items-start gap-2"><span class="text-emerald mt-1">✓</span> Kids club and child-safe pools</li>
+                                <li class="flex items-start gap-2"><span class="text-emerald mt-1">✓</span> Family meal plans and allergy notes</li>
+                                <li class="flex items-start gap-2"><span class="text-emerald mt-1">✓</span> Flexible check-in and checkout</li>
+                            </ul>
+                        </div>
+                        <a href="contact.html" class="btn btn-primary w-full text-center">Plan Family Trip</a>
                     </div>
-                    <div class="card p-8 reveal stagger-2">
-                        <div class="text-ocean mb-4">★★★★★</div>
-                        <p class="text-white-90 italic mb-6">"We picked wellness and did not have to plan every hour. The slower itinerary was exactly what we needed."</p>
-                        <div class="text-sm text-muted">Wellness guest</div>
+                    <div class="card p-5 md:p-4 lg:p-8 reveal stagger-2 border-t-2 border-t-ocean-500 flex flex-col justify-between">
+                        <div>
+                            <h3 class="text-xl lg:text-2xl font-display font-bold mb-4">Group Packages</h3>
+                            <ul class="text-muted text-sm space-y-3 mb-6">
+                                <li class="flex items-start gap-2"><span class="text-ocean mt-1">✓</span> Group villa bookings from 8 to 30+</li>
+                                <li class="flex items-start gap-2"><span class="text-ocean mt-1">✓</span> Split cost estimates and shared rooms</li>
+                                <li class="flex items-start gap-2"><span class="text-ocean mt-1">✓</span> Group activity and itinerary planning</li>
+                                <li class="flex items-start gap-2"><span class="text-ocean mt-1">✓</span> Dedicated concierge for group queries</li>
+                            </ul>
+                        </div>
+                        <a href="contact.html" class="btn btn-primary w-full text-center">Plan Group Trip</a>
                     </div>
-                    <div class="card p-8 reveal stagger-3">
-                        <div class="text-cyan mb-4">★★★★★</div>
-                        <p class="text-white-90 italic mb-6">"The group quote helped us understand the per-person cost before collecting payments from everyone."</p>
-                        <div class="text-sm text-muted">Group organizer</div>
+                    <div class="card p-5 md:p-4 lg:p-8 reveal stagger-3 border-t-2 flex flex-col justify-between" style="border-top-color: var(--clr-warning);">
+                        <div>
+                            <h3 class="text-xl lg:text-2xl font-display font-bold mb-4">Student Packages</h3>
+                            <ul class="text-muted text-sm space-y-3 mb-6">
+                                <li class="flex items-start gap-2"><span style="color:var(--clr-warning);" class="mt-1">✓</span> Budget-first stays from ₹1,200/night</li>
+                                <li class="flex items-start gap-2"><span style="color:var(--clr-warning);" class="mt-1">✓</span> Shared hostel and bunk room options</li>
+                                <li class="flex items-start gap-2"><span style="color:var(--clr-warning);" class="mt-1">✓</span> Adventure activity bundles</li>
+                                <li class="flex items-start gap-2"><span style="color:var(--clr-warning);" class="mt-1">✓</span> Group discounts on 10+ person bookings</li>
+                            </ul>
+                        </div>
+                        <a href="contact.html" class="btn btn-primary w-full text-center">Plan Student Trip</a>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- SECTION 27: Popular Add-on Bundles -->
-        <section class="py-24 bg-primary relative">
+        <!-- SECTION 6: Add-ons & Inclusions -->
+        <section class="py-24 bg-deep relative" id="addons">
             <div class="container">
                 <div class="flex flex-col md:flex-row justify-between items-end gap-6 mb-12 reveal">
                     <div>
-                        <span class="section-label">Bundle More</span>
-                        <h2 class="section-title">Popular Add-on Bundles</h2>
-                        <p class="section-subtitle">Combine extras around one clear purpose instead of adding one item at a time.</p>
+                        <span class="section-label">What's Included</span>
+                        <h2 class="section-title">Package Add-ons &amp; Inclusions</h2>
+                        <p class="section-subtitle mt-2">Availability varies by resort and package. Confirm before booking.</p>
                     </div>
-                    <a href="contact.html" class="btn btn-outline">Request Add-ons</a>
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
+                    <div class="card-feature reveal stagger-1"><div class="card-feature-icon text-emerald"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14"></path><path d="M12 5l7 7-7 7"></path></svg></div><h3 class="card-feature-title">Transfers</h3><p class="card-feature-text">Airport pickup and local cab options included in select packages.</p></div>
+                    <div class="card-feature reveal stagger-2"><div class="card-feature-icon text-ocean"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8h1a4 4 0 0 1 0 8h-1"></path><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"></path><line x1="6" y1="1" x2="6" y2="4"></line><line x1="10" y1="1" x2="10" y2="4"></line><line x1="14" y1="1" x2="14" y2="4"></line></svg></div><h3 class="card-feature-title">Meals</h3><p class="card-feature-text">Breakfast, half-board, or all-inclusive options vary by package tier.</p></div>
+                    <div class="card-feature reveal stagger-3"><div class="card-feature-icon text-cyan"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg></div><h3 class="card-feature-title">Spa Access</h3><p class="card-feature-text">Complimentary or discounted spa sessions on premium packages.</p></div>
+                    <div class="card-feature reveal stagger-4"><div class="card-feature-icon" style="color: var(--clr-warning);"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><path d="M12 6v6l4 2"></path></svg></div><h3 class="card-feature-title">Decor</h3><p class="card-feature-text">Room setups, cakes, florals, and celebration arrangements on request.</p></div>
                 </div>
 
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                    <div class="card card-glare p-8 reveal stagger-1"><span class="badge badge-emerald mb-4">Romance</span><h3 class="text-2xl font-display font-bold mb-3">Couple Bundle</h3><p class="text-muted">Private dinner, floral decor, late checkout, and spa credits.</p></div>
-                    <div class="card card-glare p-8 reveal stagger-2"><span class="badge badge-ocean mb-4">Adventure</span><h3 class="text-2xl font-display font-bold mb-3">Explorer Bundle</h3><p class="text-muted">Guided trek, water activity, outdoor dining, and transfer support.</p></div>
-                    <div class="card card-glare p-8 reveal stagger-3"><span class="badge badge-warning mb-4">Family</span><h3 class="text-2xl font-display font-bold mb-3">Ease Bundle</h3><p class="text-muted">Kids meals, activity slots, larger room request, and airport pickup.</p></div>
+                <!-- Package Comparison -->
+                <div class="text-center mb-10 reveal">
+                    <h2 class="section-title">Package Tiers Compared</h2>
+                </div>
+                <div class="overflow-x-auto reveal-scale">
+                    <table class="w-full text-left border-collapse" style="min-width:640px;">
+                        <thead><tr style="border-bottom:1px solid var(--glass-border);"><th class="py-4 px-6 text-muted text-sm uppercase tracking-wider">Feature</th><th class="py-4 px-6 text-center"><span class="badge badge-emerald">Budget</span></th><th class="py-4 px-6 text-center"><span class="badge badge-ocean">Standard</span></th><th class="py-4 px-6 text-center"><span class="badge badge-warning">Premium</span></th></tr></thead>
+                        <tbody>
+                            <tr style="border-bottom:1px solid var(--glass-border);"><td class="py-4 px-6 text-muted">Accommodation</td><td class="py-4 px-6 text-center text-emerald">✓</td><td class="py-4 px-6 text-center text-ocean">✓</td><td class="py-4 px-6 text-center" style="color:var(--clr-warning);">✓</td></tr>
+                            <tr style="border-bottom:1px solid var(--glass-border);"><td class="py-4 px-6 text-muted">Breakfast Included</td><td class="py-4 px-6 text-center text-muted">–</td><td class="py-4 px-6 text-center text-ocean">✓</td><td class="py-4 px-6 text-center" style="color:var(--clr-warning);">✓</td></tr>
+                            <tr style="border-bottom:1px solid var(--glass-border);"><td class="py-4 px-6 text-muted">Airport Transfer</td><td class="py-4 px-6 text-center text-muted">–</td><td class="py-4 px-6 text-center text-muted">–</td><td class="py-4 px-6 text-center" style="color:var(--clr-warning);">✓</td></tr>
+                            <tr style="border-bottom:1px solid var(--glass-border);"><td class="py-4 px-6 text-muted">Spa Access</td><td class="py-4 px-6 text-center text-muted">–</td><td class="py-4 px-6 text-center text-muted">–</td><td class="py-4 px-6 text-center" style="color:var(--clr-warning);">✓</td></tr>
+                            <tr><td class="py-4 px-6 text-muted">Concierge Support</td><td class="py-4 px-6 text-center text-emerald">✓</td><td class="py-4 px-6 text-center text-ocean">✓</td><td class="py-4 px-6 text-center" style="color:var(--clr-warning);">✓</td></tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </section>
 
-        <!-- SECTION 28: Package Assurance -->
-        <section class="py-24 bg-deep relative">
-            <div class="container">
-                <div class="card-glass p-8 md:p-12 rounded-2xl reveal-scale">
-                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
-                        <div>
-                            <span class="badge badge-ocean mb-4">Assurance</span>
-                            <h2 class="text-3xl md:text-4xl font-display font-bold mb-4">Clear Packages, Fewer Surprises</h2>
-                            <p class="text-white-80 text-lg mb-6">We keep package pages focused on what matters: stay details, inclusions, exclusions, upgrade options, and support before arrival.</p>
-                            <a href="contact.html" class="btn btn-primary btn-lg">Ask The Concierge</a>
-                        </div>
-                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                            <div class="bg-deep border border-glass p-6 rounded-xl"><h3 class="text-xl font-display font-bold mb-2">Clear Inclusions</h3><p class="text-muted">Know what is inside the price.</p></div>
-                            <div class="bg-deep border border-glass p-6 rounded-xl"><h3 class="text-xl font-display font-bold mb-2">Upgrade Notes</h3><p class="text-muted">Understand what is optional.</p></div>
-                            <div class="bg-deep border border-glass p-6 rounded-xl"><h3 class="text-xl font-display font-bold mb-2">Policy Reminders</h3><p class="text-muted">Review timing and cancellation rules.</p></div>
-                            <div class="bg-deep border border-glass p-6 rounded-xl"><h3 class="text-xl font-display font-bold mb-2">Support</h3><p class="text-muted">Ask before you confirm.</p></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- SECTION 29: Planning Resources -->
+        <!-- SECTION 7: How Booking Works -->
         <section class="py-24 bg-primary relative">
             <div class="container">
                 <div class="text-center mb-12 reveal">
-                    <span class="section-label">Helpful Resources</span>
-                    <h2 class="section-title">Plan Better With These Pages</h2>
-                    <p class="section-subtitle mx-auto">Move from package inspiration to actual booking decisions.</p>
+                    <span class="section-label">Simple Planning</span>
+                    <h2 class="section-title">How Package Booking Works</h2>
+                    <p class="section-subtitle mx-auto">A clear path from exploring to your actual check-in day, with support every step.</p>
                 </div>
-
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                    <a href="resorts.html" class="card p-8 hover-lift reveal stagger-1"><h3 class="text-2xl font-display font-bold mb-3">Browse Resorts</h3><p class="text-muted">Filter by destination, category, budget, and rating.</p></a>
-                    <a href="offers.html" class="card p-8 hover-lift reveal stagger-2"><h3 class="text-2xl font-display font-bold mb-3">Check Offers</h3><p class="text-muted">Use promo codes, bank discounts, and seasonal savings.</p></a>
-                    <a href="contact.html" class="card p-8 hover-lift reveal stagger-3"><h3 class="text-2xl font-display font-bold mb-3">Talk To Us</h3><p class="text-muted">Request a custom package or get help comparing options.</p></a>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
+                    <div class="card p-8 reveal stagger-1 text-center"><div class="text-4xl font-display font-bold text-emerald mb-4">01</div><h3 class="text-xl font-display font-bold mb-3">Browse</h3><p class="text-muted">Filter packages by budget, experience, group size, and destination.</p></div>
+                    <div class="card p-8 reveal stagger-2 text-center"><div class="text-4xl font-display font-bold text-ocean mb-4">02</div><h3 class="text-xl font-display font-bold mb-3">Customise</h3><p class="text-muted">Add special requests, dates, meal plans, or celebration extras.</p></div>
+                    <div class="card p-8 reveal stagger-3 text-center"><div class="text-4xl font-display font-bold text-cyan mb-4">03</div><h3 class="text-xl font-display font-bold mb-3">Confirm</h3><p class="text-muted">Review the full package cost, inclusions, and cancellation policy.</p></div>
+                    <div class="card p-8 reveal stagger-4 text-center"><div class="text-4xl font-display font-bold mb-4" style="color:var(--clr-warning);">04</div><h3 class="text-xl font-display font-bold mb-3">Arrive</h3><p class="text-muted">Check in, enjoy your stay, and let the resort team handle the rest.</p></div>
+                </div>
+                <div class="text-center reveal">
+                    <a href="contact.html" class="btn btn-primary btn-lg">Ask About a Package</a>
                 </div>
             </div>
         </section>
 
-        <!-- CTA Section -->
-        <section class="py-20 bg-primary relative overflow-hidden border-t border-glass">
-            <div class="absolute inset-0 bg-gradient-to-b from-transparent to-emerald-900 opacity-10 pointer-events-none"></div>
-            <div class="container text-center relative z-base reveal-scale">
-                <h2 class="text-3xl font-display font-bold mb-4">Need a Custom Package?</h2>
-                <p class="text-lg text-white-80 max-w-2xl mx-auto mb-8">Planning a corporate retreat, destination wedding, or a large reunion? Contact our concierges to build a bespoke package tailored exactly to your needs.</p>
-                <a href="contact.html" class="btn btn-secondary btn-lg hover-lift shadow-glow-ocean">Contact Concierge</a>
+        <!-- SECTION 8: Testimonials & Newsletter CTA -->
+        <section class="py-24 bg-deep relative overflow-hidden">
+            <div class="container">
+                <div class="text-center mb-12 reveal">
+                    <span class="section-label">What Guests Say</span>
+                    <h2 class="section-title">Package Experiences</h2>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-20">
+                    <div class="card p-8 bg-surface border border-glass hover-glow reveal stagger-1">
+                        <div class="flex text-warning text-sm mb-6 gap-1"><span>★</span><span>★</span><span>★</span><span>★</span><span>★</span></div>
+                        <p class="text-white-90 italic mb-8">"The Bali wellness package was everything we needed after a hectic year. Every detail was taken care of — transfers, meals, spa. Perfect."</p>
+                        <div class="flex items-center gap-4"><div class="w-12 h-12 bg-emerald-900 rounded-full flex items-center justify-center text-emerald font-bold">PK</div><div><h4 class="font-bold text-sm text-white">Priya Kapoor</h4><span class="text-xs text-muted">Wellness Package Guest</span></div></div>
+                    </div>
+                    <div class="card p-8 bg-surface border border-glass hover-glow reveal stagger-2">
+                        <div class="flex text-warning text-sm mb-6 gap-1"><span>★</span><span>★</span><span>★</span><span>★</span><span>★</span></div>
+                        <p class="text-white-90 italic mb-8">"Booked the group villa in Goa for 14 of us and the split cost tool made budgeting so easy. The concierge handled the whole trip flow."</p>
+                        <div class="flex items-center gap-4"><div class="w-12 h-12 bg-ocean-900 rounded-full flex items-center justify-center text-ocean font-bold">RV</div><div><h4 class="font-bold text-sm text-white">Raj Verma</h4><span class="text-xs text-muted">Group Package Organizer</span></div></div>
+                    </div>
+                    <div class="card p-8 bg-surface border border-glass hover-glow reveal stagger-3">
+                        <div class="flex text-warning text-sm mb-6 gap-1"><span>★</span><span>★</span><span>★</span><span>★</span><span>★</span></div>
+                        <p class="text-white-90 italic mb-8">"Student package in Manali was incredible value. Trek, food, bonfire, all sorted under budget. Will definitely come back for the next trip."</p>
+                        <div class="flex items-center gap-4"><div class="w-12 h-12 bg-cyan-900 rounded-full flex items-center justify-center text-cyan font-bold">AS</div><div><h4 class="font-bold text-sm text-white">Arjun Shah</h4><span class="text-xs text-muted">Student Trip Guest</span></div></div>
+                    </div>
+                </div>
+
+                <div class="card p-10 md:p-16 text-center max-w-4xl mx-auto border-emerald-500 border-opacity-30 shadow-glow-emerald reveal">
+                    <h2 class="text-3xl md:text-5xl font-display font-bold mb-4">Never Miss a Deal</h2>
+                    <p class="text-lg text-white-80 mb-8 max-w-2xl mx-auto">Subscribe to get weekly curated packages, flash offers, and exclusive promo codes straight to your inbox.</p>
+                    <form class="flex flex-col sm:flex-row gap-4 justify-center max-w-xl mx-auto">
+                        <input type="email" placeholder="Enter your email address" class="form-input sm:w-2/3 h-14 text-base" required>
+                        <button type="submit" class="btn btn-primary h-14 px-8 text-base shadow-lg">Subscribe Now</button>
+                    </form>
+                    <p class="text-xs text-muted mt-4">We respect your privacy. No spam, ever.</p>
+                </div>
             </div>
         </section>
 
     </main>
+
 
     <!-- ===== FOOTER ===== -->
     <div id="main-footer"></div>

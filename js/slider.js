@@ -33,8 +33,10 @@ document.addEventListener('DOMContentLoaded', () => {
             currentIndex = index;
         }
 
-        // Apply hardware-accelerated transform translate
-        track.style.transform = `translateX(-${currentIndex * 100}%)`;
+        // Apply hardware-accelerated transform translate with LTR vs RTL support
+        const isRtl = document.documentElement.getAttribute('dir') === 'rtl';
+        const multiplier = isRtl ? 1 : -1;
+        track.style.transform = `translateX(${currentIndex * 100 * multiplier}%)`;
 
         // Update dots state
         dots.forEach((dot, idx) => {
@@ -130,4 +132,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Initial state setup
     goToSlide(0);
+
+    // Listen to layout direction switches to re-position current slide
+    window.addEventListener('directionchanged', () => {
+        goToSlide(currentIndex);
+    });
 });

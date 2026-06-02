@@ -6,6 +6,26 @@
 (function () {
     'use strict';
 
+    /* ---- Theme & Direction Immediate Init ---- */
+    function initThemeAndDir() {
+        const savedTheme = localStorage.getItem('novanest_theme');
+        const systemPrefersLight = window.matchMedia('(prefers-color-scheme: light)').matches;
+        
+        if (savedTheme === 'light' || (!savedTheme && systemPrefersLight)) {
+            document.documentElement.classList.add('light-theme');
+        } else {
+            document.documentElement.classList.remove('light-theme');
+        }
+        
+        const savedDir = localStorage.getItem('novanest_direction');
+        if (savedDir === 'rtl') {
+            document.documentElement.setAttribute('dir', 'rtl');
+        } else {
+            document.documentElement.setAttribute('dir', 'ltr');
+        }
+    }
+    initThemeAndDir();
+
     /* ---- Path Detection ---- */
     const isSubPage = window.location.pathname.includes('/pages/');
     const BASE   = isSubPage ? '../' : '';
@@ -59,7 +79,28 @@
 
         whatsapp: `<svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L0 24l6.335-1.662c1.746.953 3.71 1.444 5.703 1.445h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>`,
 
-        arrowRight: `<span class="footer-link-icon">›</span>`
+        arrowRight: `<span class="footer-link-icon">›</span>`,
+
+        theme: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" width="18" height="18">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+        </svg>`,
+        
+        sun: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" width="18" height="18">
+            <circle cx="12" cy="12" r="5"/>
+            <line x1="12" y1="1" x2="12" y2="3"/>
+            <line x1="12" y1="21" x2="12" y2="23"/>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+            <line x1="1" y1="12" x2="3" y2="12"/>
+            <line x1="21" y1="12" x2="23" y2="12"/>
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+        </svg>`,
+
+        close: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="18" y1="6" x2="6" y2="18"/>
+            <line x1="6" y1="6" x2="18" y2="18"/>
+        </svg>`
     };
 
 
@@ -115,14 +156,42 @@
                         <li class="nav-item">
                             <a href="${PAGES}faq.html" class="nav-link ${getActive('faq')}">FAQ</a>
                         </li>
+                        <li class="nav-item mobile-only-nav-item">
+                            <div style="height: 1px; background: rgba(255, 255, 255, 0.08); margin: 0.75rem 0.5rem;"></div>
+                        </li>
+                        <li class="nav-item mobile-only-nav-item">
+                            <a href="${PAGES}admin-dashboard.html" class="nav-link ${getActive('admin-dashboard')}">
+                                ${ICONS.admin} <span>Admin Dashboard</span>
+                            </a>
+                        </li>
+                        <li class="nav-item mobile-only-nav-item">
+                            <a href="${PAGES}user-dashboard.html" class="nav-link ${getActive('user-dashboard')}">
+                                ${ICONS.user} <span>User Dashboard</span>
+                            </a>
+                        </li>
+                        <li class="nav-item mobile-only-nav-item">
+                            <a href="${PAGES}login.html" class="nav-link ${getActive('login')}">
+                                ${ICONS.userLogin} <span>Login / Sign Up</span>
+                            </a>
+                        </li>
                     </ul>
                     <div class="mobile-close-container">
-                        <button class="mobile-close-btn" id="mobile-close-btn" aria-label="Close menu">✕</button>
+                        <button class="mobile-close-btn" id="mobile-close-btn" aria-label="Close menu">${ICONS.close}</button>
                     </div>
                 </div>
 
                 <!-- Actions -->
                 <div class="nav-actions">
+                    <!-- Theme Toggle -->
+                    <button class="theme-toggle-btn" id="theme-toggle-btn" aria-label="Toggle light and dark theme">
+                        ${ICONS.theme}
+                    </button>
+
+                    <!-- Direction Toggle -->
+                    <button class="dir-toggle-btn" id="dir-toggle-btn" aria-label="Toggle LTR and RTL layouts" style="font-size: 11px; font-weight: 600; font-family: inherit;">
+                        RTL
+                    </button>
+
                     <!-- Profile Dropdown -->
                     <div class="profile-dropdown" id="profile-dropdown">
                         <button class="profile-btn" id="profile-btn" aria-haspopup="true" aria-expanded="false" aria-label="Login options">
@@ -350,6 +419,43 @@
             });
         }
 
+        /* -- Theme & Direction Toggle handlers -- */
+        const themeBtn = document.getElementById('theme-toggle-btn');
+        const dirBtn = document.getElementById('dir-toggle-btn');
+        
+        if (themeBtn) {
+            updateThemeUI();
+            themeBtn.addEventListener('click', () => {
+                const isLight = document.documentElement.classList.contains('light-theme');
+                if (isLight) {
+                    document.documentElement.classList.remove('light-theme');
+                    localStorage.setItem('novanest_theme', 'dark');
+                } else {
+                    document.documentElement.classList.add('light-theme');
+                    localStorage.setItem('novanest_theme', 'light');
+                }
+                updateThemeUI();
+            });
+        }
+        
+        if (dirBtn) {
+            updateDirUI();
+            dirBtn.addEventListener('click', () => {
+                const isRtl = document.documentElement.getAttribute('dir') === 'rtl';
+                if (isRtl) {
+                    document.documentElement.setAttribute('dir', 'ltr');
+                    localStorage.setItem('novanest_direction', 'ltr');
+                } else {
+                    document.documentElement.setAttribute('dir', 'rtl');
+                    localStorage.setItem('novanest_direction', 'rtl');
+                }
+                updateDirUI();
+                
+                // Dispatch a custom event to notify slider
+                window.dispatchEvent(new CustomEvent('directionchanged'));
+            });
+        }
+
         /* -- Resize handler: reset menu on desktop -- */
         let resizeTimer;
         window.addEventListener('resize', () => {
@@ -360,6 +466,24 @@
                 }
             }, 100);
         });
+    }
+
+    function updateThemeUI() {
+        const isLight = document.documentElement.classList.contains('light-theme');
+        const btn = document.getElementById('theme-toggle-btn');
+        if (btn) {
+            btn.innerHTML = isLight ? ICONS.sun : ICONS.theme;
+            btn.setAttribute('aria-label', isLight ? 'Switch to Dark Theme' : 'Switch to Light Theme');
+        }
+    }
+    
+    function updateDirUI() {
+        const isRtl = document.documentElement.getAttribute('dir') === 'rtl';
+        const btn = document.getElementById('dir-toggle-btn');
+        if (btn) {
+            btn.innerHTML = isRtl ? 'LTR' : 'RTL';
+            btn.setAttribute('aria-label', isRtl ? 'Switch to LTR Layout' : 'Switch to RTL Layout');
+        }
     }
 
     function toggleMobileMenu(open) {
@@ -390,14 +514,16 @@
         form.addEventListener('submit', (e) => {
             e.preventDefault();
             const email = document.getElementById('footer-newsletter-email');
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-            if (email && email.value && email.value.includes('@')) {
-                showToast('Subscribed successfully!');
+            if (email && emailRegex.test(email.value.trim())) {
+                showToast('Subscribed successfully!', 'success');
                 email.value = '';
             } else if (email) {
                 // Shake animation on invalid
                 email.style.outline = '2px solid #f43f5e';
                 email.style.outlineOffset = '0';
+                showToast('Please enter a valid email address.', 'error');
                 setTimeout(() => {
                     email.style.outline = '';
                     email.style.outlineOffset = '';
@@ -407,15 +533,25 @@
     }
 
     // Expose showToast globally
-    function showToast(msg) {
+    function showToast(msg, type = 'success') {
         let t = document.getElementById('toast-notification');
         if (!t) {
             t = document.createElement('div');
             t.id = 'toast-notification';
             t.className = 'toast';
-            t.innerHTML = `<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg><span id="toast-text"></span>`;
             document.body.appendChild(t);
         }
+        
+        if (type === 'error') {
+            t.style.border = '1px solid #f43f5e';
+            t.style.borderLeft = '4px solid #f43f5e';
+            t.innerHTML = `<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="#f43f5e" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg><span id="toast-text"></span>`;
+        } else {
+            t.style.border = '';
+            t.style.borderLeft = '';
+            t.innerHTML = `<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg><span id="toast-text"></span>`;
+        }
+        
         document.getElementById('toast-text').innerText = msg;
         t.classList.add('show');
         setTimeout(() => t.classList.remove('show'), 3500);

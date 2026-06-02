@@ -1,10 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Special Offers — Nova Nest Retreats</title>
-    
+
     <!-- Stylesheets -->
     <link rel="stylesheet" href="../css/style.css">
     <link rel="stylesheet" href="../css/animations.css">
@@ -17,76 +18,30 @@
             position: relative;
             overflow: hidden;
         }
-        
-        .coupon-card::before, .coupon-card::after {
-            content: '';
-            position: absolute;
-            top: 50%;
-            width: 30px;
-            height: 30px;
-            background-color: var(--clr-bg-deep);
-            border-radius: 50%;
-            transform: translateY(-50%);
-            border: 2px solid rgba(16, 185, 129, 0.4);
+
+        /* Referral list mobile responsiveness */
+        .referral-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+            width: 100%;
         }
 
-        .coupon-card::before {
-            left: -17px;
-            border-right-color: transparent;
-            border-top-color: transparent;
-            border-bottom-color: transparent;
-        }
-
-        .coupon-card::after {
-            right: -17px;
-            border-left-color: transparent;
-            border-top-color: transparent;
-            border-bottom-color: transparent;
-        }
-
-        .coupon-code {
-            font-family: monospace;
-            letter-spacing: 0.1em;
-            background: rgba(0,0,0,0.3);
-            border: 1px solid var(--glass-border);
-            padding: 0.5rem 1rem;
-            border-radius: var(--radius-sm);
-            user-select: all;
-        }
-
-        /* Responsive Banner Overrides to fix corners and padding on mobile */
-        @media (max-width: 480px) {
-            /* Override the global responsive.css flex rule that breaks the absolute wrapper */
-            .flash-sale-banner > div.absolute {
-                display: block !important;
-                padding: 0 !important;
-                flex: none !important;
-                width: 100% !important;
-                height: 100% !important;
+        @media (max-width: 576px) {
+            .referral-row {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.75rem;
             }
 
-            /* Ensure content relative div has proper responsive padding */
-            .flash-sale-banner > div.relative {
-                padding: 2.25rem 1.5rem !important;
-            }
-
-            /* Set countdown timer box padding on mobile to match tablet layout space */
-            .flash-sale-banner .glass-strong {
-                padding: 1.5rem !important;
-            }
-        }
-
-        @media (max-width: 320px) {
-            /* Narrow layout padding adjustments to prevent text squeeze */
-            .flash-sale-banner > div.relative {
-                padding: 1.75rem 1.25rem !important;
-            }
-            .flash-sale-banner .glass-strong {
-                padding: 1.25rem 1rem !important;
+            .referral-row .badge {
+                align-self: flex-start;
             }
         }
     </style>
 </head>
+
 <body>
 
     <!-- ===== HEADER ===== -->
@@ -94,731 +49,585 @@
 
     <!-- ===== MAIN CONTENT ===== -->
     <main id="main-content" class="page-content bg-deep min-h-screen">
-        
-        <!-- Page Header -->
-        <section class="pt-8 pb-8 relative">
+
+        <!-- SECTION 1: Hero -->
+        <section class="pt-12 pb-16 relative overflow-hidden text-center">
+            <div
+                class="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-gradient-to-b from-emerald-900 to-transparent opacity-20 blur-3xl pointer-events-none">
+            </div>
             <div class="container relative z-base reveal">
-                <nav class="text-sm text-muted mb-4 flex flex-wrap items-center gap-2">
+                <nav class="text-sm text-muted mb-6 flex flex-wrap items-center justify-center gap-2">
                     <a href="../index.html" class="hover:text-emerald">Home</a>
                     <span>/</span>
-                    <span class="text-white">Offers</span>
+                    <span class="text-white">Special Offers</span>
                 </nav>
-                <h1 class="text-4xl md:text-5xl font-display font-bold mb-4">Exclusive <span class="text-gradient">Offers</span></h1>
-                <p class="text-muted text-lg max-w-2xl">Discover limited-time deals, flash sales, and special coupons to make your luxury getaway even more affordable.</p>
+                <div class="badge badge-warning animate-pulse mb-4 text-sm">Limited Time Deals</div>
+                <h1 class="text-5xl md:text-6xl font-display font-bold mb-6">Exclusive <span
+                        class="text-gradient">Offers</span></h1>
+                <p class="text-muted text-lg max-w-2xl mx-auto leading-relaxed mb-8">Flash sales, seasonal deals, member
+                    discounts, referral bonuses, and promo codes — all in one place.</p>
+                <div class="flex flex-wrap gap-3 justify-center">
+                    <a href="#deals" class="badge badge-emerald text-sm py-2 px-4">Featured Deals</a>
+                    <a href="#coupons" class="badge badge-ocean text-sm py-2 px-4">Coupon Codes</a>
+                    <a href="#seasonal" class="badge badge-warning text-sm py-2 px-4">Seasonal</a>
+                    <a href="#member" class="badge text-sm py-2 px-4"
+                        style="background:var(--cyan-900);color:var(--cyan-400);">Member Perks</a>
+                </div>
             </div>
         </section>
 
-        <!-- Flash Sale & Countdown -->
-        <section class="pb-16 pt-8">
-            <div class="container reveal-scale">
-                <div class="flash-sale-banner relative rounded-2xl overflow-hidden shadow-glow-ocean">
-                    <!-- Banner Image -->
-                    <div class="absolute inset-0 z-below overflow-hidden" style="border-radius: inherit;">
-                        <img src="https://images.unsplash.com/photo-1540541338287-41700207dee6?auto=format&fit=crop&w=1920&q=80" alt="Flash Sale Resort" class="w-full h-full object-cover opacity-40" style="border-radius: inherit;">
-                        <div class="flash-sale-overlay absolute inset-0" style="border-radius: inherit;"></div>
-                    </div>
-
-                    <div class="relative z-base p-4 sm:p-8 lg:p-12 flex flex-col lg:flex-row items-center justify-between gap-8" style="width: 100%; max-width: 100%; box-sizing: border-box; overflow: hidden;">
-                        <div class="flex-1 text-center lg:text-left" style="width: 100%; max-width: 100%; box-sizing: border-box; overflow: hidden;">
-                            <div class="badge badge-warning animate-pulse mb-4">Live Now: Flash Sale</div>
-                            <h2 class="text-3xl md:text-4xl font-display font-bold mb-4 text-white" style="word-wrap: break-word; overflow-wrap: break-word;">48-Hour Monsoon Escape</h2>
-                            <p class="flash-sale-desc">Get up to 40% off on all Premium Water Villas in the Maldives & Bali. Offer includes complimentary breakfast and airport transfers.</p>
-                            <a href="resorts.html" class="btn btn-primary btn-lg hover-scale shadow-glow-emerald" style="margin-top: 1.5rem;">Shop the Sale</a>
+        <!-- SECTION 2: Featured Deals & Countdown Timer -->
+        <section class="py-20 bg-primary relative" id="deals">
+            <div class="container">
+                <!-- Flash Sale Banner with Countdown -->
+                <div class="card-glass p-8 md:p-12 rounded-2xl reveal-scale mb-16">
+                    <div class="flex flex-col md:flex-row items-center justify-between gap-8">
+                        <div class="flex-1 text-center md:text-left">
+                            <div class="badge badge-warning mb-4 animate-pulse">Flash Sale</div>
+                            <h2 class="text-3xl md:text-4xl font-display font-bold mb-4">Summer Monsoon Escape</h2>
+                            <p class="text-white-80 text-lg mb-6">Book any premium villa in the next 48 hours and get a
+                                free 60-minute spa treatment plus complimentary airport transfers.</p>
+                            <a href="packages.html" class="btn btn-primary btn-lg">Claim Offer Now</a>
                         </div>
-                        
-                        <div class="flex-1 flex justify-center lg:justify-end w-full">
-                            <div class="glass-strong p-4 sm:p-6 rounded-xl border border-glass w-full max-w-md text-center">
-                                <h3 class="text-sm uppercase tracking-wider text-muted mb-4">Offer Ends In</h3>
-                                <div class="flex justify-center gap-3 md:gap-4" id="flash-countdown">
-                                    <div class="flex flex-col">
-                                        <div class="text-3xl md:text-4xl font-display font-bold text-emerald" id="cd-hours">47</div>
-                                        <div class="text-xs text-muted mt-1 uppercase tracking-wider">Hours</div>
-                                    </div>
-                                    <div class="text-3xl font-bold text-emerald self-center">:</div>
-                                    <div class="flex flex-col">
-                                        <div class="text-3xl md:text-4xl font-display font-bold text-emerald" id="cd-mins">59</div>
-                                        <div class="text-xs text-muted mt-1 uppercase tracking-wider">Mins</div>
-                                    </div>
-                                    <div class="text-3xl font-bold text-emerald self-center">:</div>
-                                    <div class="flex flex-col">
-                                        <div class="text-3xl md:text-4xl font-display font-bold text-emerald" id="cd-secs">24</div>
-                                        <div class="text-xs text-muted mt-1 uppercase tracking-wider">Secs</div>
-                                    </div>
+                        <div class="flex-1 flex justify-center">
+                            <div class="flex gap-4 text-center" id="countdown-timer">
+                                <div class="bg-deep border border-glass p-4 rounded-xl w-20 md:w-24 shadow-lg">
+                                    <div class="text-3xl md:text-4xl font-display font-bold text-white mb-1"
+                                        id="cd-hours">47</div>
+                                    <div class="text-xs text-emerald uppercase tracking-wider">Hours</div>
+                                </div>
+                                <div class="text-3xl font-bold text-emerald self-center">:</div>
+                                <div class="bg-deep border border-glass p-4 rounded-xl w-20 md:w-24 shadow-lg">
+                                    <div class="text-3xl md:text-4xl font-display font-bold text-white mb-1"
+                                        id="cd-mins">59</div>
+                                    <div class="text-xs text-emerald uppercase tracking-wider">Mins</div>
+                                </div>
+                                <div class="text-3xl font-bold text-emerald self-center">:</div>
+                                <div class="bg-deep border border-glass p-4 rounded-xl w-20 md:w-24 shadow-lg">
+                                    <div class="text-3xl md:text-4xl font-display font-bold text-white mb-1"
+                                        id="cd-secs">24</div>
+                                    <div class="text-xs text-emerald uppercase tracking-wider">Secs</div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        </section>
 
-        <!-- Coupon Cards -->
-        <section class="pb-20">
-            <div class="container">
-                <div class="flex justify-between items-end mb-8 reveal">
-                    <div>
-                        <span class="section-label">Unlock Savings</span>
-                        <h2 class="section-title">Latest Promo Codes</h2>
-                    </div>
-                </div>
-
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                    
-                    <!-- Coupon 1 -->
-                    <div class="card coupon-card p-8 text-center reveal stagger-1">
-                        <div class="w-16 h-16 mx-auto bg-emerald-900 bg-opacity-40 rounded-full flex items-center justify-center text-emerald text-2xl mb-4">
-                            <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-emerald"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82zM7 7h.01"/></svg>
-                        </div>
-                        <h3 class="text-xl font-bold mb-2">Flat ₹5,000 Off</h3>
-                        <p class="text-sm text-muted mb-6">On domestic resort bookings with a minimum spend of ₹20,000.</p>
-                        <div class="flex flex-col gap-3 items-center">
-                            <span class="coupon-code text-lg text-emerald font-bold" id="code-1">NOVA5K</span>
-                            <button class="btn btn-sm btn-outline copy-btn" data-code="NOVA5K">Copy Code</button>
-                        </div>
-                        <div class="text-xs text-muted mt-4">Valid till: 30 Nov 2026</div>
-                    </div>
-
-                    <!-- Coupon 2 -->
-                    <div class="card coupon-card p-8 text-center reveal stagger-2 border-ocean-500 bg-gradient-to-br from-ocean-900 to-transparent">
-                        <div class="w-16 h-16 mx-auto bg-ocean-900 bg-opacity-40 rounded-full flex items-center justify-center text-ocean text-2xl mb-4">
-                            <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-ocean"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
-                        </div>
-                        <h3 class="text-xl font-bold mb-2">15% Bank Discount</h3>
-                        <p class="text-sm text-muted mb-6">Instant discount using HDFC or ICICI Credit Cards. Max discount ₹10,000.</p>
-                        <div class="flex flex-col gap-3 items-center">
-                            <span class="coupon-code text-lg text-ocean font-bold" id="code-2">BANK15OFF</span>
-                            <button class="btn btn-sm btn-outline-ocean copy-btn" data-code="BANK15OFF">Copy Code</button>
-                        </div>
-                        <div class="text-xs text-muted mt-4">Valid till: 15 Dec 2026</div>
-                    </div>
-
-                    <!-- Coupon 3 -->
-                    <div class="card coupon-card p-8 text-center reveal stagger-3 border-warning opacity-90">
-                        <div class="w-16 h-16 mx-auto bg-warning bg-opacity-20 rounded-full flex items-center justify-center text-warning text-2xl mb-4">
-                            <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-warning"><path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"/></svg>
-                        </div>
-                        <h3 class="text-xl font-bold mb-2">Free Spa Upgrade</h3>
-                        <p class="text-sm text-muted mb-6">Book any luxury suite and get a complimentary 90-minute couples spa.</p>
-                        <div class="flex flex-col gap-3 items-center">
-                            <span class="coupon-code text-lg text-warning font-bold" id="code-3">RELAXNOW</span>
-                            <button class="btn btn-sm btn-outline copy-btn" data-code="RELAXNOW" style="border-color: #fbbf24; color: #fbbf24;">Copy Code</button>
-                        </div>
-                        <div class="text-xs text-muted mt-4">Valid on selected resorts</div>
-                    </div>
-
-                </div>
-            </div>
-        </section>
-
-        <!-- Referral Offer -->
-        <section class="py-20 bg-primary relative overflow-hidden border-y border-glass">
-            <!-- Background effects -->
-            <div class="absolute left-0 top-0 w-64 h-64 bg-emerald-500 rounded-full blur-[120px] opacity-10"></div>
-            <div class="absolute right-0 bottom-0 w-64 h-64 bg-cyan-500 rounded-full blur-[120px] opacity-10"></div>
-            
-            <div class="container relative z-base">
-                <div class="flex flex-col lg:flex-row items-center bg-card border border-glass rounded-2xl overflow-hidden shadow-xl reveal-scale">
-                    
-                    <div class="lg:w-1/2 p-10 md:p-14 text-center lg:text-left referral-col-info">
-                        <span class="badge badge-emerald mb-4">Nova Nest Rewards</span>
-                        <h2 class="text-3xl md:text-4xl font-display font-bold mb-4">Give ₹2,000. <br>Get ₹2,000.</h2>
-                        <p class="text-muted text-lg mb-8">
-                            Share the gift of luxury travel. Invite a friend to Nova Nest Retreats and they'll get ₹2,000 off their first booking. Once their stay is complete, you get ₹2,000 in your wallet!
-                        </p>
-                        
-                        <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
-                            <a href="signup.html" class="btn btn-primary btn-lg hover-lift shadow-glow-emerald">Join Rewards Program</a>
-                            <a href="login.html" class="btn btn-outline btn-lg hover-lift">Log In to Refer</a>
-                        </div>
-                    </div>
-                    
-                    <div class="lg:w-1/2 bg-deep p-10 md:p-14 flex items-center justify-center border-t lg:border-t-0 lg:border-l border-glass referral-col-action">
-                        <div class="text-center w-full">
-                            <div class="w-32 h-32 mx-auto bg-gradient-to-br from-emerald-400 to-cyan-500 rounded-full flex items-center justify-center shadow-glow-emerald mb-6 animate-float">
-                                <svg viewBox="0 0 24 24" width="60" height="60" fill="none" stroke="white" stroke-width="1.5"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle><path d="M16 11h6"></path><path d="M19 8v6"></path></svg>
-                            </div>
-                            <h3 class="text-2xl font-bold text-white mb-2">Unlimited Referrals</h3>
-                            <p class="text-sm text-muted mb-4">There is no cap on how much you can earn. Start inviting today!</p>
-                            <button id="btn-referrals-toggle" class="btn btn-outline btn-sm" style="border-color: var(--emerald-500); color: var(--emerald-400);">Track Referrals (4 Active)</button>
-                            
-                            <!-- Referral List -->
-                            <div id="referrals-list" style="display: none;" class="mt-6 text-left max-w-sm mx-auto flex flex-col gap-3">
-                                <!-- Referral 1 -->
-                                <div class="flex justify-between items-center p-3 bg-primary rounded-lg border border-glass">
-                                    <div>
-                                        <div class="font-bold text-sm text-white">Amit Sharma</div>
-                                        <div class="text-xs text-muted">Joined May 10, 2026</div>
-                                    </div>
-                                    <div class="text-right">
-                                        <div class="text-sm font-bold text-emerald">+₹2,000</div>
-                                        <div class="text-2xs text-emerald bg-emerald-950 bg-opacity-40 px-2 py-0.5 rounded-full border border-emerald-900 inline-block mt-0.5">Completed</div>
-                                    </div>
-                                </div>
-                                <!-- Referral 2 -->
-                                <div class="flex justify-between items-center p-3 bg-primary rounded-lg border border-glass">
-                                    <div>
-                                        <div class="font-bold text-sm text-white">Priya Patel</div>
-                                        <div class="text-xs text-muted">Joined May 18, 2026</div>
-                                    </div>
-                                    <div class="text-right">
-                                        <div class="text-sm font-bold text-ocean">+₹2,000</div>
-                                        <div class="text-2xs text-ocean bg-ocean-950 bg-opacity-40 px-2 py-0.5 rounded-full border border-ocean-900 inline-block mt-0.5">Pending Stay</div>
-                                    </div>
-                                </div>
-                                <!-- Referral 3 -->
-                                <div class="flex justify-between items-center p-3 bg-primary rounded-lg border border-glass">
-                                    <div>
-                                        <div class="font-bold text-sm text-white">John Smith</div>
-                                        <div class="text-xs text-muted">Joined May 22, 2026</div>
-                                    </div>
-                                    <div class="text-right">
-                                        <div class="text-sm font-bold text-emerald">+₹2,000</div>
-                                        <div class="text-2xs text-emerald bg-emerald-950 bg-opacity-40 px-2 py-0.5 rounded-full border border-emerald-900 inline-block mt-0.5">Completed</div>
-                                    </div>
-                                </div>
-                                <!-- Referral 4 -->
-                                <div class="flex justify-between items-center p-3 bg-primary rounded-lg border border-glass">
-                                    <div>
-                                        <div class="font-bold text-sm text-white">Sarah Jenkins</div>
-                                        <div class="text-xs text-muted">Joined May 28, 2026</div>
-                                    </div>
-                                    <div class="text-right">
-                                        <div class="text-sm font-bold text-ocean">+₹2,000</div>
-                                        <div class="text-2xs text-ocean bg-ocean-950 bg-opacity-40 px-2 py-0.5 rounded-full border border-ocean-900 inline-block mt-0.5">Pending Stay</div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-        </section>
-
-        <!-- SECTION 6: Offer Categories -->
-        <section class="py-24 bg-deep relative">
-            <div class="container">
-                <div class="text-center mb-12 reveal">
-                    <span class="section-label">Find Your Deal</span>
-                    <h2 class="section-title">Offer Categories</h2>
-                    <p class="section-subtitle mx-auto">Jump into savings by trip style, timing, or travel group.</p>
-                </div>
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                    <a href="resorts.html?offer=flash" class="card-feature hover-lift reveal stagger-1">
-                        <div class="card-feature-icon text-emerald"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg></div>
-                        <h3 class="card-feature-title">Flash Sales</h3>
-                        <p class="card-feature-text">Short-window deals for travelers ready to book quickly.</p>
-                    </a>
-                    <a href="packages.html?theme=family" class="card-feature hover-lift reveal stagger-2">
-                        <div class="card-feature-icon text-ocean"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path></svg></div>
-                        <h3 class="card-feature-title">Family Deals</h3>
-                        <p class="card-feature-text">Room, meal, and activity savings for family holidays.</p>
-                    </a>
-                    <a href="packages.html?theme=wellness" class="card-feature hover-lift reveal stagger-3">
-                        <div class="card-feature-icon text-cyan"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22V9"></path><path d="M6 18h12l-6-9z"></path><path d="M8 12h8l-4-7z"></path></svg></div>
-                        <h3 class="card-feature-title">Wellness Offers</h3>
-                        <p class="card-feature-text">Spa, yoga, meals, and slow-stay perks bundled together.</p>
-                    </a>
-                    <a href="resorts.html?offer=bank" class="card-feature hover-lift reveal stagger-4">
-                        <div class="card-feature-icon" style="color: var(--clr-warning);"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"></rect><line x1="2" y1="10" x2="22" y2="10"></line></svg></div>
-                        <h3 class="card-feature-title">Bank Discounts</h3>
-                        <p class="card-feature-text">Instant card offers and payment-linked savings.</p>
-                    </a>
-                </div>
-            </div>
-        </section>
-
-        <!-- SECTION 7: Deal Of The Week -->
-        <section class="py-24 bg-primary relative">
-            <div class="container">
-                <div class="card-glass p-8 md:p-12 rounded-2xl reveal-scale">
-                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
-                        <div>
-                            <span class="badge badge-warning mb-4">Deal Of The Week</span>
-                            <h2 class="text-3xl md:text-4xl font-display font-bold mb-4">Bali Jungle Pool Villa Save 35%</h2>
-                            <p class="text-white-80 text-lg mb-6">Book a 3-night wellness escape with breakfast, airport pickup, and one guided waterfall trail included.</p>
-                            <a href="resorts.html?search=Bali" class="btn btn-primary btn-lg">View Bali Deals</a>
-                        </div>
-                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                            <div class="bg-deep border border-glass p-6 rounded-xl"><div class="text-3xl font-display font-bold text-emerald mb-2">35%</div><p class="text-muted">Off selected villas</p></div>
-                            <div class="bg-deep border border-glass p-6 rounded-xl"><div class="text-3xl font-display font-bold text-ocean mb-2">3N</div><p class="text-muted">Ideal retreat length</p></div>
-                            <div class="bg-deep border border-glass p-6 rounded-xl"><div class="text-3xl font-display font-bold text-cyan mb-2">2</div><p class="text-muted">Wellness inclusions</p></div>
-                            <div class="bg-deep border border-glass p-6 rounded-xl"><div class="text-3xl font-display font-bold mb-2" style="color: var(--clr-warning);">Free</div><p class="text-muted">Airport pickup</p></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- SECTION 8: Bank Partner Offers -->
-        <section class="py-24 bg-deep relative">
-            <div class="container">
+                <!-- Featured Deal Cards -->
                 <div class="flex flex-col md:flex-row justify-between items-end gap-6 mb-12 reveal">
                     <div>
-                        <span class="section-label">Payment Perks</span>
-                        <h2 class="section-title">Bank Partner Offers</h2>
-                        <p class="section-subtitle">Stack eligible card benefits with selected resort promotions.</p>
+                        <span class="section-label">Handpicked Savings</span>
+                        <h2 class="section-title">Featured Deals</h2>
                     </div>
-                    <a href="resorts.html" class="btn btn-outline">Browse Eligible Stays</a>
+                    <a href="packages.html" class="btn btn-outline">All Packages</a>
                 </div>
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                    <div class="card p-8 reveal stagger-1" style="border-top: 2px solid var(--emerald-500);"><h3 class="text-2xl font-display font-bold mb-3">HDFC Cards</h3><p class="text-muted mb-4">Instant percentage discount on premium domestic resort bookings.</p><span class="coupon-code text-emerald font-bold">HDFCESCAPE</span></div>
-                    <div class="card p-8 reveal stagger-2" style="border-top: 2px solid var(--ocean-500);"><h3 class="text-2xl font-display font-bold mb-3">ICICI Cards</h3><p class="text-muted mb-4">Limited-period savings on city luxury and island resort stays.</p><span class="coupon-code text-ocean font-bold">ICICILUXE</span></div>
-                    <div class="card p-8 reveal stagger-3" style="border-top: 2px solid var(--clr-warning);"><h3 class="text-2xl font-display font-bold mb-3">UPI Cashback</h3><p class="text-muted mb-4">Cashback rewards on selected quick-pay bookings and weekend deals.</p><span class="coupon-code font-bold" style="color: var(--clr-warning);">UPIREWARD</span></div>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <div class="card flex flex-col h-full overflow-hidden hover-lift reveal stagger-1">
+                        <div class="relative h-48 overflow-hidden">
+                            <img src="https://images.unsplash.com/photo-1506929562872-bb421503ef21?auto=format&fit=crop&w=800&q=80"
+                                alt="Maldives"
+                                class="w-full h-full object-cover hover:scale-110 transition-transform duration-500">
+                            <div class="absolute top-4 left-4"><span class="badge badge-warning">25% OFF</span></div>
+                            <div class="absolute bottom-4 right-4 flex gap-2"><span class="badge text-sm line-through"
+                                    style="background:rgba(0,0,0,0.6);">₹24,999</span><span
+                                    class="badge badge-emerald text-sm">₹18,749</span></div>
+                        </div>
+                        <div class="p-6 flex flex-col justify-between flex-1">
+                            <div>
+                                <h3 class="text-xl font-display font-bold mb-2">Maldives Island Bliss</h3>
+                                <p class="text-muted text-sm mb-4">3 nights water villa, meals, and transfers. Use code
+                                    <span class="text-emerald font-bold">MALDIVES25</span></p>
+                            </div>
+                            <a href="packages.html" class="btn btn-primary w-full text-center mt-auto">Book Now</a>
+                        </div>
+                    </div>
+                    <div class="card flex flex-col h-full overflow-hidden hover-lift reveal stagger-2">
+                        <div class="relative h-48 overflow-hidden">
+                            <img src="https://images.unsplash.com/photo-1571896349842-33c89424de2d?auto=format&fit=crop&w=800&q=80"
+                                alt="Coorg"
+                                class="w-full h-full object-cover hover:scale-110 transition-transform duration-500">
+                            <div class="absolute top-4 left-4"><span class="badge badge-ocean">Free Spa</span></div>
+                            <div class="absolute bottom-4 right-4"><span class="badge badge-emerald text-sm">From
+                                    ₹8,499</span></div>
+                        </div>
+                        <div class="p-6 flex flex-col justify-between flex-1">
+                            <div>
+                                <h3 class="text-xl font-display font-bold mb-2">Coorg Weekend + Spa</h3>
+                                <p class="text-muted text-sm mb-4">2 nights forest cottage plus free 60-min spa treatment on
+                                    check-in day.</p>
+                            </div>
+                            <a href="packages.html" class="btn btn-primary w-full text-center mt-auto">Book Now</a>
+                        </div>
+                    </div>
+                    <div class="card flex flex-col h-full overflow-hidden hover-lift reveal stagger-3">
+                        <div class="relative h-48 overflow-hidden">
+                            <img src="https://images.unsplash.com/photo-1614082242765-7c98ca0f3df3?auto=format&fit=crop&w=800&q=80"
+                                alt="Bali"
+                                class="w-full h-full object-cover hover:scale-110 transition-transform duration-500">
+                            <div class="absolute top-4 left-4"><span class="badge badge-warning">GOLD MEMBERS</span>
+                            </div>
+                            <div class="absolute bottom-4 right-4 flex gap-2"><span class="badge text-sm line-through"
+                                    style="background:rgba(0,0,0,0.6);">₹36,999</span><span
+                                    class="badge badge-emerald text-sm">₹32,999</span></div>
+                        </div>
+                        <div class="p-6 flex flex-col justify-between flex-1">
+                            <div>
+                                <h3 class="text-xl font-display font-bold mb-2">Bali Wellness 5 Nights</h3>
+                                <p class="text-muted text-sm mb-4">Exclusive Gold member pricing. Spa villa, daily
+                                    treatments, yoga included.</p>
+                            </div>
+                            <a href="packages.html" class="btn btn-primary w-full text-center mt-auto">Book Now</a>
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>
 
-        <!-- SECTION 9: Seasonal Savings -->
-        <section class="py-24 bg-primary relative">
+        <!-- SECTION 3: Coupon Codes -->
+        <section class="py-24 bg-deep relative" id="coupons">
             <div class="container">
                 <div class="text-center mb-12 reveal">
-                    <span class="section-label">Save By Season</span>
-                    <h2 class="section-title">Seasonal Savings Calendar</h2>
-                    <p class="section-subtitle mx-auto">Plan around seasonal pricing windows and resort availability.</p>
+                    <span class="section-label">Save More</span>
+                    <h2 class="section-title">Promo Codes &amp; Coupons</h2>
+                    <p class="section-subtitle mx-auto">Copy a code and use it at checkout. Validity and conditions
+                        apply per code.</p>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <div class="coupon-card card p-6 reveal stagger-1">
+                        <div class="flex justify-between items-start mb-4">
+                            <div><span class="badge badge-emerald mb-2">First Booking</span>
+                                <h3 class="text-2xl font-display font-bold">WELCOME15</h3>
+                            </div>
+                            <div class="text-3xl font-bold text-emerald">15%</div>
+                        </div>
+                        <p class="text-muted text-sm mb-4">15% off your first resort booking. Valid on any package above
+                            ₹10,000.</p>
+                        <button
+                            class="copy-btn w-full py-2 rounded-lg border border-emerald-500 text-emerald text-sm font-medium transition-fast hover:bg-emerald-900 hover:bg-opacity-30"
+                            data-code="WELCOME15">Copy Code</button>
+                    </div>
+                    <div class="coupon-card card p-6 reveal stagger-2">
+                        <div class="flex justify-between items-start mb-4">
+                            <div><span class="badge badge-ocean mb-2">Monsoon Sale</span>
+                                <h3 class="text-2xl font-display font-bold">MONSOON25</h3>
+                            </div>
+                            <div class="text-3xl font-bold text-ocean">25%</div>
+                        </div>
+                        <p class="text-muted text-sm mb-4">25% off select beach and hillside resorts during monsoon
+                            season.</p>
+                        <button
+                            class="copy-btn w-full py-2 rounded-lg border border-ocean-500 text-ocean text-sm font-medium transition-fast hover:bg-ocean-900 hover:bg-opacity-30"
+                            data-code="MONSOON25">Copy Code</button>
+                    </div>
+                    <div class="coupon-card card p-6 reveal stagger-3">
+                        <div class="flex justify-between items-start mb-4">
+                            <div><span class="badge badge-warning mb-2">Group Deal</span>
+                                <h3 class="text-2xl font-display font-bold">GROUP10</h3>
+                            </div>
+                            <div class="text-3xl font-bold" style="color:var(--clr-warning);">10%</div>
+                        </div>
+                        <p class="text-muted text-sm mb-4">10% off for groups of 10 or more. Applies to all package
+                            tiers.</p>
+                        <button
+                            class="copy-btn w-full py-2 rounded-lg text-sm font-medium transition-fast hover:bg-opacity-30"
+                            data-code="GROUP10" style="border:1px solid transparent;color:var(--clr-warning);">Copy
+                            Code</button>
+                    </div>
+                    <div class="coupon-card card p-6 reveal stagger-4">
+                        <div class="flex justify-between items-start mb-4">
+                            <div><span class="badge mb-2"
+                                    style="background:var(--cyan-900);color:var(--cyan-400);">Student</span>
+                                <h3 class="text-2xl font-display font-bold">STUDENT20</h3>
+                            </div>
+                            <div class="text-3xl font-bold text-cyan">20%</div>
+                        </div>
+                        <p class="text-muted text-sm mb-4">20% off for student groups of 5 or more. Valid ID required at
+                            check-in.</p>
+                        <button
+                            class="copy-btn w-full py-2 rounded-lg border border-cyan-500 text-cyan text-sm font-medium transition-fast hover:bg-cyan-900 hover:bg-opacity-30"
+                            data-code="STUDENT20">Copy Code</button>
+                    </div>
+                    <div class="coupon-card card p-6 reveal stagger-1">
+                        <div class="flex justify-between items-start mb-4">
+                            <div><span class="badge badge-emerald mb-2">Couples</span>
+                                <h3 class="text-2xl font-display font-bold">ROMANCE12</h3>
+                            </div>
+                            <div class="text-3xl font-bold text-emerald">12%</div>
+                        </div>
+                        <p class="text-muted text-sm mb-4">12% off romantic packages. Includes room décor and sunset
+                            dinner setup.</p>
+                        <button
+                            class="copy-btn w-full py-2 rounded-lg border border-emerald-500 text-emerald text-sm font-medium transition-fast hover:bg-emerald-900 hover:bg-opacity-30"
+                            data-code="ROMANCE12">Copy Code</button>
+                    </div>
+                    <div class="coupon-card card p-6 reveal stagger-2">
+                        <div class="flex justify-between items-start mb-4">
+                            <div><span class="badge badge-warning mb-2">Holiday</span>
+                                <h3 class="text-2xl font-display font-bold">XMAS2025</h3>
+                            </div>
+                            <div class="text-3xl font-bold" style="color:var(--clr-warning);">18%</div>
+                        </div>
+                        <p class="text-muted text-sm mb-4">18% off for Christmas and New Year bookings. Valid Nov 1 –
+                            Dec 31.</p>
+                        <button
+                            class="copy-btn w-full py-2 rounded-lg text-sm font-medium transition-fast hover:bg-opacity-30"
+                            data-code="XMAS2025" style="border:1px solid transparent;color:var(--clr-warning);">Copy
+                            Code</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 4: Seasonal Offers & Flash Sales -->
+        <section class="py-24 bg-primary relative" id="seasonal">
+            <div class="container">
+                <div class="text-center mb-12 reveal">
+                    <span class="section-label">Best Times to Book</span>
+                    <h2 class="section-title">Seasonal Offers &amp; Flash Sales</h2>
+                    <p class="section-subtitle mx-auto">Save big by booking with our seasonal windows and limited-time
+                        flash deals.</p>
+                </div>
+
+                <!-- Seasonal Calendar -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
+                    <div class="card p-8 reveal stagger-1 border-t-2 border-t-emerald-500">
+                        <h3 class="text-xl font-display font-bold mb-2">Monsoon</h3>
+                        <div class="text-emerald font-bold text-2xl mb-3">Up to 30% off</div>
+                        <p class="text-muted text-sm mb-3">Jul – Sep. Beach resorts, hillside retreats, spa packages.
+                            Lower prices, lush landscapes.</p>
+                        <div class="text-xs text-muted">Use code: <span class="text-emerald font-bold">MONSOON25</span>
+                        </div>
+                    </div>
+                    <div class="card p-8 reveal stagger-2 border-t-2 border-t-ocean-500">
+                        <h3 class="text-xl font-display font-bold mb-2">Winter</h3>
+                        <div class="text-ocean font-bold text-2xl mb-3">Up to 20% off</div>
+                        <p class="text-muted text-sm mb-3">Nov – Jan. Beach destinations, city resorts, and warm-weather
+                            retreats are popular.</p>
+                        <div class="text-xs text-muted">Use code: <span class="text-ocean font-bold">WINTER20</span>
+                        </div>
+                    </div>
+                    <div class="card p-8 reveal stagger-3 border-t-2" style="border-top-color:var(--clr-warning);">
+                        <h3 class="text-xl font-display font-bold mb-2">Summer</h3>
+                        <div class="font-bold text-2xl mb-3" style="color:var(--clr-warning);">Up to 25% off</div>
+                        <p class="text-muted text-sm mb-3">Apr – Jun. Mountain escapes, wellness retreats, and cooler
+                            hill station deals.</p>
+                        <div class="text-xs text-muted">Use code: <span style="color:var(--clr-warning);"
+                                class="font-bold">SUMMER25</span></div>
+                    </div>
+                    <div class="card p-8 reveal stagger-4 border-t-2 border-t-cyan-500">
+                        <h3 class="text-xl font-display font-bold mb-2">Festival</h3>
+                        <div class="text-cyan font-bold text-2xl mb-3">Up to 15% off</div>
+                        <p class="text-muted text-sm mb-3">Diwali, Holi, Eid, and Christmas. Celebration packages with
+                            decor and dining.</p>
+                        <div class="text-xs text-muted">Use code: <span class="text-cyan font-bold">FESTIVE15</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Flash Sales -->
+                <div class="text-center mb-10 reveal">
+                    <span class="section-label">Speed Deals</span>
+                    <h2 class="section-title">Last-Minute Flash Sales</h2>
+                    <p class="section-subtitle mx-auto">These deals expire fast. Book within the window to lock in the
+                        savings.</p>
                 </div>
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                    <div class="card card-glare p-8 reveal stagger-1"><span class="badge badge-emerald mb-4">Monsoon</span><h3 class="text-2xl font-display font-bold mb-3">Wellness Discounts</h3><p class="text-muted">Spa-heavy packages, lush views, and softer weekday pricing.</p></div>
-                    <div class="card card-glare p-8 reveal stagger-2"><span class="badge badge-ocean mb-4">Winter</span><h3 class="text-2xl font-display font-bold mb-3">Beach Bundles</h3><p class="text-muted">Coastal resort deals with meals, transfers, and activity credits.</p></div>
-                    <div class="card card-glare p-8 reveal stagger-3"><span class="badge badge-warning mb-4">Summer</span><h3 class="text-2xl font-display font-bold mb-3">Hill Escapes</h3><p class="text-muted">Family-friendly mountain stays with longer-stay savings.</p></div>
+                    <div class="card card-glare p-8 reveal stagger-1">
+                        <span class="badge badge-warning mb-4 animate-pulse">Ends in 2 Hours</span>
+                        <h3 class="text-2xl font-display font-bold mb-3">Goa Pool Villa Flash</h3>
+                        <div class="flex items-baseline gap-2 mb-4"><span
+                                class="text-3xl font-bold text-emerald">₹19,999</span><span
+                                class="text-muted line-through">₹27,999</span></div>
+                        <p class="text-muted mb-6">4-night pool villa. Includes breakfast, late checkout, and one
+                            complimentary activity.</p>
+                        <a href="packages.html" class="btn btn-primary w-full text-center">Grab Deal</a>
+                    </div>
+                    <div class="card card-glare p-8 reveal stagger-2">
+                        <span class="badge badge-ocean mb-4 animate-pulse">Ends Tonight</span>
+                        <h3 class="text-2xl font-display font-bold mb-3">Kerala Houseboat Deal</h3>
+                        <div class="flex items-baseline gap-2 mb-4"><span
+                                class="text-3xl font-bold text-emerald">₹12,499</span><span
+                                class="text-muted line-through">₹16,999</span></div>
+                        <p class="text-muted mb-6">2-night houseboat + 2-night resort combo. All meals and backwater
+                            cruise.</p>
+                        <a href="packages.html" class="btn btn-primary w-full text-center">Grab Deal</a>
+                    </div>
+                    <div class="card card-glare p-8 reveal stagger-3">
+                        <span class="badge mb-4 animate-pulse"
+                            style="background:var(--cyan-900);color:var(--cyan-400);">48h Window</span>
+                        <h3 class="text-2xl font-display font-bold mb-3">Manali Snow Season</h3>
+                        <div class="flex items-baseline gap-2 mb-4"><span
+                                class="text-3xl font-bold text-emerald">₹9,999</span><span
+                                class="text-muted line-through">₹13,999</span></div>
+                        <p class="text-muted mb-6">3-night mountain lodge, guided snow trek, campfire dinner, all meals.
+                        </p>
+                        <a href="packages.html" class="btn btn-primary w-full text-center">Grab Deal</a>
+                    </div>
                 </div>
             </div>
         </section>
 
-        <!-- SECTION 10: Last-Minute Deals -->
-        <section class="py-24 bg-deep relative">
-            <div class="container">
-                <div class="flex flex-col lg:flex-row items-center gap-12">
-                    <div class="flex-1 reveal-left">
-                        <span class="section-label">Book Soon</span>
-                        <h2 class="section-title">Last-Minute Escape Deals</h2>
-                        <p class="section-subtitle">Short-notice travel can unlock strong savings when resorts have open inventory.</p>
-                        <a href="resorts.html?offer=last-minute" class="btn btn-primary btn-lg mt-4">See Weekend Deals</a>
-                    </div>
-                    <div class="flex-1 grid grid-cols-1 gap-5 w-full reveal-right">
-                        <div class="card p-6"><h3 class="text-xl font-display font-bold mb-2">48-Hour Windows</h3><p class="text-muted">Best for flexible travelers who can confirm quickly.</p></div>
-                        <div class="card p-6"><h3 class="text-xl font-display font-bold mb-2">Nearby Destinations</h3><p class="text-muted">Ideal for driveable retreats and quick domestic breaks.</p></div>
-                        <div class="card p-6"><h3 class="text-xl font-display font-bold mb-2">Simple Inclusions</h3><p class="text-muted">Look for breakfast, late checkout, and transfer credits.</p></div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- SECTION 11: Member Exclusive Deals -->
-        <section class="py-24 bg-primary relative">
+        <!-- SECTION 5: Member Discounts & Loyalty Perks -->
+        <section class="py-24 bg-deep relative" id="member">
             <div class="container">
                 <div class="text-center mb-12 reveal">
                     <span class="section-label">Nova Circle</span>
-                    <h2 class="section-title">Member Exclusive Deals</h2>
-                    <p class="section-subtitle mx-auto">Members get early access, better rates, and extra perks on repeat bookings.</p>
+                    <h2 class="section-title">Member Discounts &amp; Loyalty Perks</h2>
+                    <p class="section-subtitle mx-auto">Unlock better prices with every booking. Your tier grows with
+                        every stay.</p>
                 </div>
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                    <div class="card p-8 reveal stagger-1"><h3 class="text-2xl font-display font-bold mb-2">Silver</h3><div class="text-3xl font-display font-bold text-emerald mb-4">5% off</div><p class="text-muted">Starter savings and early alerts for selected offers.</p></div>
-                    <div class="card p-8 reveal stagger-2"><h3 class="text-2xl font-display font-bold mb-2">Gold</h3><div class="text-3xl font-display font-bold text-ocean mb-4">10% off</div><p class="text-muted">Better discounts, breakfast perks, and upgrade requests.</p></div>
-                    <div class="card p-8 reveal stagger-3"><h3 class="text-2xl font-display font-bold mb-2">Platinum</h3><div class="text-3xl font-display font-bold mb-4" style="color: var(--clr-warning);">15% off</div><p class="text-muted">Top-tier savings, premium arrival amenities, and priority support.</p></div>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
+                    <div class="card p-8 reveal stagger-1" style="border-top: 2px solid var(--emerald-500);">
+                        <h3 class="text-2xl font-display font-bold mb-2">Silver</h3>
+                        <div class="text-3xl font-display font-bold text-emerald mb-4">5% off</div>
+                        <ul class="text-muted space-y-2 mb-6 text-sm">
+                            <li>✓ Member pricing on select packages</li>
+                            <li>✓ Early deal alerts by email</li>
+                            <li>✓ Priority chat support</li>
+                            <li>✓ Birthday discount (5%)</li>
+                        </ul>
+                        <a href="contact.html" class="btn btn-outline w-full text-center">Join Silver</a>
+                    </div>
+                    <div class="card p-8 reveal stagger-2" style="border-top: 2px solid var(--ocean-500);">
+                        <h3 class="text-2xl font-display font-bold mb-2">Gold</h3>
+                        <div class="text-3xl font-display font-bold text-ocean mb-4">10% off</div>
+                        <ul class="text-muted space-y-2 mb-6 text-sm">
+                            <li>✓ Better discounts on all packages</li>
+                            <li>✓ Room upgrade requests</li>
+                            <li>✓ Free breakfast on select stays</li>
+                            <li>✓ Flash sale early access</li>
+                        </ul>
+                        <a href="contact.html" class="btn btn-primary w-full text-center">Join Gold</a>
+                    </div>
+                    <div class="card p-8 reveal stagger-3" style="border-top: 2px solid var(--clr-warning);">
+                        <h3 class="text-2xl font-display font-bold mb-2">Platinum</h3>
+                        <div class="text-3xl font-display font-bold mb-4" style="color:var(--clr-warning);">15% off
+                        </div>
+                        <ul class="text-muted space-y-2 mb-6 text-sm">
+                            <li>✓ Highest savings across all resorts</li>
+                            <li>✓ Flexible reschedule support</li>
+                            <li>✓ Premium arrival amenities</li>
+                            <li>✓ Dedicated account manager</li>
+                        </ul>
+                        <a href="contact.html" class="btn btn-outline w-full text-center"
+                            style="border-color:var(--clr-warning);color:var(--clr-warning);">Join Platinum</a>
+                    </div>
                 </div>
-            </div>
-        </section>
 
-        <!-- SECTION 12: Family Offer Bundles -->
-        <section class="py-24 bg-deep relative">
-            <div class="container">
-                <div class="text-center mb-12 reveal">
-                    <span class="section-label">Family Value</span>
-                    <h2 class="section-title">Family Offer Bundles</h2>
-                    <p class="section-subtitle mx-auto">Save on the details that make family trips easier.</p>
+                <!-- Bank & Partner Offers -->
+                <div class="text-center mb-10 reveal">
+                    <span class="section-label">Payment Perks</span>
+                    <h2 class="section-title">Bank &amp; Partner Offers</h2>
+                    <p class="section-subtitle mx-auto">Additional savings when you pay with partnered banks and cards.
+                    </p>
                 </div>
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                    <div class="card-feature reveal stagger-1"><div class="card-feature-icon text-emerald"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 11h18"></path><path d="M5 11V7a3 3 0 0 1 3-3h8a3 3 0 0 1 3 3v4"></path><path d="M5 11v8M19 11v8"></path></svg></div><h3 class="card-feature-title">Suite Deals</h3><p class="card-feature-text">Discounts on connected rooms and family suites.</p></div>
-                    <div class="card-feature reveal stagger-2"><div class="card-feature-icon text-ocean"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><path d="M8 15s1.5 2 4 2 4-2 4-2"></path><path d="M9 9h.01M15 9h.01"></path></svg></div><h3 class="card-feature-title">Kids Perks</h3><p class="card-feature-text">Kids club, meal offers, and supervised activity options.</p></div>
-                    <div class="card-feature reveal stagger-3"><div class="card-feature-icon text-cyan"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 10h16"></path><path d="M5 10l1-5h12l1 5"></path><path d="M6 14h12v5H6z"></path></svg></div><h3 class="card-feature-title">Meal Savings</h3><p class="card-feature-text">Breakfast, buffet, and kids-eat-free plans.</p></div>
-                    <div class="card-feature reveal stagger-4"><div class="card-feature-icon" style="color: var(--clr-warning);"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14"></path><path d="M12 5l7 7-7 7"></path></svg></div><h3 class="card-feature-title">Transfers</h3><p class="card-feature-text">Airport pickup and local cab bundles for families.</p></div>
-                </div>
-            </div>
-        </section>
-
-        <!-- SECTION 13: Couple Offers -->
-        <section class="py-24 bg-primary relative">
-            <div class="container">
-                <div class="flex flex-col md:flex-row justify-between items-end gap-6 mb-12 reveal">
-                    <div>
-                        <span class="section-label">For Two</span>
-                        <h2 class="section-title">Couple Celebration Offers</h2>
-                        <p class="section-subtitle">Romantic savings for honeymoons, anniversaries, and quiet luxury breaks.</p>
+                    <div class="card p-6 reveal stagger-1">
+                        <h3 class="text-lg font-display font-bold mb-2">HDFC Cards</h3>
+                        <p class="text-muted text-sm mb-3">10% instant discount on bookings above ₹15,000.</p><span
+                            class="text-emerald text-sm font-medium">Use: HDFC10</span>
                     </div>
-                    <a href="packages.html?theme=romance" class="btn btn-outline">View Couple Packages</a>
-                </div>
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                    <div class="card card-glare p-8 reveal stagger-1"><h3 class="text-2xl font-display font-bold mb-3">Private Dinner</h3><p class="text-muted">Candlelight setups, chef menus, and scenic dining corners.</p></div>
-                    <div class="card card-glare p-8 reveal stagger-2"><h3 class="text-2xl font-display font-bold mb-3">Spa For Two</h3><p class="text-muted">Couple massages, steam access, and wellness credits.</p></div>
-                    <div class="card card-glare p-8 reveal stagger-3"><h3 class="text-2xl font-display font-bold mb-3">Suite Upgrade</h3><p class="text-muted">Better views, premium rooms, and arrival amenities.</p></div>
-                </div>
-            </div>
-        </section>
-
-        <!-- SECTION 14: Student And Group Deals -->
-        <section class="py-24 bg-deep relative">
-            <div class="container">
-                <div class="flex flex-col lg:flex-row items-center gap-12">
-                    <div class="flex-1 reveal-left">
-                        <span class="section-label">Split The Cost</span>
-                        <h2 class="section-title">Student &amp; Group Deals</h2>
-                        <p class="section-subtitle">Group discounts make adventure stays, villa breaks, and shared rooms easier to plan.</p>
-                        <a href="packages.html?type=student" class="btn btn-primary btn-lg mt-4">Explore Group Packages</a>
+                    <div class="card p-6 reveal stagger-2">
+                        <h3 class="text-lg font-display font-bold mb-2">ICICI Credit</h3>
+                        <p class="text-muted text-sm mb-3">8% off for ICICI Sapphire and Rubyx cardholders.</p><span
+                            class="text-ocean text-sm font-medium">Use: ICICI8</span>
                     </div>
-                    <div class="flex-1 grid grid-cols-1 sm:grid-cols-2 gap-5 w-full reveal-right">
-                        <div class="card p-6"><h3 class="text-xl font-display font-bold mb-2">Shared Rooms</h3><p class="text-muted">Lower per-person costs for friend groups.</p></div>
-                        <div class="card p-6"><h3 class="text-xl font-display font-bold mb-2">Activity Credits</h3><p class="text-muted">Adventure, water sport, or local tour savings.</p></div>
-                        <div class="card p-6"><h3 class="text-xl font-display font-bold mb-2">Villa Splits</h3><p class="text-muted">Better value for larger groups staying together.</p></div>
-                        <div class="card p-6"><h3 class="text-xl font-display font-bold mb-2">Late Checkout</h3><p class="text-muted">More time to relax before heading home.</p></div>
+                    <div class="card p-6 reveal stagger-3">
+                        <h3 class="text-lg font-display font-bold mb-2">UPI Payments</h3>
+                        <p class="text-muted text-sm mb-3">Flat ₹500 off for UPI payments above ₹8,000.</p><span
+                            class="text-cyan text-sm font-medium">Use: UPI500</span>
+                    </div>
+                    <div class="card p-6 reveal stagger-4">
+                        <h3 class="text-lg font-display font-bold mb-2">EMI Offer</h3>
+                        <p class="text-muted text-sm mb-3">0% EMI for 6 months on bookings above ₹20,000.</p><span
+                            class="font-medium text-sm" style="color:var(--clr-warning);">Use: EMI6ZERO</span>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- SECTION 15: Long Stay Offers -->
+        <!-- SECTION 6: Referral Program -->
         <section class="py-24 bg-primary relative">
             <div class="container">
                 <div class="text-center mb-12 reveal">
-                    <span class="section-label">Stay Longer</span>
-                    <h2 class="section-title">Long-Stay Offer Ideas</h2>
-                    <p class="section-subtitle mx-auto">Extended stays can unlock stronger value on rooms, meals, and workspace.</p>
+                    <span class="section-label">Earn While You Travel</span>
+                    <h2 class="section-title">Refer &amp; Earn</h2>
+                    <p class="section-subtitle mx-auto">Share Nova Nest with friends and earn travel credits for every
+                        successful booking.</p>
                 </div>
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                    <div class="card p-8 reveal stagger-1"><div class="text-emerald font-display font-bold text-5xl mb-4">5N</div><h3 class="text-xl font-display font-bold mb-3">Relaxed Holiday</h3><p class="text-muted">Good for families and couples who want slower days.</p></div>
-                    <div class="card p-8 reveal stagger-2"><div class="text-ocean font-display font-bold text-5xl mb-4">7N</div><h3 class="text-xl font-display font-bold mb-3">Workation Week</h3><p class="text-muted">Bundle Wi-Fi, desk setup, breakfast, and weekday savings.</p></div>
-                    <div class="card p-8 reveal stagger-3"><div class="font-display font-bold text-5xl mb-4" style="color: var(--clr-warning);">14N</div><h3 class="text-xl font-display font-bold mb-3">Slow Retreat</h3><p class="text-muted">Best for wellness travelers and extended remote work.</p></div>
-                </div>
-            </div>
-        </section>
-
-        <!-- SECTION 16: Free Upgrade Offers -->
-        <section class="py-24 bg-deep relative">
-            <div class="container">
-                <div class="text-center mb-12 reveal">
-                    <span class="section-label">Extra Comfort</span>
-                    <h2 class="section-title">Free Upgrade Offers</h2>
-                    <p class="section-subtitle mx-auto">Selected offers include upgrades that make the trip feel more premium.</p>
-                </div>
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                    <div class="card-feature reveal stagger-1"><div class="card-feature-icon text-emerald"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="7" width="18" height="13" rx="2"></rect><path d="M7 7V5a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v2"></path></svg></div><h3 class="card-feature-title">Room Upgrade</h3><p class="card-feature-text">Subject to availability at selected resorts.</p></div>
-                    <div class="card-feature reveal stagger-2"><div class="card-feature-icon text-ocean"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12h20"></path><path d="M5 12c0-5 14-5 14 0"></path></svg></div><h3 class="card-feature-title">Pool Access</h3><p class="card-feature-text">Premium pool or cabana credits on eligible stays.</p></div>
-                    <div class="card-feature reveal stagger-3"><div class="card-feature-icon text-cyan"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3 3"></path></svg></div><h3 class="card-feature-title">Late Checkout</h3><p class="card-feature-text">More room time on short breaks and weekend stays.</p></div>
-                    <div class="card-feature reveal stagger-4"><div class="card-feature-icon" style="color: var(--clr-warning);"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 3h8l1 7H7z"></path><path d="M6 10h12v11H6z"></path></svg></div><h3 class="card-feature-title">Spa Credit</h3><p class="card-feature-text">Treatment credits bundled into premium suite offers.</p></div>
-                </div>
-            </div>
-        </section>
-
-        <!-- SECTION 17: Offer Terms Snapshot -->
-        <section class="py-24 bg-primary relative">
-            <div class="container">
-                <div class="flex flex-col md:flex-row justify-between items-end gap-6 mb-12 reveal">
-                    <div>
-                        <span class="section-label">Before You Book</span>
-                        <h2 class="section-title">Offer Terms Snapshot</h2>
-                        <p class="section-subtitle">Check the important details before applying a coupon or deal.</p>
-                    </div>
-                </div>
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                    <div class="card p-8 reveal stagger-1"><h3 class="text-xl font-display font-bold mb-3">Minimum Spend</h3><p class="text-muted">Some coupons require a minimum booking value before discounts apply.</p></div>
-                    <div class="card p-8 reveal stagger-2"><h3 class="text-xl font-display font-bold mb-3">Eligible Resorts</h3><p class="text-muted">Bank and upgrade offers may apply only to selected destinations or room types.</p></div>
-                    <div class="card p-8 reveal stagger-3"><h3 class="text-xl font-display font-bold mb-3">Date Windows</h3><p class="text-muted">Flash sales and festive deals can have fixed booking and travel periods.</p></div>
-                </div>
-            </div>
-        </section>
-
-        <!-- SECTION 18: How To Redeem -->
-        <section class="py-24 bg-deep relative">
-            <div class="container">
-                <div class="text-center mb-12 reveal">
-                    <span class="section-label">Easy Redemption</span>
-                    <h2 class="section-title">How To Redeem An Offer</h2>
-                    <p class="section-subtitle mx-auto">A simple path from coupon discovery to confirmed savings.</p>
-                </div>
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                    <div class="card p-8 reveal stagger-1"><div class="text-emerald font-display font-bold text-5xl mb-4">01</div><h3 class="text-xl font-display font-bold mb-3">Copy Code</h3><p class="text-muted">Choose a valid promo code or open an eligible deal.</p></div>
-                    <div class="card p-8 reveal stagger-2"><div class="text-ocean font-display font-bold text-5xl mb-4">02</div><h3 class="text-xl font-display font-bold mb-3">Pick Resort</h3><p class="text-muted">Select destination, dates, room type, and package inclusions.</p></div>
-                    <div class="card p-8 reveal stagger-3"><div class="font-display font-bold text-5xl mb-4" style="color: var(--clr-warning);">03</div><h3 class="text-xl font-display font-bold mb-3">Apply &amp; Confirm</h3><p class="text-muted">Apply the code during booking and review the final price.</p></div>
-                </div>
-            </div>
-        </section>
-
-        <!-- SECTION 19: Corporate Deals -->
-        <section class="py-24 bg-primary relative">
-            <div class="container">
-                <div class="flex flex-col lg:flex-row items-center gap-12">
-                    <div class="flex-1 reveal-left">
-                        <span class="section-label">Team Travel</span>
-                        <h2 class="section-title">Corporate Retreat Offers</h2>
-                        <p class="section-subtitle">Get bundled pricing for offsites, leadership retreats, workations, and team celebrations.</p>
-                        <a href="contact.html" class="btn btn-primary btn-lg mt-4">Request Corporate Deal</a>
-                    </div>
-                    <div class="flex-1 grid grid-cols-1 gap-5 w-full reveal-right">
-                        <div class="card p-6"><h3 class="text-xl font-display font-bold mb-2">Room Blocks</h3><p class="text-muted">Negotiated pricing for groups needing multiple rooms.</p></div>
-                        <div class="card p-6"><h3 class="text-xl font-display font-bold mb-2">Meeting Spaces</h3><p class="text-muted">Conference halls, AV support, and refreshment breaks.</p></div>
-                        <div class="card p-6"><h3 class="text-xl font-display font-bold mb-2">Team Activities</h3><p class="text-muted">Guided experiences, games, wellness sessions, and dinner setups.</p></div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- SECTION 20: Destination Deal Map -->
-        <section class="py-24 bg-deep relative">
-            <div class="container">
-                <div class="text-center mb-12 reveal">
-                    <span class="section-label">Where Deals Are Hot</span>
-                    <h2 class="section-title">Destination Deal Highlights</h2>
-                    <p class="section-subtitle mx-auto">Popular regions where offer-led stays are frequently available.</p>
-                </div>
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                    <div class="card p-8 reveal stagger-1"><h3 class="text-xl font-display font-bold mb-3">Goa</h3><p class="text-muted">Beach resorts, weekend breaks, and bank-led savings.</p></div>
-                    <div class="card p-8 reveal stagger-2"><h3 class="text-xl font-display font-bold mb-3">Kerala</h3><p class="text-muted">Wellness retreats, monsoon packages, and spa credits.</p></div>
-                    <div class="card p-8 reveal stagger-3"><h3 class="text-xl font-display font-bold mb-3">Bali</h3><p class="text-muted">Pool villas, jungle resorts, and long-stay bundles.</p></div>
-                    <div class="card p-8 reveal stagger-4"><h3 class="text-xl font-display font-bold mb-3">Maldives</h3><p class="text-muted">Water villas, transfer inclusions, and seasonal luxury deals.</p></div>
-                </div>
-            </div>
-        </section>
-
-        <!-- SECTION 21: Offer FAQs -->
-        <section class="py-24 bg-primary relative">
-            <div class="container">
-                <div class="text-center mb-12 reveal">
-                    <span class="section-label">Offer Help</span>
-                    <h2 class="section-title">Frequently Asked Questions</h2>
-                    <p class="section-subtitle mx-auto">Quick answers before you apply a deal or coupon.</p>
-                </div>
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mx-auto" style="max-width: 64rem;">
-                    <details class="card p-6 reveal stagger-1"><summary class="text-lg font-display font-bold cursor-pointer">Can I use two coupon codes together?</summary><p class="text-muted mt-4">Most offers allow one promo code per booking, though member benefits or bank perks may apply separately when eligible.</p></details>
-                    <details class="card p-6 reveal stagger-2"><summary class="text-lg font-display font-bold cursor-pointer">Do flash sale prices change?</summary><p class="text-muted mt-4">Yes. Flash sale inventory can change as rooms sell out or the countdown ends.</p></details>
-                    <details class="card p-6 reveal stagger-3"><summary class="text-lg font-display font-bold cursor-pointer">Are offers valid on every resort?</summary><p class="text-muted mt-4">Some offers are limited to selected resorts, room categories, destinations, or travel dates.</p></details>
-                    <details class="card p-6 reveal stagger-4"><summary class="text-lg font-display font-bold cursor-pointer">Where do I apply a bank offer?</summary><p class="text-muted mt-4">Bank offers are typically applied at payment after choosing an eligible card or payment method.</p></details>
-                </div>
-            </div>
-        </section>
-
-        <!-- SECTION 22: Savings Finder -->
-        <section class="py-24 bg-deep relative">
-            <div class="container">
-                <div class="text-center mb-12 reveal">
-                    <span class="section-label">Deal Guide</span>
-                    <h2 class="section-title">Find The Best Savings Route</h2>
-                    <p class="section-subtitle mx-auto">Different offers work better for different booking styles, budgets, and timelines.</p>
-                </div>
-                <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
-                    <div class="card p-8 reveal stagger-1"><div class="text-emerald font-display font-bold text-4xl mb-3">01</div><h3 class="text-xl font-display font-bold mb-3">Choose Dates</h3><p class="text-muted">Flexible dates unlock more sale windows and room categories.</p></div>
-                    <div class="card p-8 reveal stagger-2"><div class="text-ocean font-display font-bold text-4xl mb-3">02</div><h3 class="text-xl font-display font-bold mb-3">Match Offer</h3><p class="text-muted">Pick flash sale, bank discount, member deal, or package savings.</p></div>
-                    <div class="card p-8 reveal stagger-3"><div class="text-cyan font-display font-bold text-4xl mb-3">03</div><h3 class="text-xl font-display font-bold mb-3">Check Terms</h3><p class="text-muted">Review minimum spend, eligible resorts, and travel periods.</p></div>
-                    <div class="card p-8 reveal stagger-4"><div class="font-display font-bold text-4xl mb-3" style="color: var(--clr-warning);">04</div><h3 class="text-xl font-display font-bold mb-3">Book Smart</h3><p class="text-muted">Confirm the final price and inclusions before payment.</p></div>
-                </div>
-            </div>
-        </section>
-
-        <!-- SECTION 23: Offer Match Scenarios -->
-        <section class="py-24 bg-primary relative">
-            <div class="container">
-                <div class="text-center mb-12 reveal">
-                    <span class="section-label">What Fits You</span>
-                    <h2 class="section-title">Offer Match Scenarios</h2>
-                    <p class="section-subtitle mx-auto">Use these examples to pick the strongest deal path quickly.</p>
-                </div>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                    <div class="card card-glare p-8 reveal stagger-1"><h3 class="text-2xl font-display font-bold mb-3">"We can travel this weekend."</h3><p class="text-muted mb-5">Look for flash sales, last-minute escapes, and nearby resorts with open inventory.</p><a href="resorts.html?offer=last-minute" class="text-emerald font-medium">See last-minute deals &rarr;</a></div>
-                    <div class="card card-glare p-8 reveal stagger-2"><h3 class="text-2xl font-display font-bold mb-3">"We are booking a premium suite."</h3><p class="text-muted mb-5">Use bank discounts, free spa upgrades, and member savings for higher-value stays.</p><a href="resorts.html?offer=bank" class="text-ocean font-medium">See bank offers &rarr;</a></div>
-                    <div class="card card-glare p-8 reveal stagger-3"><h3 class="text-2xl font-display font-bold mb-3">"We are a family of four."</h3><p class="text-muted mb-5">Choose family bundles with meal plans, suite savings, transfers, and kids perks.</p><a href="packages.html?theme=family" class="text-cyan font-medium">See family packages &rarr;</a></div>
-                    <div class="card card-glare p-8 reveal stagger-4"><h3 class="text-2xl font-display font-bold mb-3">"We want a longer stay."</h3><p class="text-muted mb-5">Look for weekly stay discounts, workation deals, and meal-plan bundles.</p><a href="packages.html?theme=workation" class="font-medium" style="color: var(--clr-warning);">See long-stay ideas &rarr;</a></div>
-                </div>
-            </div>
-        </section>
-
-        <!-- SECTION 24: Coupon Stacking Guide -->
-        <section class="py-24 bg-deep relative">
-            <div class="container">
-                <div class="flex flex-col lg:flex-row items-center gap-12">
-                    <div class="flex-1 reveal-left">
-                        <span class="section-label">Stack Carefully</span>
-                        <h2 class="section-title">How To Combine Savings</h2>
-                        <p class="section-subtitle">Not every offer stacks, but some savings can work together when eligibility matches.</p>
-                        <a href="contact.html" class="btn btn-primary btn-lg mt-4">Ask About Eligibility</a>
-                    </div>
-                    <div class="flex-1 grid grid-cols-1 gap-5 w-full reveal-right">
-                        <div class="card p-6"><h3 class="text-xl font-display font-bold mb-2">Promo Code + Member Tier</h3><p class="text-muted">Some member benefits apply alongside selected coupon savings.</p></div>
-                        <div class="card p-6"><h3 class="text-xl font-display font-bold mb-2">Package Deal + Add-on Credit</h3><p class="text-muted">A package may include spa, decor, or transfer credits already inside the price.</p></div>
-                        <div class="card p-6"><h3 class="text-xl font-display font-bold mb-2">Bank Offer At Payment</h3><p class="text-muted">Card discounts are usually validated during the payment step.</p></div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- SECTION 25: Weekly Deal Drops -->
-        <section class="py-24 bg-primary relative">
-            <div class="container">
-                <div class="text-center mb-12 reveal">
-                    <span class="section-label">Fresh Drops</span>
-                    <h2 class="section-title">Weekly Deal Drop Calendar</h2>
-                    <p class="section-subtitle mx-auto">A simple rhythm for checking the right offer at the right time.</p>
-                </div>
-                <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
-                    <div class="card p-8 reveal stagger-1"><h3 class="text-xl font-display font-bold mb-3">Monday</h3><p class="text-muted">New weekday stay deals and workation pricing.</p></div>
-                    <div class="card p-8 reveal stagger-2"><h3 class="text-xl font-display font-bold mb-3">Wednesday</h3><p class="text-muted">Bank-led savings and premium suite offers.</p></div>
-                    <div class="card p-8 reveal stagger-3"><h3 class="text-xl font-display font-bold mb-3">Friday</h3><p class="text-muted">Weekend flash sales and last-minute availability.</p></div>
-                    <div class="card p-8 reveal stagger-4"><h3 class="text-xl font-display font-bold mb-3">Sunday</h3><p class="text-muted">Family, wellness, and long-stay package highlights.</p></div>
-                </div>
-            </div>
-        </section>
-
-        <!-- SECTION 26: Offer Value Calculator Preview -->
-        <section class="py-24 bg-deep relative">
-            <div class="container">
-                <div class="card-glass p-8 md:p-12 rounded-2xl reveal-scale">
+                <div class="card-glass p-8 md:p-12 rounded-2xl reveal-scale mb-12">
                     <div class="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
                         <div>
-                            <span class="badge badge-emerald mb-4">Savings Preview</span>
-                            <h2 class="text-3xl md:text-4xl font-display font-bold mb-4">Understand The Real Deal Value</h2>
-                            <p class="text-white-80 text-lg mb-6">The best offer is not always the biggest percentage. Compare the final price, inclusions, upgrades, and flexibility.</p>
-                            <a href="packages.html" class="btn btn-primary btn-lg">Compare Packages</a>
+                            <h2 class="text-3xl md:text-4xl font-display font-bold mb-4">Earn ₹1,500 Per Referral</h2>
+                            <p class="text-white-80 text-lg mb-6">When a friend books through your referral link, you
+                                both save. They get ₹750 off their first booking. You get ₹1,500 travel credits for your
+                                next stay.</p>
+                            <div class="flex flex-col sm:flex-row gap-3">
+                                <a href="contact.html" class="btn btn-primary btn-lg">Get My Referral Link</a>
+                                <button id="btn-referrals-toggle" class="btn btn-outline"
+                                    style="border-color: var(--emerald-500); color: var(--emerald-400);">Track Referrals
+                                    (4 Active)</button>
+                            </div>
                         </div>
-                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                            <div class="bg-deep border border-glass p-6 rounded-xl"><div class="text-3xl font-display font-bold text-emerald mb-2">40%</div><p class="text-muted">Flash sale headline discount</p></div>
-                            <div class="bg-deep border border-glass p-6 rounded-xl"><div class="text-3xl font-display font-bold text-ocean mb-2">+Spa</div><p class="text-muted">Included upgrade value</p></div>
-                            <div class="bg-deep border border-glass p-6 rounded-xl"><div class="text-3xl font-display font-bold text-cyan mb-2">Free</div><p class="text-muted">Transfer inclusion</p></div>
-                            <div class="bg-deep border border-glass p-6 rounded-xl"><div class="text-3xl font-display font-bold mb-2" style="color: var(--clr-warning);">Flex</div><p class="text-muted">Date-change value</p></div>
+                        <div class="grid grid-cols-3 gap-4 text-center">
+                            <div class="bg-deep border border-glass p-6 rounded-xl">
+                                <div class="text-3xl font-bold text-emerald mb-2">₹1.5K</div>
+                                <p class="text-muted text-sm">You earn per referral</p>
+                            </div>
+                            <div class="bg-deep border border-glass p-6 rounded-xl">
+                                <div class="text-3xl font-bold text-ocean mb-2">₹750</div>
+                                <p class="text-muted text-sm">Friend's first booking</p>
+                            </div>
+                            <div class="bg-deep border border-glass p-6 rounded-xl">
+                                <div class="text-3xl font-bold text-cyan mb-2">∞</div>
+                                <p class="text-muted text-sm">No limit on referrals</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="referrals-list" style="display:none;">
+                    <div class="card p-6">
+                        <div class="referral-row">
+                            <div>
+                                <p class="font-bold text-white">Aditi M.</p>
+                                <p class="text-sm text-muted">Booked: Goa Villa — Jun 2025</p>
+                            </div><span class="badge badge-emerald">Credited ₹1,500</span>
+                        </div>
+                    </div>
+                    <div class="card p-6">
+                        <div class="referral-row">
+                            <div>
+                                <p class="font-bold text-white">Ravi K.</p>
+                                <p class="text-sm text-muted">Booking pending confirmation</p>
+                            </div><span class="badge badge-warning">Pending</span>
+                        </div>
+                    </div>
+                    <div class="card p-6">
+                        <div class="referral-row">
+                            <div>
+                                <p class="font-bold text-white">Sneha P.</p>
+                                <p class="text-sm text-muted">Booked: Bali Wellness — May 2025</p>
+                            </div><span class="badge badge-emerald">Credited ₹1,500</span>
+                        </div>
+                    </div>
+                    <div class="card p-6">
+                        <div class="referral-row">
+                            <div>
+                                <p class="font-bold text-white">Arjun L.</p>
+                                <p class="text-sm text-muted">Booking in progress</p>
+                            </div><span class="badge badge-ocean">In Progress</span>
                         </div>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- SECTION 27: Offer Types Compared -->
-        <section class="py-24 bg-primary relative">
-            <div class="container">
-                <div class="text-center mb-12 reveal">
-                    <span class="section-label">Compare Types</span>
-                    <h2 class="section-title">Offer Types At A Glance</h2>
-                    <p class="section-subtitle mx-auto">Pick based on how soon you travel, how much you spend, and what extras matter.</p>
-                </div>
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                    <div class="card p-8 reveal stagger-1" style="border-top: 2px solid var(--emerald-500);"><h3 class="text-2xl font-display font-bold mb-3">Flash Sale</h3><p class="text-muted">Best for flexible travelers who can book quickly and travel within a fixed window.</p></div>
-                    <div class="card p-8 reveal stagger-2" style="border-top: 2px solid var(--ocean-500);"><h3 class="text-2xl font-display font-bold mb-3">Bank Offer</h3><p class="text-muted">Best for higher-value bookings where card discounts have a useful cap.</p></div>
-                    <div class="card p-8 reveal stagger-3" style="border-top: 2px solid var(--clr-warning);"><h3 class="text-2xl font-display font-bold mb-3">Package Offer</h3><p class="text-muted">Best when meals, transfers, spa, or activities reduce the overall trip cost.</p></div>
-                </div>
-            </div>
-        </section>
-
-        <!-- SECTION 28: Destination Offer Collections -->
-        <section class="py-24 bg-deep relative">
-            <div class="container">
-                <div class="flex flex-col md:flex-row justify-between items-end gap-6 mb-12 reveal">
-                    <div>
-                        <span class="section-label">Collections</span>
-                        <h2 class="section-title">Destination Offer Collections</h2>
-                        <p class="section-subtitle">Browse deal ideas around the destination mood you want.</p>
-                    </div>
-                    <a href="resorts.html" class="btn btn-outline">Browse All Resorts</a>
-                </div>
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                    <a href="resorts.html?search=Goa" class="card-feature hover-lift reveal stagger-1"><div class="card-feature-icon text-ocean"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 20c2 0 2-1 4-1s2 1 4 1 2-1 4-1 2 1 4 1 2-1 4-1"></path></svg></div><h3 class="card-feature-title">Coastal Offers</h3><p class="card-feature-text">Beach resorts, meals, pool access, and weekend pricing.</p></a>
-                    <a href="resorts.html?search=Coorg" class="card-feature hover-lift reveal stagger-2"><div class="card-feature-icon text-emerald"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 20h18L13 4l-4 8-2-4z"></path></svg></div><h3 class="card-feature-title">Mountain Offers</h3><p class="card-feature-text">Cool weather stays, family plans, and long weekends.</p></a>
-                    <a href="resorts.html?search=Kerala" class="card-feature hover-lift reveal stagger-3"><div class="card-feature-icon text-cyan"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22V9"></path><path d="M6 18h12l-6-9z"></path></svg></div><h3 class="card-feature-title">Wellness Offers</h3><p class="card-feature-text">Spa credits, mindful meals, and monsoon retreats.</p></a>
-                    <a href="resorts.html?search=Dubai" class="card-feature hover-lift reveal stagger-4"><div class="card-feature-icon" style="color: var(--clr-warning);"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="8" width="7" height="12"></rect><rect x="14" y="4" width="7" height="16"></rect></svg></div><h3 class="card-feature-title">City Offers</h3><p class="card-feature-text">Luxury hotels, shopping districts, and bank-led savings.</p></a>
-                </div>
-            </div>
-        </section>
-
-        <!-- SECTION 29: Limited Inventory Alerts -->
-        <section class="py-24 bg-primary relative">
-            <div class="container">
-                <div class="text-center mb-12 reveal">
-                    <span class="section-label">Availability</span>
-                    <h2 class="section-title">Limited Inventory Alerts</h2>
-                    <p class="section-subtitle mx-auto">Some offers disappear because the eligible room type sells out, not because the page changed.</p>
-                </div>
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                    <div class="card card-glare p-8 reveal stagger-1"><span class="badge badge-warning mb-4">Few Rooms</span><h3 class="text-2xl font-display font-bold mb-3">Premium Villas</h3><p class="text-muted">Pool villas and water villas often have limited sale inventory.</p></div>
-                    <div class="card card-glare p-8 reveal stagger-2"><span class="badge badge-ocean mb-4">High Demand</span><h3 class="text-2xl font-display font-bold mb-3">Holiday Dates</h3><p class="text-muted">Festive windows and school breaks move faster than weekday stays.</p></div>
-                    <div class="card card-glare p-8 reveal stagger-3"><span class="badge badge-emerald mb-4">Best Value</span><h3 class="text-2xl font-display font-bold mb-3">Weekday Escapes</h3><p class="text-muted">Flexible weekday travelers usually find better pricing and availability.</p></div>
-                </div>
-            </div>
-        </section>
-
-        <!-- SECTION 30: Member Early Access -->
-        <section class="py-24 bg-deep relative">
-            <div class="container">
-                <div class="flex flex-col lg:flex-row items-center gap-12">
-                    <div class="flex-1 reveal-left">
-                        <span class="section-label">Early Access</span>
-                        <h2 class="section-title">Members See Selected Deals First</h2>
-                        <p class="section-subtitle">Nova Circle members can receive early alerts for seasonal drops, premium upgrades, and limited room inventory.</p>
-                        <a href="signup.html" class="btn btn-primary btn-lg mt-4">Join Nova Circle</a>
-                    </div>
-                    <div class="flex-1 grid grid-cols-1 sm:grid-cols-2 gap-5 w-full reveal-right">
-                        <div class="card p-6"><h3 class="text-xl font-display font-bold mb-2">Deal Alerts</h3><p class="text-muted">Get notified when matching offers open.</p></div>
-                        <div class="card p-6"><h3 class="text-xl font-display font-bold mb-2">Upgrade Notes</h3><p class="text-muted">Watch for spa, room, and transfer perks.</p></div>
-                        <div class="card p-6"><h3 class="text-xl font-display font-bold mb-2">Priority Help</h3><p class="text-muted">Ask support to compare deal fit.</p></div>
-                        <div class="card p-6"><h3 class="text-xl font-display font-bold mb-2">Repeat Savings</h3><p class="text-muted">Unlock benefits across future stays.</p></div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- SECTION 31: Offer Mistakes To Avoid -->
-        <section class="py-24 bg-primary relative">
-            <div class="container">
-                <div class="text-center mb-12 reveal">
-                    <span class="section-label">Book Better</span>
-                    <h2 class="section-title">Offer Mistakes To Avoid</h2>
-                    <p class="section-subtitle mx-auto">A few quick checks can protect the value of your deal.</p>
-                </div>
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                    <div class="card p-8 reveal stagger-1"><h3 class="text-xl font-display font-bold mb-3">Ignoring Travel Dates</h3><p class="text-muted">Always check whether your intended stay falls inside the offer window.</p></div>
-                    <div class="card p-8 reveal stagger-2"><h3 class="text-xl font-display font-bold mb-3">Missing Minimum Spend</h3><p class="text-muted">Some coupons only activate after a minimum booking value.</p></div>
-                    <div class="card p-8 reveal stagger-3"><h3 class="text-xl font-display font-bold mb-3">Skipping Inclusions</h3><p class="text-muted">A smaller discount with meals or transfers can beat a bigger room-only discount.</p></div>
-                </div>
-            </div>
-        </section>
-
-        <!-- SECTION 32: Deal Proof Points -->
+        <!-- SECTION 7: Special Occasion & Corporate Deals -->
         <section class="py-24 bg-deep relative">
             <div class="container">
                 <div class="text-center mb-12 reveal">
-                    <span class="section-label">Why It Works</span>
-                    <h2 class="section-title">Savings Guests Care About</h2>
-                    <p class="section-subtitle mx-auto">Offer value is strongest when it reduces both price and planning effort.</p>
+                    <span class="section-label">Special Situations</span>
+                    <h2 class="section-title">Occasion &amp; Corporate Deals</h2>
+                    <p class="section-subtitle mx-auto">Tailored savings for specific travel purposes — from honeymoons
+                        to offsite retreats.</p>
                 </div>
-                <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
-                    <div class="card p-8 text-center reveal stagger-1"><div class="text-4xl font-display font-bold text-emerald mb-3">40%</div><p class="text-muted">Peak flash discount</p></div>
-                    <div class="card p-8 text-center reveal stagger-2"><div class="text-4xl font-display font-bold text-ocean mb-3">15%</div><p class="text-muted">Member tier savings</p></div>
-                    <div class="card p-8 text-center reveal stagger-3"><div class="text-4xl font-display font-bold text-cyan mb-3">₹10K</div><p class="text-muted">Possible card cap</p></div>
-                    <div class="card p-8 text-center reveal stagger-4"><div class="text-4xl font-display font-bold mb-3" style="color: var(--clr-warning);">Free</div><p class="text-muted">Upgrade opportunities</p></div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16">
+                    <div class="card card-glare p-10 reveal stagger-1">
+                        <span class="badge badge-emerald mb-4">Honeymoon</span>
+                        <h3 class="text-2xl font-display font-bold mb-3">Couple Celebration Package</h3>
+                        <p class="text-muted mb-6">20% off for couples booking within 3 months of their wedding date.
+                            Includes room décor, candlelight dinner setup, and a welcome amenity tray.</p>
+                        <ul class="text-muted text-sm space-y-1 mb-6">
+                            <li>✓ Valid on all premium room types</li>
+                            <li>✓ Proof of wedding date required</li>
+                            <li>✓ Valid on bookings above ₹15,000</li>
+                        </ul>
+                        <a href="contact.html" class="btn btn-primary">Claim Honeymoon Deal</a>
+                    </div>
+                    <div class="card card-glare p-10 reveal stagger-2">
+                        <span class="badge badge-ocean mb-4">Corporate</span>
+                        <h3 class="text-2xl font-display font-bold mb-3">Team Offsite &amp; Retreats</h3>
+                        <p class="text-muted mb-6">Up to 15% off for corporate bookings of 10 or more rooms. Includes
+                            meeting room access, dedicated coordinator, and tailored activity planning.</p>
+                        <ul class="text-muted text-sm space-y-1 mb-6">
+                            <li>✓ Invoice and GST billing available</li>
+                            <li>✓ Food and activity planning support</li>
+                            <li>✓ Flexible cancellation for teams</li>
+                        </ul>
+                        <a href="contact.html" class="btn btn-primary">Get Corporate Quote</a>
+                    </div>
                 </div>
-            </div>
-        </section>
 
-        <!-- SECTION 33: Offer Concierge CTA -->
-        <section class="py-24 bg-primary relative">
-            <div class="container">
-                <div class="card-glass p-8 md:p-12 rounded-2xl reveal-scale">
-                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
-                        <div>
-                            <span class="badge badge-ocean mb-4">Need Help Choosing?</span>
-                            <h2 class="text-3xl md:text-4xl font-display font-bold mb-4">Let The Concierge Compare Offers</h2>
-                            <p class="text-white-80 text-lg mb-6">Send us your dates, destination, guest count, and budget. We can help identify the strongest offer path.</p>
-                            <a href="contact.html" class="btn btn-primary btn-lg">Ask Concierge</a>
-                        </div>
-                        <div class="grid grid-cols-1 gap-4">
-                            <div class="bg-deep border border-glass p-6 rounded-xl"><h3 class="text-xl font-display font-bold mb-2">Best For Families</h3><p class="text-muted">We compare suites, meals, transfers, and kids perks.</p></div>
-                            <div class="bg-deep border border-glass p-6 rounded-xl"><h3 class="text-xl font-display font-bold mb-2">Best For Couples</h3><p class="text-muted">We compare room upgrades, spa credits, and private dining.</p></div>
-                            <div class="bg-deep border border-glass p-6 rounded-xl"><h3 class="text-xl font-display font-bold mb-2">Best For Groups</h3><p class="text-muted">We compare per-person cost, room blocks, and activity value.</p></div>
-                        </div>
+                <!-- Offer Stats -->
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+                    <div class="card p-8 text-center reveal stagger-1">
+                        <div class="text-4xl font-display font-bold text-emerald mb-3">5K+</div>
+                        <p class="text-muted">Offers redeemed this year</p>
+                    </div>
+                    <div class="card p-8 text-center reveal stagger-2">
+                        <div class="text-4xl font-display font-bold text-ocean mb-3">₹2.1Cr</div>
+                        <p class="text-muted">Total savings passed to guests</p>
+                    </div>
+                    <div class="card p-8 text-center reveal stagger-3">
+                        <div class="text-4xl font-display font-bold text-cyan mb-3">40+</div>
+                        <p class="text-muted">Active deals at any time</p>
+                    </div>
+                    <div class="card p-8 text-center reveal stagger-4">
+                        <div class="text-4xl font-display font-bold mb-3" style="color:var(--clr-warning);">48h</div>
+                        <p class="text-muted">Average flash sale window</p>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- Newsletter Sub-Banner -->
-        <section class="py-12 bg-deep text-center reveal">
+        <!-- SECTION 8: Offer FAQs & Newsletter CTA -->
+        <section class="py-24 bg-primary relative overflow-hidden">
             <div class="container">
-                <p class="text-emerald font-medium mb-2 mx-auto text-center">Want deals sent directly to you?</p>
-                <a href="#main-footer" class="text-white underline hover:text-ocean transition-fast">Subscribe to our newsletter below</a>
+                <div class="text-center mb-12 reveal">
+                    <span class="section-label">Common Questions</span>
+                    <h2 class="section-title">Offer FAQs</h2>
+                    <p class="section-subtitle mx-auto">Quick answers about how our deals and discounts work.</p>
+                </div>
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mx-auto mb-20" style="max-width: 64rem;">
+                    <details class="card p-6 reveal stagger-1">
+                        <summary class="text-lg font-display font-bold cursor-pointer">Can I combine multiple promo
+                            codes?</summary>
+                        <p class="text-muted mt-4">No, only one promo code can be applied per booking. We recommend
+                            choosing the code with the highest discount for your booking value.</p>
+                    </details>
+                    <details class="card p-6 reveal stagger-2">
+                        <summary class="text-lg font-display font-bold cursor-pointer">Do member discounts stack with
+                            seasonal offers?</summary>
+                        <p class="text-muted mt-4">In most cases, yes. Member tier discounts can be applied on top of
+                            seasonal offers, unless the deal is explicitly marked "not stackable."</p>
+                    </details>
+                    <details class="card p-6 reveal stagger-3">
+                        <summary class="text-lg font-display font-bold cursor-pointer">Are flash sale bookings
+                            refundable?</summary>
+                        <p class="text-muted mt-4">Flash sale bookings are generally non-refundable but can be
+                            rescheduled once within the same season, subject to availability.</p>
+                    </details>
+                    <details class="card p-6 reveal stagger-4">
+                        <summary class="text-lg font-display font-bold cursor-pointer">How long are coupon codes valid?
+                        </summary>
+                        <p class="text-muted mt-4">Each coupon has a validity window shown on its card. Expired codes
+                            cannot be applied. Subscribe to get alerts before deals expire.</p>
+                    </details>
+                </div>
+
+                <div
+                    class="card p-10 md:p-16 text-center max-w-4xl mx-auto border-emerald-500 border-opacity-30 shadow-glow-emerald reveal">
+                    <h2 class="text-3xl md:text-5xl font-display font-bold mb-4">Never Miss a Deal</h2>
+                    <p class="text-lg text-white-80 mb-8 max-w-2xl mx-auto">Get early access to flash sales, new promo
+                        codes, and exclusive seasonal offers. Join 50,000+ subscribers.</p>
+                    <form id="newsletter-form" class="flex flex-col sm:flex-row gap-4 justify-center max-w-xl mx-auto">
+                        <input type="email" placeholder="Enter your email address"
+                            class="form-input sm:w-2/3 h-14 text-base" required>
+                        <button type="submit" class="btn btn-primary h-14 px-8 text-base shadow-lg">Subscribe
+                            Now</button>
+                    </form>
+                    <p class="text-xs text-muted mt-4">We respect your privacy. No spam, ever.</p>
+                </div>
             </div>
         </section>
 
@@ -840,7 +649,7 @@
                     const originalText = btn.innerText;
                     btn.innerText = 'Copied!';
                     btn.style.background = 'rgba(16, 185, 129, 0.2)';
-                    
+
                     setTimeout(() => {
                         btn.innerText = originalText;
                         btn.style.background = 'transparent';
@@ -854,13 +663,13 @@
         const cdMins = document.getElementById('cd-mins');
         const cdSecs = document.getElementById('cd-secs');
 
-        if(cdHours && cdMins && cdSecs) {
+        if (cdHours && cdMins && cdSecs) {
             let totalSeconds = (47 * 3600) + (59 * 60) + 24;
 
             setInterval(() => {
                 if (totalSeconds <= 0) return;
                 totalSeconds--;
-                
+
                 const h = Math.floor(totalSeconds / 3600);
                 const m = Math.floor((totalSeconds % 3600) / 60);
                 const s = Math.floor(totalSeconds % 60);
@@ -874,7 +683,7 @@
         // Referrals Toggle Logic
         const refToggleBtn = document.getElementById('btn-referrals-toggle');
         const refList = document.getElementById('referrals-list');
-        
+
         if (refToggleBtn && refList) {
             refToggleBtn.addEventListener('click', () => {
                 const isHidden = refList.style.display === 'none' || !refList.style.display;
@@ -898,4 +707,5 @@
         }
     </script>
 </body>
+
 </html>

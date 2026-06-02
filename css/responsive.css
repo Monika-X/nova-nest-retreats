@@ -65,6 +65,10 @@ input[type="date"] {
         z-index: 310 !important;
     }
 
+    .mobile-only-nav-item {
+        display: block !important;
+    }
+
     /* Mobile slide-in menu */
     .nav-menu {
         position: fixed;
@@ -149,8 +153,8 @@ input[type="date"] {
         z-index: 300 !important;
     }
 
-    /* Hide profile dropdown when menu drawer is open */
-    body.menu-open .profile-dropdown {
+    /* Hide nav actions (theme, dir toggles, profile dropdown) when menu drawer is open */
+    body.menu-open .nav-actions {
         display: none !important;
     }
 
@@ -205,7 +209,16 @@ input[type="date"] {
 
     /* Mobile Close Button Style */
     .mobile-close-container {
-        display: none !important;
+        display: flex !important;
+        position: absolute;
+        top: 1.5rem;
+        right: 1.5rem;
+        z-index: 310;
+    }
+
+    [dir="rtl"] .mobile-close-container {
+        right: auto !important;
+        left: 1.5rem !important;
     }
 
     .mobile-close-btn {
@@ -235,6 +248,20 @@ input[type="date"] {
 
     .mobile-close-btn:active {
         transform: scale(0.95);
+    }
+
+    .mobile-close-btn svg {
+        width: 20px;
+        height: 20px;
+        stroke: currentColor;
+        fill: none;
+        stroke-width: 2.2;
+        flex-shrink: 0;
+        transition: transform var(--transition-fast);
+    }
+
+    .mobile-close-btn:hover svg {
+        transform: rotate(90deg);
     }
 
     /* Booking card sticky override */
@@ -632,7 +659,7 @@ input[type="date"] {
         overflow: hidden !important;
     }
 
-    .flash-sale-banner > div {
+    .flash-sale-banner>div {
         padding: 2rem 1.25rem !important;
         width: 100% !important;
         max-width: 100% !important;
@@ -850,6 +877,14 @@ input[type="date"] {
         width: auto !important;
     }
 
+    .md\:p-4 {
+        padding: var(--space-4) !important;
+    }
+
+    .md\:p-6 {
+        padding: var(--space-6) !important;
+    }
+
     .md\:p-10 {
         padding: 2.5rem !important;
     }
@@ -995,6 +1030,10 @@ input[type="date"] {
 
     .lg\:border-l {
         border-left: 1px solid var(--glass-border) !important;
+    }
+
+    .lg\:p-8 {
+        padding: var(--space-8) !important;
     }
 }
 
@@ -1515,11 +1554,13 @@ input[type="date"] {
         width: 100% !important;
         border-radius: var(--radius-full) !important;
     }
+
     /* Resort details: form and gallery handled by page-level inline styles */
 }
 
 /* ---- 768px (Tablet) ---- */
 @media (max-width: 768px) {
+
     /* Resort details: booking-card, amenity, attraction, review styles
        are handled by page-level inline styles in resort-details.html */
     .hero-content {
@@ -1722,7 +1763,7 @@ input[type="date"] {
     .flash-sale-banner h2 {
         font-size: 1.5rem !important;
     }
-    
+
     .flash-sale-banner p {
         font-size: 0.9rem !important;
     }
@@ -1742,8 +1783,9 @@ input[type="date"] {
    16. BOOKINGS PAGE RESPONSIVE POLISH
    ============================================================ */
 @media (max-width: 768px) {
+
     /* Adjust page margins for dashboard pages on mobile */
-    .dash-layout > div {
+    .dash-layout>div {
         padding: 1.25rem 1rem !important;
     }
 
@@ -1759,7 +1801,7 @@ input[type="date"] {
     }
 
     /* Stack details and buttons vertically and left-aligned */
-    .booking-card .flex-1.p-6 > div:first-child {
+    .booking-card .flex-1.p-6>div:first-child {
         width: 100% !important;
     }
 
@@ -1769,7 +1811,7 @@ input[type="date"] {
         gap: 1rem !important;
     }
 
-    .booking-card .grid-cols-3 > div:nth-child(3) {
+    .booking-card .grid-cols-3>div:nth-child(3) {
         grid-column: span 2 !important;
         margin-top: 0.25rem !important;
     }
@@ -1812,6 +1854,7 @@ input[type="date"] {
 }
 
 @media (max-width: 768px) {
+
     /* Main Content Area */
     .dash-main {
         padding: 1rem 0.75rem !important;
@@ -1819,33 +1862,36 @@ input[type="date"] {
     }
 
     /* Stats Grid */
-    .stats-grid, .stats-row {
+    .stats-grid,
+    .stats-row {
         grid-template-columns: repeat(2, 1fr) !important;
         gap: 1rem !important;
     }
 
     /* Stats Cards Values */
-    .stat-value, .sc-val {
+    .stat-value,
+    .sc-val {
         font-size: 1.45rem !important;
     }
 
     /* Dashboard Headers Stacking */
-    .dash-header-wrap, .dash-header {
+    .dash-header-wrap,
+    .dash-header {
         flex-direction: column !important;
         align-items: stretch !important;
         gap: 1rem !important;
     }
 
     /* Align buttons full width side-by-side or stacked on very small screens */
-    .dash-header-wrap > *:last-child, 
-    .dash-header > *:last-child {
+    .dash-header-wrap>*:last-child,
+    .dash-header>*:last-child {
         width: 100% !important;
         display: flex !important;
         gap: 0.75rem !important;
         margin-top: 0.25rem !important;
     }
 
-    .dash-header-wrap .btn, 
+    .dash-header-wrap .btn,
     .dash-header-wrap .btn-export,
     .dash-header-wrap .btn-outline,
     .dash-header .btn,
@@ -1858,13 +1904,15 @@ input[type="date"] {
     }
 
     /* Toolbars & Filter tabs wrapping/stacking */
-    .table-toolbar, .toolbar {
+    .table-toolbar,
+    .toolbar {
         flex-direction: column !important;
         align-items: stretch !important;
         gap: 1rem !important;
     }
 
-    .table-toolbar > div, .toolbar > div {
+    .table-toolbar>div,
+    .toolbar>div {
         flex-direction: column !important;
         align-items: stretch !important;
         gap: 0.85rem !important;
@@ -1872,14 +1920,16 @@ input[type="date"] {
     }
 
     /* Search wrapper absolute alignment & search icon positioning */
-    .search-input-wrap, .search-wrap {
+    .search-input-wrap,
+    .search-wrap {
         position: relative !important;
         max-width: none !important;
         width: 100% !important;
         flex: 1 1 100% !important;
     }
 
-    .search-input-wrap svg, .search-wrap svg {
+    .search-input-wrap svg,
+    .search-wrap svg {
         position: absolute !important;
         left: 0.85rem !important;
         top: 50% !important;
@@ -1890,26 +1940,30 @@ input[type="date"] {
         height: 16px !important;
     }
 
-    input.search-input, input.search-inp {
+    input.search-input,
+    input.search-inp {
         width: 100% !important;
         padding-left: 2.5rem !important;
         box-sizing: border-box !important;
     }
 
-    select.search-inp, select.sel-inp {
+    select.search-inp,
+    select.sel-inp {
         width: 100% !important;
         max-width: none !important;
         box-sizing: border-box !important;
     }
 
-    .filter-tabs, .role-tabs {
+    .filter-tabs,
+    .role-tabs {
         width: 100% !important;
         display: flex !important;
         flex-wrap: wrap !important;
         gap: 0.4rem !important;
     }
 
-    .ftab, .rtab {
+    .ftab,
+    .rtab {
         flex: 1 1 auto !important;
         text-align: center !important;
         padding: 0.45rem 0.75rem !important;
@@ -1925,7 +1979,8 @@ input[type="date"] {
         padding: 1rem !important;
     }
 
-    .pagination-btns, .pg-btns {
+    .pagination-btns,
+    .pg-btns {
         justify-content: center !important;
         width: 100% !important;
         flex-wrap: wrap !important;
@@ -1939,8 +1994,10 @@ input[type="date"] {
 }
 
 @media (max-width: 576px) {
+
     /* Stats Grid Collapse */
-    .stats-grid, .stats-row {
+    .stats-grid,
+    .stats-row {
         grid-template-columns: 1fr !important;
         gap: 0.85rem !important;
     }
@@ -1957,6 +2014,7 @@ input[type="date"] {
         grid-template-columns: 1fr !important;
         display: block !important;
     }
+
     .dash-sidebar {
         position: fixed !important;
         top: 0 !important;
@@ -1969,30 +2027,34 @@ input[type="date"] {
         transition: transform 0.3s ease !important;
         overflow-y: auto !important;
     }
+
     .dash-sidebar.active {
         transform: translateX(0) !important;
     }
+
     .dash-main {
         width: 100% !important;
         min-width: 0 !important;
     }
+
     .dash-mobile-bar {
         display: flex !important;
     }
+
     .dash-overlay {
         display: block !important;
     }
-    
+
     /* High contrast text styling for dashboard sidebar link items in mobile drawer */
     .dash-sidebar .sidebar-link {
         color: var(--white-90) !important;
     }
-    
+
     .dash-sidebar .sidebar-link:hover,
     .dash-sidebar .sidebar-link.active {
         color: var(--emerald-400) !important;
     }
-    
+
     .dash-sidebar .sidebar-label {
         color: rgba(255, 255, 255, 0.45) !important;
     }
@@ -2000,6 +2062,7 @@ input[type="date"] {
 
 /* --- Toolbar column stacking at 768px --- */
 @media (max-width: 768px) {
+
     .table-toolbar,
     .toolbar {
         flex-direction: column !important;
@@ -2010,8 +2073,8 @@ input[type="date"] {
 
     /* Inner wrapper (admin-bookings uses .toolbar-inner) */
     .toolbar-inner,
-    .table-toolbar > div,
-    .toolbar > div {
+    .table-toolbar>div,
+    .toolbar>div {
         flex-direction: column !important;
         align-items: stretch !important;
         gap: 0.85rem !important;
@@ -2048,7 +2111,8 @@ input[type="date"] {
         width: 100% !important;
         padding-left: 2.5rem !important;
         box-sizing: border-box !important;
-        font-size: 16px !important;    /* prevents iOS zoom */
+        font-size: 16px !important;
+        /* prevents iOS zoom */
     }
 
     /* Select dropdowns */
@@ -2088,34 +2152,65 @@ input[type="date"] {
 
 /* --- 425px (Mobile L) --- */
 @media (max-width: 425px) {
-    .ftab, .rtab {
+
+    .ftab,
+    .rtab {
         padding: 0.4rem 0.35rem !important;
         font-size: 0.7rem !important;
     }
-    .filter-tabs, .role-tabs { gap: 0.35rem !important; }
+
+    .filter-tabs,
+    .role-tabs {
+        gap: 0.35rem !important;
+    }
 }
 
 /* --- 375px (Mobile M) --- */
 @media (max-width: 375px) {
-    .ftab, .rtab { font-size: 0.65rem !important; }
+
+    .ftab,
+    .rtab {
+        font-size: 0.65rem !important;
+    }
+
     input.search-input,
-    input.search-inp { font-size: 14px !important; }
+    input.search-inp {
+        font-size: 14px !important;
+    }
+
     select.search-inp,
-    select.sel-inp { font-size: 14px !important; }
+    select.sel-inp {
+        font-size: 14px !important;
+    }
 }
 
 /* --- 320px (Mobile S) --- */
 @media (max-width: 320px) {
-    .ftab, .rtab {
+
+    .ftab,
+    .rtab {
         font-size: 0.6rem !important;
         padding: 0.35rem 0.25rem !important;
     }
-    .filter-tabs, .role-tabs { gap: 0.25rem !important; }
+
+    .filter-tabs,
+    .role-tabs {
+        gap: 0.25rem !important;
+    }
+
     input.search-input,
-    input.search-inp { font-size: 13px !important; }
+    input.search-inp {
+        font-size: 13px !important;
+    }
+
     select.search-inp,
-    select.sel-inp { font-size: 13px !important; }
-    .dash-main { padding: 0.75rem !important; }
+    select.sel-inp {
+        font-size: 13px !important;
+    }
+
+    .dash-main {
+        padding: 0.75rem !important;
+    }
 }
 
 /* ============================================================
@@ -2146,6 +2241,7 @@ input[type="date"] {
 }
 
 @media (max-width: 768px) {
+
     /* Coupon cards container and padding on mobile */
     .coupon-card {
         padding: 1.5rem !important;
@@ -2188,5 +2284,26 @@ input[type="date"] {
     .referral-col-info,
     .referral-col-action {
         padding: 2rem 1rem !important;
+    }
+}
+
+/* ---- Tablet Overrides for Group, Family & Student Packages ---- */
+@media (min-width: 768px) and (max-width: 1024px) {
+    #group .card {
+        padding: var(--space-4) !important;
+    }
+
+    #group .btn {
+        padding-inline: var(--space-3) !important;
+        font-size: var(--fs-xs) !important;
+    }
+
+    #group h3 {
+        font-size: 1.15rem !important;
+        margin-bottom: var(--space-2) !important;
+    }
+
+    #group ul {
+        margin-bottom: var(--space-4) !important;
     }
 }
