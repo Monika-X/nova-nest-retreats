@@ -3549,9 +3549,11 @@ select option,
     color: #ffffff;
 }
 
-:root.light-theme .nav-menu {
-    background: rgba(255, 255, 255, 0.98) !important;
-    border-left-color: rgba(15, 23, 42, 0.08) !important;
+@media (max-width: 1024px) {
+    :root.light-theme .nav-menu {
+        background: rgba(255, 255, 255, 0.98) !important;
+        border-left-color: rgba(15, 23, 42, 0.08) !important;
+    }
 }
 
 :root.light-theme .mobile-close-btn {
