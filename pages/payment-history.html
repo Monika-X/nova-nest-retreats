@@ -9,104 +9,401 @@
     <link rel="stylesheet" href="../css/animations.css">
     <link rel="stylesheet" href="../css/responsive.css">
     <style>
-        .dash-layout { display: grid; grid-template-columns: 260px 1fr; min-height: 100vh; }
-        .dash-sidebar { position: sticky; top: var(--nav-height); height: calc(100vh - var(--nav-height)); background: var(--clr-bg-surface); border-right: 1px solid var(--glass-border); overflow-y: auto; padding: 2rem 1rem; display: flex; flex-direction: column; gap: 0.25rem; }
-        .sidebar-label { font-size: var(--fs-2xs); font-weight: var(--fw-semibold); text-transform: uppercase; letter-spacing: 0.12em; color: var(--clr-text-muted); padding: 0.5rem 0.75rem; margin-top: 1.25rem; }
-        .sidebar-link { display: flex; align-items: center; gap: 0.75rem; padding: 0.7rem 0.9rem; border-radius: var(--radius-md); font-size: var(--fs-sm); font-weight: var(--fw-medium); color: var(--clr-text-secondary); transition: all var(--transition-fast); }
-        .sidebar-link:hover { background: rgba(255,255,255,0.05); color: var(--white); }
-        .sidebar-link.active { background: rgba(16,185,129,0.1); color: var(--emerald-400); border-left: 3px solid var(--emerald-500); }
-        .sidebar-link svg { width: 18px; height: 18px; stroke: currentColor; fill: none; stroke-width: 2; flex-shrink: 0; }
-        .stat-card { background: var(--clr-bg-card); border: 1px solid var(--glass-border); border-radius: var(--radius-lg); padding: 1.5rem; transition: all var(--transition-fast); }
-        .stat-card:hover { border-color: rgba(16,185,129,0.2); transform: translateY(-3px); }
-        .history-table { width: 100%; border-collapse: collapse; }
-        .history-table th { padding: 1rem; text-align: left; font-size: var(--fs-xs); font-weight: var(--fw-semibold); text-transform: uppercase; letter-spacing: 0.08em; color: var(--clr-text-muted); border-bottom: 1px solid var(--glass-border); }
-        .history-table td { padding: 1rem; font-size: var(--fs-sm); color: var(--clr-text-secondary); border-bottom: 1px solid rgba(255,255,255,0.04); vertical-align: middle; }
-        .history-table tr:hover td { background: rgba(255,255,255,0.02); }
-        /* Toast style */
-        .toast { position: fixed; bottom: 2rem; right: 2rem; background: var(--clr-bg-surface); border: 1px solid var(--emerald-500); border-left: 4px solid var(--emerald-500); padding: 1rem 1.5rem; border-radius: var(--radius-md); box-shadow: var(--shadow-lg); display: flex; align-items: center; gap: 0.75rem; transform: translateY(100px); opacity: 0; transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1); z-index: var(--z-toast); }
-        .toast.show { transform: translateY(0); opacity: 1; }
+
+        /* ══════════════════════════════════════════════════════════
+           LAYOUT — two-column on desktop, single-column below 900px
+           ══════════════════════════════════════════════════════════ */
+        .ph-wrapper {
+            display: grid;
+            grid-template-columns: 260px 1fr;
+            grid-template-rows: auto;
+            min-height: calc(100vh - var(--nav-height));
+            align-items: start;
+        }
+
+        /* ── Sidebar ─────────────────────────────────────────────── */
+        .ph-sidebar {
+            position: sticky;
+            top: var(--nav-height);
+            height: calc(100vh - var(--nav-height));
+            overflow-y: auto;
+            background: var(--clr-bg-surface);
+            border-right: 1px solid var(--glass-border);
+            padding: 1.75rem 0.85rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.2rem;
+            scrollbar-width: thin;
+        }
+
+        .ph-sidebar-user {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.6rem 0.75rem;
+            background: rgba(16,185,129,0.08);
+            border: 1px solid rgba(16,185,129,0.15);
+            border-radius: 0.75rem;
+            margin-bottom: 0.5rem;
+        }
+        .ph-sidebar-avatar {
+            width: 38px; height: 38px;
+            background: var(--emerald-500);
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-weight: 700; font-size: 0.8rem; color: #fff;
+            flex-shrink: 0;
+        }
+        .ph-sidebar-name  { font-weight: 700; font-size: 0.85rem; color: var(--white); }
+        .ph-sidebar-badge { font-size: 0.7rem; color: var(--emerald-400); }
+
+        .ph-sidebar-label {
+            font-size: 0.65rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--clr-text-muted);
+            padding: 0.4rem 0.75rem;
+            margin-top: 1rem;
+        }
+
+        .ph-sidebar-link {
+            display: flex;
+            align-items: center;
+            gap: 0.65rem;
+            padding: 0.65rem 0.85rem;
+            border-radius: 0.5rem;
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: var(--clr-text-secondary);
+            text-decoration: none;
+            transition: background 0.2s, color 0.2s;
+            border-left: 3px solid transparent;
+        }
+        .ph-sidebar-link:hover { background: rgba(255,255,255,0.05); color: var(--white); }
+        .ph-sidebar-link.active {
+            background: rgba(16,185,129,0.1);
+            color: var(--emerald-400);
+            border-left-color: var(--emerald-500);
+        }
+        .ph-sidebar-link svg { width: 17px; height: 17px; stroke: currentColor; fill: none; stroke-width: 2; flex-shrink: 0; }
+        .ph-sidebar-link.logout { color: #f87171; margin-top: 0.75rem; }
+
+        /* ── Main content area ───────────────────────────────────── */
+        .ph-main {
+            padding: 2.5rem 2.5rem 3rem;
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+            min-width: 0;
+        }
+
+        /* ── Page title ──────────────────────────────────────────── */
+        .ph-title    { font-size: clamp(1.5rem, 4vw, 2rem); font-weight: 700; }
+        .ph-subtitle { color: var(--clr-text-muted); margin-top: 0.25rem; font-size: 0.9rem; }
+
+        /* ── Stat cards row ──────────────────────────────────────── */
+        .ph-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.25rem;
+        }
+        .ph-stat {
+            background: var(--clr-bg-card);
+            border: 1px solid var(--glass-border);
+            border-radius: 0.75rem;
+            padding: 1.35rem 1.5rem;
+            transition: border-color 0.2s, transform 0.2s;
+        }
+        .ph-stat:hover { border-color: rgba(16,185,129,0.25); transform: translateY(-3px); }
+        .ph-stat-label { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--clr-text-muted); margin-bottom: 0.5rem; }
+        .ph-stat-value { font-size: 1.5rem; font-weight: 700; }
+        .ph-stat-note  { font-size: 0.72rem; margin-top: 0.4rem; color: var(--clr-text-muted); }
+        .ph-stat-value.green  { color: var(--emerald-400); }
+        .ph-stat-value.yellow { color: #fbbf24; }
+        .ph-stat-value.blue   { color: #38bdf8; }
+        .ph-stat-note.green   { color: var(--emerald-400); }
+
+        /* ── Transaction table card ──────────────────────────────── */
+        .ph-card {
+            background: var(--clr-bg-card);
+            border: 1px solid var(--glass-border);
+            border-radius: 0.875rem;
+            overflow: hidden;
+        }
+        .ph-card-head {
+            padding: 1.1rem 1.5rem;
+            border-bottom: 1px solid var(--glass-border);
+        }
+        .ph-card-head h2 { font-size: 1.1rem; font-weight: 700; }
+
+        .ph-table-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+
+        table.ph-table { width: 100%; border-collapse: collapse; min-width: 620px; }
+        table.ph-table th {
+            padding: 0.85rem 1rem;
+            text-align: left;
+            font-size: 0.68rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: var(--clr-text-muted);
+            border-bottom: 1px solid var(--glass-border);
+            white-space: nowrap;
+        }
+        table.ph-table td {
+            padding: 0.9rem 1rem;
+            font-size: 0.85rem;
+            color: var(--clr-text-secondary);
+            border-bottom: 1px solid rgba(255,255,255,0.04);
+            vertical-align: middle;
+        }
+        table.ph-table tr:last-child td { border-bottom: none; }
+        table.ph-table tbody tr:hover td { background: rgba(255,255,255,0.025); }
+        .ph-table-id    { font-family: monospace; font-size: 0.78rem; color: var(--white); white-space: nowrap; }
+        .ph-table-resort-name { font-weight: 600; color: var(--white); }
+        .ph-table-resort-loc  { font-size: 0.7rem; color: var(--clr-text-muted); }
+        .ph-table-amount { font-weight: 600; color: var(--white); white-space: nowrap; }
+
+        /* ── Toast ───────────────────────────────────────────────── */
+        .ph-toast {
+            position: fixed; bottom: 2rem; right: 2rem;
+            background: var(--clr-bg-surface);
+            border: 1px solid var(--emerald-500);
+            border-left: 4px solid var(--emerald-500);
+            padding: 1rem 1.5rem;
+            border-radius: 0.5rem;
+            box-shadow: var(--shadow-lg);
+            display: flex; align-items: center; gap: 0.75rem;
+            transform: translateY(120px); opacity: 0;
+            transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+            z-index: 9999;
+        }
+        .ph-toast.show { transform: translateY(0); opacity: 1; }
+
+        /* ── RTL Grid Alignment ──────────────────────────────────── */
+        [dir="rtl"] table.ph-table th,
+        [dir="rtl"] table.ph-table td {
+            text-align: right;
+        }
+
+        /* ══════════════════════════════════════════════════════════
+           RESPONSIVE — ≤ 900px: sidebar → horizontal tab bar
+           ══════════════════════════════════════════════════════════ */
+        @media (max-width: 900px) {
+            .ph-wrapper {
+                grid-template-columns: 1fr;
+                grid-template-rows: auto 1fr;
+            }
+
+            .ph-sidebar {
+                position: static;
+                height: auto;
+                flex-direction: row;
+                flex-wrap: nowrap;
+                overflow-x: auto;
+                overflow-y: visible;
+                padding: 0.5rem 0.75rem;
+                border-right: none;
+                border-bottom: 1px solid var(--glass-border);
+                gap: 0.1rem;
+                scrollbar-width: none;
+                -ms-overflow-style: none;
+                align-items: center;
+            }
+            .ph-sidebar::-webkit-scrollbar { display: none; }
+
+            /* Hide user card and section labels in horizontal mode */
+            .ph-sidebar-user,
+            .ph-sidebar-label { display: none; }
+
+            .ph-sidebar-link {
+                flex-direction: column;
+                align-items: center;
+                gap: 0.2rem;
+                padding: 0.45rem 0.7rem;
+                font-size: 0.6rem;
+                white-space: nowrap;
+                flex-shrink: 0;
+                border-left: none !important;
+                border-bottom: 2px solid transparent;
+                border-radius: 0.4rem 0.4rem 0 0;
+            }
+            .ph-sidebar-link svg { width: 18px; height: 18px; }
+            .ph-sidebar-link.active {
+                border-bottom-color: var(--emerald-500);
+                background: rgba(16,185,129,0.08);
+                color: var(--emerald-400);
+            }
+            .ph-sidebar-link.logout { margin-top: 0; }
+
+            .ph-main {
+                padding: 1.5rem 1.25rem 2rem;
+                gap: 1.5rem;
+            }
+        }
+
+        /* ── Stats: 2 cols on tablet ─────────────────────────────── */
+        @media (max-width: 680px) {
+            .ph-stats { grid-template-columns: repeat(2, 1fr); }
+        }
+
+        /* ── Stats + content: single column on mobile ────────────── */
+        @media (max-width: 440px) {
+            .ph-stats { grid-template-columns: 1fr; }
+            .ph-main  { padding: 1rem 0.85rem 2rem; gap: 1.25rem; }
+            .ph-title { font-size: 1.35rem; }
+        }
+
+        /* ── Table → stacked cards below 768px ──────────────────── */
+        @media (max-width: 768px) {
+            .ph-table-scroll { overflow-x: visible; }
+
+            table.ph-table,
+            table.ph-table thead,
+            table.ph-table tbody,
+            table.ph-table tr,
+            table.ph-table th,
+            table.ph-table td {
+                display: block;
+                width: 100%;
+            }
+
+            table.ph-table { min-width: unset; }
+            table.ph-table thead { display: none; }
+
+            table.ph-table tr {
+                border: 1px solid var(--glass-border);
+                border-radius: 0.75rem;
+                margin-bottom: 0.85rem;
+                padding: 0.85rem 1rem;
+                background: rgba(255,255,255,0.02);
+            }
+            table.ph-table tbody tr:hover td { background: transparent; }
+
+            table.ph-table td {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                gap: 0.5rem;
+                padding: 0.3rem 0;
+                border-bottom: none;
+            }
+
+            table.ph-table td::before {
+                content: attr(data-label);
+                font-size: 0.65rem;
+                font-weight: 600;
+                text-transform: uppercase;
+                letter-spacing: 0.07em;
+                color: var(--clr-text-muted);
+                flex-shrink: 0;
+                min-width: 85px;
+            }
+
+            table.ph-table td[data-label="Resort"] {
+                align-items: flex-start;
+            }
+
+            table.ph-table td[data-label="Resort"] > div {
+                text-align: right;
+            }
+
+            [dir="rtl"] table.ph-table td[data-label="Resort"] > div {
+                text-align: left;
+            }
+
+            /* Separator line between first td (ID) and rest */
+            table.ph-table td:first-child {
+                padding-bottom: 0.55rem;
+                margin-bottom: 0.25rem;
+                border-bottom: 1px solid rgba(255,255,255,0.06) !important;
+            }
+        }
     </style>
 </head>
 <body>
     <header id="main-header"></header>
 
     <main id="main-content" class="page-content bg-deep">
-        <div class="dash-layout">
-            <!-- Sidebar -->
-            <aside class="dash-sidebar">
-                <div class="flex items-center gap-3 mb-6 p-2 bg-emerald-900 bg-opacity-20 rounded-xl border border-emerald-500 border-opacity-20">
-                    <div class="w-10 h-10 rounded-full bg-emerald-500 flex items-center justify-center text-white font-bold text-sm flex-shrink-0">JD</div>
-                    <div class="min-w-0">
-                        <div class="font-bold text-sm text-white truncate">John Doe</div>
-                        <div class="text-xs text-emerald truncate">Gold Member</div>
+        <div class="ph-wrapper">
+
+            <!-- ═══════════ SIDEBAR ═══════════ -->
+            <aside class="ph-sidebar">
+                <div class="ph-sidebar-user">
+                    <div class="ph-sidebar-avatar">JD</div>
+                    <div>
+                        <div class="ph-sidebar-name">John Doe</div>
+                        <div class="ph-sidebar-badge">Gold Member</div>
                     </div>
                 </div>
 
-                <span class="sidebar-label">Main</span>
-                <a href="user-dashboard.html" class="sidebar-link">
+                <span class="ph-sidebar-label">Main</span>
+
+                <a href="user-dashboard.html" class="ph-sidebar-link">
                     <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
                     Dashboard
                 </a>
-                <a href="bookings.html" class="sidebar-link">
+                <a href="bookings.html" class="ph-sidebar-link">
                     <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
                     My Bookings
                 </a>
-                <a href="wishlist.html" class="sidebar-link">
+                <a href="wishlist.html" class="ph-sidebar-link">
                     <svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
                     Wishlist
                 </a>
-                <a href="payment-history.html" class="sidebar-link active">
+                <a href="payment-history.html" class="ph-sidebar-link active">
                     <svg viewBox="0 0 24 24"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect><line x1="1" y1="10" x2="23" y2="10"></line></svg>
-                    Payment History
+                    Payments
                 </a>
 
-                <span class="sidebar-label">Account</span>
-                <a href="settings.html" class="sidebar-link">
+                <span class="ph-sidebar-label">Account</span>
+
+                <a href="settings.html" class="ph-sidebar-link">
                     <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06A1.65 1.65 0 0 0 15 19.4a1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
                     Settings
                 </a>
-                <a href="login.html" class="sidebar-link text-error mt-4">
+                <a href="login.html" class="ph-sidebar-link logout">
                     <svg viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
                     Logout
                 </a>
             </aside>
 
-            <!-- Main Content -->
-            <div class="flex flex-col gap-8 p-6 md:p-10 overflow-y-auto">
-                <!-- Header -->
-                <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 reveal">
-                    <div>
-                        <h1 class="text-3xl font-display font-bold">Payment History</h1>
-                        <p class="text-muted mt-1">Review all your billing records, receipts, and membership expenses.</p>
-                    </div>
+            <!-- ═══════════ MAIN CONTENT ═══════════ -->
+            <div class="ph-main">
+
+                <!-- Page Title -->
+                <div class="reveal">
+                    <h1 class="ph-title">Payment History</h1>
+                    <p class="ph-subtitle">Review all your billing records, receipts, and membership expenses.</p>
                 </div>
 
                 <!-- Stats Overview -->
-                <div class="grid grid-cols-1 sm:grid-cols-3 gap-5 reveal">
-                    <div class="stat-card">
-                        <div class="text-xs text-muted uppercase tracking-wider mb-2">Total Paid Stays</div>
-                        <div class="text-2xl font-display font-bold text-white">₹1,46,320</div>
-                        <div class="text-xs text-emerald mt-2">3 Success Transactions</div>
+                <div class="ph-stats reveal">
+                    <div class="ph-stat">
+                        <div class="ph-stat-label">Total Paid Stays</div>
+                        <div class="ph-stat-value green">₹1,46,320</div>
+                        <div class="ph-stat-note green">3 Successful Transactions</div>
                     </div>
-                    <div class="stat-card">
-                        <div class="text-xs text-muted uppercase tracking-wider mb-2">Pending Invoice</div>
-                        <div class="text-2xl font-display font-bold text-warning">₹20,400</div>
-                        <div class="text-xs text-muted mt-2">1 Payment Pending</div>
+                    <div class="ph-stat">
+                        <div class="ph-stat-label">Pending Invoice</div>
+                        <div class="ph-stat-value yellow">₹20,400</div>
+                        <div class="ph-stat-note">1 Payment Pending</div>
                     </div>
-                    <div class="stat-card">
-                        <div class="text-xs text-muted uppercase tracking-wider mb-2">Refunds Credited</div>
-                        <div class="text-2xl font-display font-bold text-ocean">₹0.00</div>
-                        <div class="text-xs text-muted mt-2">No active refunds</div>
+                    <div class="ph-stat">
+                        <div class="ph-stat-label">Refunds Credited</div>
+                        <div class="ph-stat-value blue">₹0.00</div>
+                        <div class="ph-stat-note">No active refunds</div>
                     </div>
                 </div>
 
-                <!-- Payment Table Card -->
-                <div class="card reveal">
-                    <div class="card-body border-b border-glass py-4">
-                        <h2 class="text-xl font-display font-bold">Transaction History</h2>
+                <!-- Transaction Table -->
+                <div class="ph-card reveal">
+                    <div class="ph-card-head">
+                        <h2>Transaction History</h2>
                     </div>
-                    <div class="overflow-x-auto">
-                        <table class="history-table">
+                    <div class="ph-table-scroll">
+                        <table class="ph-table">
                             <thead>
                                 <tr>
                                     <th>Booking ID</th>
@@ -120,44 +417,50 @@
                             </thead>
                             <tbody>
                                 <tr>
-                                    <td class="font-mono text-xs text-white">#NNR-883492</td>
-                                    <td>
-                                        <div class="font-semibold text-white">Azure Ocean Water Villas</div>
-                                        <div class="text-2xs text-muted">Male Atoll, Maldives</div>
+                                    <td data-label="Booking ID" class="ph-table-id">#NNR-883492</td>
+                                    <td data-label="Resort">
+                                        <div>
+                                            <div class="ph-table-resort-name">Azure Ocean Water Villas</div>
+                                            <div class="ph-table-resort-loc">Male Atoll, Maldives</div>
+                                        </div>
                                     </td>
-                                    <td>May 26, 2026</td>
-                                    <td class="font-semibold text-white">₹82,320</td>
-                                    <td class="text-xs">Visa •••• 4242</td>
-                                    <td><span class="badge badge-emerald">Success</span></td>
-                                    <td>
+                                    <td data-label="Paid Date">May 26, 2026</td>
+                                    <td data-label="Amount" class="ph-table-amount">₹82,320</td>
+                                    <td data-label="Method">Visa •••• 4242</td>
+                                    <td data-label="Status"><span class="badge badge-emerald">Success</span></td>
+                                    <td data-label="Invoice">
                                         <button onclick="downloadInvoice('NNR-883492')" class="btn btn-xs btn-outline">Download</button>
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td class="font-mono text-xs text-white">#NNR-772183</td>
-                                    <td>
-                                        <div class="font-semibold text-white">Sapphire Coast Premium</div>
-                                        <div class="text-2xs text-muted">Goa, India</div>
+                                    <td data-label="Booking ID" class="ph-table-id">#NNR-772183</td>
+                                    <td data-label="Resort">
+                                        <div>
+                                            <div class="ph-table-resort-name">Sapphire Coast Premium</div>
+                                            <div class="ph-table-resort-loc">Goa, India</div>
+                                        </div>
                                     </td>
-                                    <td>—</td>
-                                    <td class="font-semibold text-white">₹20,400</td>
-                                    <td class="text-xs">Pending Select</td>
-                                    <td><span class="badge badge-warning">Pending</span></td>
-                                    <td>
-                                        <button disabled class="btn btn-xs btn-outline opacity-50 cursor-not-allowed">Download</button>
+                                    <td data-label="Paid Date">—</td>
+                                    <td data-label="Amount" class="ph-table-amount">₹20,400</td>
+                                    <td data-label="Method">Pending Select</td>
+                                    <td data-label="Status"><span class="badge badge-warning">Pending</span></td>
+                                    <td data-label="Invoice">
+                                        <button disabled class="btn btn-xs btn-outline" style="opacity:0.45;cursor:not-allowed;">Download</button>
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td class="font-mono text-xs text-white">#NNR-553412</td>
-                                    <td>
-                                        <div class="font-semibold text-white">Emerald Jungle Retreat</div>
-                                        <div class="text-2xs text-muted">Bali, Indonesia</div>
+                                    <td data-label="Booking ID" class="ph-table-id">#NNR-553412</td>
+                                    <td data-label="Resort">
+                                        <div>
+                                            <div class="ph-table-resort-name">Emerald Jungle Retreat</div>
+                                            <div class="ph-table-resort-loc">Bali, Indonesia</div>
+                                        </div>
                                     </td>
-                                    <td>Sep 08, 2025</td>
-                                    <td class="font-semibold text-white">₹64,000</td>
-                                    <td class="text-xs">NetBanking (HDFC)</td>
-                                    <td><span class="badge badge-emerald">Success</span></td>
-                                    <td>
+                                    <td data-label="Paid Date">Sep 08, 2025</td>
+                                    <td data-label="Amount" class="ph-table-amount">₹64,000</td>
+                                    <td data-label="Method">NetBanking (HDFC)</td>
+                                    <td data-label="Status"><span class="badge badge-emerald">Success</span></td>
+                                    <td data-label="Invoice">
                                         <button onclick="downloadInvoice('NNR-553412')" class="btn btn-xs btn-outline">Download</button>
                                     </td>
                                 </tr>
@@ -165,26 +468,25 @@
                         </table>
                     </div>
                 </div>
-            </div>
-        </div>
+
+            </div><!-- /.ph-main -->
+        </div><!-- /.ph-wrapper -->
     </main>
 
-    <!-- Toast Notification -->
-    <div id="toast" class="toast">
+    <!-- Toast -->
+    <div id="ph-toast" class="ph-toast">
         <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
-        <span id="toast-text">Invoice downloaded successfully!</span>
+        <span id="ph-toast-text">Invoice downloaded!</span>
     </div>
 
     <script src="../js/main.js"></script>
     <script src="../js/animations.js"></script>
     <script>
         function downloadInvoice(id) {
-            const toast = document.getElementById('toast');
-            document.getElementById('toast-text').innerText = `Receipt for invoice #${id} downloaded!`;
+            const toast = document.getElementById('ph-toast');
+            document.getElementById('ph-toast-text').innerText = `Receipt for #${id} downloaded!`;
             toast.classList.add('show');
-            setTimeout(() => {
-                toast.classList.remove('show');
-            }, 3000);
+            setTimeout(() => toast.classList.remove('show'), 3000);
         }
     </script>
 </body>

@@ -929,28 +929,34 @@ hr {
 }
 
 /* ---- Flash Sale Countdown Responsiveness ---- */
-#flash-countdown {
+#flash-countdown,
+#countdown-timer {
     display: flex !important;
     flex-direction: row !important;
     flex-wrap: nowrap !important;
     justify-content: center !important;
     align-items: center !important;
     width: 100% !important;
+    max-width: 100% !important;
 }
 
-#flash-countdown>div {
+#flash-countdown>div,
+#countdown-timer>div {
     flex-shrink: 0 !important;
 }
 
-#flash-countdown .font-display {
+#flash-countdown .font-display,
+#countdown-timer .font-display {
     font-size: clamp(1.5rem, 5.5vw, 2.25rem) !important;
 }
 
-#flash-countdown .text-xs {
+#flash-countdown .text-xs,
+#countdown-timer .text-xs {
     font-size: clamp(0.65rem, 2.5vw, 0.75rem) !important;
 }
 
-#flash-countdown .self-center {
+#flash-countdown .self-center,
+#countdown-timer .self-center {
     font-size: clamp(1.5rem, 5.5vw, 2.25rem) !important;
     line-height: 1 !important;
 }
@@ -2113,9 +2119,10 @@ hr {
     backdrop-filter: blur(8px);
     border-radius: var(--radius-full);
     border: 1px solid rgba(255, 255, 255, 0.1);
+    color: var(--white);
     cursor: pointer;
     transition: all var(--transition-fast);
-    z-index: 1;
+    z-index: 10;
 }
 
 .card-resort-wishlist:hover {
@@ -3386,6 +3393,18 @@ select option,
     flex-shrink: 0;
 }
 
+:root.light-theme .toast {
+    background: #ffffff;
+    border-color: rgba(16, 185, 129, 0.35);
+    border-left-color: var(--emerald-500);
+    color: var(--clr-text-primary);
+    box-shadow: 0 12px 30px rgba(15, 23, 42, 0.14);
+}
+
+:root.light-theme .toast svg {
+    color: var(--emerald-600, #059669);
+}
+
 /* ============================================================
    LIGHT THEME CONTROLS & OVERRIDES
    ============================================================ */
@@ -3449,6 +3468,8 @@ select option,
 
 :root.light-theme .card-resort-wishlist {
     background: rgba(255, 255, 255, 0.9);
+    border-color: rgba(15, 23, 42, 0.12);
+    color: #0f172a;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
@@ -3597,9 +3618,9 @@ select option,
 }
 
 [dir="rtl"] .dropdown-menu {
-    left: 0;
-    right: auto;
-    transform-origin: top left;
+    right: 0;
+    left: auto;
+    transform-origin: top right;
 }
 
 [dir="rtl"] .mobile-close-btn {
@@ -3650,6 +3671,11 @@ select option,
 
 [dir="rtl"] .newsletter-btn {
     border-radius: var(--radius-full) 0 0 var(--radius-full);
+}
+
+[dir="rtl"] .footer-link-icon {
+    transform: scaleX(-1);
+    display: inline-block;
 }
 
 /* ============================================================

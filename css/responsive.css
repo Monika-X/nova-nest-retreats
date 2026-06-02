@@ -221,6 +221,66 @@ input[type="date"] {
         left: 1.5rem !important;
     }
 
+    [dir="rtl"] .nav-menu {
+        right: auto !important;
+        left: 0 !important;
+        transform: translateX(-100%) !important;
+        border-left: none !important;
+        border-right: 1px solid var(--glass-border) !important;
+        box-shadow: 10px 0 50px rgba(0, 0, 0, 0.5) !important;
+    }
+
+    [dir="rtl"] .nav-menu.active {
+        transform: translateX(0) !important;
+    }
+
+    [dir="rtl"] .nav-item {
+        text-align: right !important;
+    }
+
+    [dir="rtl"] .nav-link {
+        text-align: right !important;
+        justify-content: flex-start !important;
+    }
+
+    [dir="rtl"] .nav-link::after {
+        left: auto !important;
+        right: 0 !important;
+        border-radius: 2px 0 0 2px !important;
+        transform-origin: bottom !important;
+    }
+
+    [dir="rtl"] .nav-link:hover,
+    [dir="rtl"] .nav-link.active {
+        padding-left: 0.5rem !important;
+        padding-right: 0.75rem !important;
+    }
+
+    /* Center profile dropdown on mobile view to prevent clipping on both LTR and RTL */
+    .profile-dropdown .dropdown-menu,
+    [dir="rtl"] .profile-dropdown .dropdown-menu {
+        left: 50% !important;
+        right: auto !important;
+        transform: translate(-50%, -8px) scale(0.97) !important;
+        transform-origin: top center !important;
+    }
+
+    .profile-dropdown.open .dropdown-menu,
+    [dir="rtl"] .profile-dropdown.open .dropdown-menu {
+        transform: translate(-50%, 0) scale(1) !important;
+        opacity: 1 !important;
+        visibility: visible !important;
+    }
+
+    .profile-dropdown .dropdown-menu::before,
+    [dir="rtl"] .profile-dropdown .dropdown-menu::before {
+        left: 50% !important;
+        right: auto !important;
+        transform: translateX(-50%) rotate(45deg) !important;
+    }
+
+
+
     .mobile-close-btn {
         display: flex;
         align-items: center;
@@ -335,6 +395,17 @@ input[type="date"] {
         border-radius: var(--radius-full);
         width: 100%;
     }
+
+    [dir="rtl"] .footer-grid .footer-col:nth-child(4) .newsletter-input {
+        border-left: 1px solid rgba(255, 255, 255, 0.08) !important;
+        border-radius: var(--radius-full) !important;
+    }
+    :root.light-theme[dir="rtl"] .footer-grid .footer-col:nth-child(4) .newsletter-input {
+        border-left: 1px solid rgba(15, 23, 42, 0.15) !important;
+    }
+    [dir="rtl"] .footer-grid .footer-col:nth-child(4) .newsletter-btn {
+        border-radius: var(--radius-full) !important;
+    }
 }
 
 
@@ -375,6 +446,17 @@ input[type="date"] {
         border-radius: var(--radius-full);
         width: 100%;
     }
+
+    [dir="rtl"] .footer-grid .footer-col:nth-child(4) .newsletter-input {
+        border-left: 1px solid rgba(255, 255, 255, 0.08) !important;
+        border-radius: var(--radius-full) !important;
+    }
+    :root.light-theme[dir="rtl"] .footer-grid .footer-col:nth-child(4) .newsletter-input {
+        border-left: 1px solid rgba(15, 23, 42, 0.15) !important;
+    }
+    [dir="rtl"] .footer-grid .footer-col:nth-child(4) .newsletter-btn {
+        border-radius: var(--radius-full) !important;
+    }
 }
 
 
@@ -383,6 +465,10 @@ input[type="date"] {
     :root {
         --nav-height: 64px;
         --container-pad: 1.25rem;
+    }
+
+    .section-title, h2 {
+        font-size: clamp(1.4rem, 5vw, 2.2rem) !important;
     }
 
     /* Footer — single column; reset tablet grid overrides */
@@ -482,6 +568,41 @@ input[type="date"] {
     .newsletter-btn {
         border-radius: var(--radius-full);
         padding: 0.8rem 1.5rem;
+    }
+
+    [dir="rtl"] .newsletter-input {
+        border-left: 1px solid rgba(255, 255, 255, 0.08) !important;
+        border-radius: var(--radius-full) !important;
+    }
+
+    :root.light-theme[dir="rtl"] .newsletter-input {
+        border-left: 1px solid rgba(15, 23, 42, 0.15) !important;
+    }
+
+    [dir="rtl"] .newsletter-btn {
+        border-radius: var(--radius-full) !important;
+    }
+
+    [dir="rtl"] .footer-col.footer-brand,
+    [dir="rtl"] .footer-grid .footer-col:nth-child(2),
+    [dir="rtl"] .footer-grid .footer-col:nth-child(3),
+    [dir="rtl"] .footer-grid .footer-col:nth-child(4) {
+        text-align: right !important;
+        align-items: flex-start !important;
+    }
+
+    [dir="rtl"] .footer-col.footer-brand .footer-brand-text {
+        text-align: right !important;
+    }
+
+    [dir="rtl"] .footer-col.footer-brand .social-links {
+        justify-content: flex-start !important;
+    }
+
+    [dir="rtl"] .footer-grid .footer-col:nth-child(4) .footer-heading::after {
+        left: auto !important;
+        right: 0 !important;
+        transform: none !important;
     }
 
     /* Logo */
@@ -647,8 +768,23 @@ input[type="date"] {
         padding: 1.25rem 1rem !important;
     }
 
-    #flash-countdown {
-        gap: 0.5rem !important;
+    #flash-countdown,
+    #countdown-timer {
+        gap: clamp(0.25rem, 1.8vw, 0.5rem) !important;
+        max-width: 100% !important;
+    }
+
+    #flash-countdown>div:not(.self-center),
+    #countdown-timer>div:not(.self-center) {
+        width: clamp(4rem, 24vw, 5rem) !important;
+        padding: 0.75rem 0.5rem !important;
+        box-sizing: border-box !important;
+    }
+
+    #flash-countdown .self-center,
+    #countdown-timer .self-center {
+        width: auto !important;
+        min-width: 0.4rem !important;
     }
 
     /* Flash Sale Banner Responsive Tuning (Mobile L/M) */
@@ -1719,6 +1855,240 @@ input[type="date"] {
 }
 
 @media (max-width: 480px) {
+    .about-page section {
+        padding-top: 3rem !important;
+        padding-bottom: 3rem !important;
+    }
+
+    .about-page .container {
+        padding-inline: 0.85rem !important;
+    }
+
+    .about-page .card,
+    .about-page .card-glass,
+    .about-page .card-feature {
+        max-width: 100% !important;
+        min-width: 0 !important;
+        border-radius: var(--radius-md) !important;
+    }
+
+    .about-page .card,
+    .about-page .card-glass,
+    .about-page .card-feature,
+    .about-page .card.p-6,
+    .about-page .card.p-8,
+    .about-page .card.p-10,
+    .about-page .card-glass.p-8,
+    .about-page .card-feature.p-10,
+    .about-page .bg-deep.border.border-glass.p-6 {
+        padding: 1.15rem !important;
+    }
+
+    .about-page h1 {
+        font-size: clamp(2rem, 13vw, 2.55rem) !important;
+        line-height: 1.05 !important;
+    }
+
+    .about-page h2,
+    .about-page .section-title {
+        font-size: clamp(1.45rem, 9vw, 2rem) !important;
+        line-height: 1.18 !important;
+    }
+
+    .about-page h3,
+    .about-page h4,
+    .about-page p,
+    .about-page li,
+    .about-page summary,
+    .about-page span,
+    .about-page a,
+    .about-page button {
+        overflow-wrap: anywhere !important;
+    }
+
+    .about-page .btn,
+    .about-page .btn-lg {
+        width: 100% !important;
+        max-width: 100% !important;
+        min-height: 44px !important;
+        padding: 0.72rem 1rem !important;
+        white-space: normal !important;
+        text-align: center !important;
+        line-height: 1.25 !important;
+    }
+
+    .about-page .grid.grid-cols-2,
+    .about-page .grid.grid-cols-3,
+    .about-page .grid.grid-cols-4 {
+        grid-template-columns: 1fr !important;
+    }
+
+    .about-page .grid,
+    .about-page .flex {
+        gap: 1rem !important;
+    }
+
+    .about-page #counter-section {
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+        gap: 1rem !important;
+    }
+
+    .about-page #counter-section .text-5xl {
+        font-size: clamp(2rem, 12vw, 2.5rem) !important;
+    }
+
+    .about-page .h-64 {
+        height: 13.5rem !important;
+    }
+
+    .about-page .-mt-12 {
+        margin-top: -2rem !important;
+    }
+
+    .about-page .leadership-card {
+        display: flex !important;
+        flex-direction: column !important;
+        overflow: visible !important;
+    }
+
+    .about-page .leadership-image {
+        height: auto !important;
+        aspect-ratio: 4 / 3 !important;
+        overflow: hidden !important;
+        border-radius: var(--radius-md) var(--radius-md) 0 0 !important;
+    }
+
+    .about-page .leadership-image img {
+        width: 100% !important;
+        height: 100% !important;
+        object-fit: contain !important;
+        object-position: center top !important;
+        background: var(--clr-bg-deep) !important;
+        transform: none !important;
+    }
+
+    .about-page .leadership-image .absolute {
+        display: none !important;
+    }
+
+    .about-page .leadership-body {
+        margin-top: 0 !important;
+        padding: 1.15rem !important;
+        position: relative !important;
+        z-index: auto !important;
+        background: var(--clr-bg-card) !important;
+    }
+
+    .about-page details summary {
+        font-size: 1rem !important;
+        line-height: 1.35 !important;
+    }
+
+    .offers-page section {
+        padding-top: 3rem !important;
+        padding-bottom: 3rem !important;
+    }
+
+    .offers-page .container {
+        padding-inline: 0.85rem !important;
+    }
+
+    .offers-page .card,
+    .offers-page .card-glass,
+    .offers-page .coupon-card {
+        border-radius: var(--radius-md) !important;
+        max-width: 100% !important;
+        min-width: 0 !important;
+    }
+
+    .offers-page .card-glass,
+    .offers-page .card.p-10,
+    .offers-page .card.p-8,
+    .offers-page .card.p-6,
+    .offers-page .coupon-card {
+        padding: 1.15rem !important;
+    }
+
+    .offers-page h1 {
+        font-size: clamp(2rem, 13vw, 2.55rem) !important;
+        line-height: 1.05 !important;
+    }
+
+    .offers-page h2,
+    .offers-page .section-title {
+        font-size: clamp(1.45rem, 9vw, 2rem) !important;
+        line-height: 1.18 !important;
+    }
+
+    .offers-page h3,
+    .offers-page p,
+    .offers-page li,
+    .offers-page summary,
+    .offers-page span,
+    .offers-page a,
+    .offers-page button {
+        overflow-wrap: anywhere !important;
+    }
+
+    .offers-page .btn,
+    .offers-page .btn-lg,
+    .offers-page .copy-btn {
+        width: 100% !important;
+        max-width: 100% !important;
+        min-height: 44px !important;
+        padding: 0.72rem 1rem !important;
+        white-space: normal !important;
+        text-align: center !important;
+        line-height: 1.25 !important;
+    }
+
+    .offers-page .badge {
+        white-space: normal !important;
+        text-align: center !important;
+        line-height: 1.2 !important;
+        max-width: 100% !important;
+    }
+
+    .offers-page .absolute.bottom-4.right-4 {
+        left: 0.75rem !important;
+        right: 0.75rem !important;
+        justify-content: flex-end !important;
+        flex-wrap: wrap !important;
+    }
+
+    .offers-page .absolute.top-4.left-4 {
+        right: 0.75rem !important;
+    }
+
+    .offers-page .coupon-card>.flex.justify-between,
+    .offers-page .card .flex.items-baseline {
+        flex-direction: column !important;
+        align-items: flex-start !important;
+        gap: 0.4rem !important;
+    }
+
+    .offers-page .grid.grid-cols-2,
+    .offers-page .grid.grid-cols-3 {
+        grid-template-columns: 1fr !important;
+    }
+
+    .offers-page .grid {
+        gap: 1rem !important;
+    }
+
+    .offers-page form.flex {
+        width: 100% !important;
+    }
+
+    .offers-page .form-input {
+        width: 100% !important;
+        min-width: 0 !important;
+    }
+
+    .offers-page details summary {
+        font-size: 1rem !important;
+        line-height: 1.35 !important;
+    }
 
     /* Savings & Split Estimator on Mobile */
     .card .bg-primary.flex {
@@ -1770,12 +2140,102 @@ input[type="date"] {
 }
 
 @media (max-width: 320px) {
+    .about-page .container {
+        padding-inline: 0.65rem !important;
+    }
+
+    .about-page .card,
+    .about-page .card-glass,
+    .about-page .card-feature,
+    .about-page .card.p-6,
+    .about-page .card.p-8,
+    .about-page .card.p-10,
+    .about-page .card-glass.p-8,
+    .about-page .card-feature.p-10,
+    .about-page .bg-deep.border.border-glass.p-6 {
+        padding: 1rem !important;
+    }
+
+    .about-page .grid,
+    .about-page .flex {
+        gap: 0.85rem !important;
+    }
+
+    .about-page #counter-section {
+        grid-template-columns: 1fr !important;
+    }
+
+    .about-page .text-3xl {
+        font-size: 1.55rem !important;
+    }
+
+    .about-page .text-4xl {
+        font-size: 1.85rem !important;
+    }
+
+    .about-page .text-5xl {
+        font-size: 2.1rem !important;
+    }
+
+    .about-page .text-lg {
+        font-size: 0.95rem !important;
+    }
+
+    .about-page .leadership-image {
+        aspect-ratio: 1 / 1 !important;
+    }
+
+    .about-page .leadership-body {
+        padding: 1rem !important;
+    }
+
+    .offers-page .container {
+        padding-inline: 0.65rem !important;
+    }
+
+    .offers-page .card-glass,
+    .offers-page .card.p-10,
+    .offers-page .card.p-8,
+    .offers-page .card.p-6,
+    .offers-page .coupon-card {
+        padding: 1rem !important;
+    }
+
+    .offers-page .flex.gap-3,
+    .offers-page .flex.gap-4,
+    .offers-page .flex.gap-6,
+    .offers-page .flex.gap-8,
+    .offers-page .grid.gap-6,
+    .offers-page .grid.gap-8,
+    .offers-page .grid.gap-10 {
+        gap: 0.85rem !important;
+    }
+
+    .offers-page .text-3xl {
+        font-size: 1.55rem !important;
+    }
+
+    .offers-page .text-4xl {
+        font-size: 1.85rem !important;
+    }
+
+    .offers-page .text-lg {
+        font-size: 0.95rem !important;
+    }
+
     .flash-sale-banner .glass-strong {
         padding: 1rem 0.75rem !important;
     }
 
-    #flash-countdown {
-        gap: 0.25rem !important;
+    #flash-countdown,
+    #countdown-timer {
+        gap: 0.2rem !important;
+    }
+
+    #flash-countdown>div:not(.self-center),
+    #countdown-timer>div:not(.self-center) {
+        width: clamp(3.65rem, 23vw, 4rem) !important;
+        padding: 0.65rem 0.35rem !important;
     }
 }
 
