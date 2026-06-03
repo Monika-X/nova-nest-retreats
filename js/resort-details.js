@@ -238,19 +238,30 @@
         };
 
         let wishlist = JSON.parse(localStorage.getItem('novanest_wishlist')) || [];
-        let isSaved = wishlist.includes(resort.id);
+        let isSaved = wishlist.some(item => {
+            if (typeof item === 'object' && item !== null) {
+                return String(item.id) === String(resort.id);
+            }
+            return String(item) === String(resort.id);
+        });
         updateHeartVisuals(isSaved);
 
         wishlistBtn.addEventListener('click', () => {
             wishlist = JSON.parse(localStorage.getItem('novanest_wishlist')) || [];
-            isSaved = wishlist.includes(resort.id);
+            const index = wishlist.findIndex(item => {
+                if (typeof item === 'object' && item !== null) {
+                    return String(item.id) === String(resort.id);
+                }
+                return String(item) === String(resort.id);
+            });
+            isSaved = index > -1;
             if (isSaved) {
-                wishlist = wishlist.filter(id => id !== resort.id);
+                wishlist.splice(index, 1);
                 localStorage.setItem('novanest_wishlist', JSON.stringify(wishlist));
                 updateHeartVisuals(false);
                 if (window.showToast) window.showToast('Removed from Wishlist');
             } else {
-                wishlist.push(resort.id);
+                wishlist.push(resort);
                 localStorage.setItem('novanest_wishlist', JSON.stringify(wishlist));
                 updateHeartVisuals(true);
                 if (window.showToast) window.showToast('Added to Wishlist');

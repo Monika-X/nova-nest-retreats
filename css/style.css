@@ -2122,7 +2122,7 @@ hr {
     color: var(--white);
     cursor: pointer;
     transition: all var(--transition-fast);
-    z-index: 10;
+    z-index: 15;
 }
 
 .card-resort-wishlist:hover {
